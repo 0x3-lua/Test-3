@@ -115,6 +115,7 @@ function WebServer.new(host, port)
 		coroutine.wrap(function ()
 			while true do
 				local client = object.server:accept()
+				print('met client')
 				
 				local request = cURL.clientRequest
 					.fromTCPClient(client)
