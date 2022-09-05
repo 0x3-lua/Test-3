@@ -293,23 +293,17 @@ function cURL.clientRequest.fromString(s)
 			tempStringParser.popUntil('\n'),
 			'error parsing headers: no line breaks, reached end.'
 		)
-		tempAStringParser.reset(line)
-		print('line:', 
-			table.concat({ line:byte(1, #line) }, '|'))
-			
-			--[[
-		local index = StringParser.popUntil()
-		
-		print("header: ", index, value)
 
-		if not index then -- this is a pretty bold idea
-			
+		if line == '\13' then
 			break
-		end
+		else
+			tempAStringParser.reset(line)
+			local index = tempAStringParser.popUntil(': ')
+			assert(index, 'in headers: missing index')
+			local value = tempAStringParser.toEnd()
 
-		object.headers[index] = value
-		--]]
---end
+			object.headers[index] = value
+		end
 	end
 
 
