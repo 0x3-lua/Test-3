@@ -54,6 +54,7 @@ local Enum = require('Enum')
 local Static = require('Static')
 
 local tempStringParser = StringParser.new''
+local tempAStringParser = StringParser.new''
 
 ---@type flagStruct
 local tempA = {
@@ -292,9 +293,13 @@ function cURL.clientRequest.fromString(s)
 			tempStringParser.popUntil('\n'),
 			'error parsing headers: no line breaks, reached end.'
 		)
-
-		local index, value = line:match('([^:]-): ?(.+)')
-		print('line:', '|' .. line .. '|')
+		tempAStringParser.reset(line)
+		print('line:', 
+			table.concat({ line:byte(1, #line) }, '|'))
+			
+			--[[
+		local index = StringParser.popUntil()
+		
 		print("header: ", index, value)
 
 		if not index then -- this is a pretty bold idea
@@ -303,6 +308,8 @@ function cURL.clientRequest.fromString(s)
 		end
 
 		object.headers[index] = value
+		--]]
+--end
 	end
 
 
