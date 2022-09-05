@@ -293,10 +293,14 @@ function cURL.clientRequest.fromString(s)
 		)
 
 		if #line == 0 then
+			print('met')
 			break
 		else
 			local index, value = line:match('(.-): (.+)')
+			print('line:', line)
 			print("header: ", index, value)
+
+			
 
 			object.headers[index] = value
 		end
