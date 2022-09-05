@@ -300,7 +300,7 @@ function cURL.clientRequest.fromTCPClient(client)
 
 		repeat
 			local line, close = client:receive()
-
+			print('L', line)
 			object.body = object.body .. line
 
 			if not close then
