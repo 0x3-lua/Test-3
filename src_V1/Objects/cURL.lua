@@ -316,6 +316,7 @@ end
 ---@param client TcpServer.client
 ---@return cURL.ClientRequest
 function cURL.clientRequest.fromTCPClient(client)
+	print('getting all content')
 	local requestStr, closed = client:receive('*a')
 
 	assert(not closed, 'unexpected closed')
