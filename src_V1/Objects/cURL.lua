@@ -306,7 +306,6 @@ function cURL.clientRequest.fromString(s)
 		end
 	end
 
-
 	object.body = tempStringParser.toEnd()
 
 	return object
@@ -317,7 +316,7 @@ end
 function cURL.clientRequest.fromTCPClient(client)
 	print('getting all content')
 	local requestStr, closed = client:receive('*a')
-
+	print('got content', requestStr)
 	assert(not closed, 'unexpected closed')
 	print('getting request')
 	return cURL.clientRequest.fromString(requestStr)

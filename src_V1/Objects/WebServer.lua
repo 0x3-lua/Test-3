@@ -114,9 +114,7 @@ function WebServer.new(host, port)
 		launched = true
 		coroutine.wrap(function ()
 			while true do
-				print('began loop')
 				local client = object.server:accept()
-				print('met client')
 				
 				local request = cURL
 					.clientRequest
