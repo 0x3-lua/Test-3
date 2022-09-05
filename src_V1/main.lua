@@ -24,7 +24,8 @@ end).onInvalidRequest(function (client, req, res)
 	res.body = 'blank'
 
 	print(
-	Static.table.toString(req))
+		Static.table.toString(req)
+	)
 end)
 
 -- always last step
