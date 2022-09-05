@@ -296,24 +296,17 @@ function cURL.clientRequest.fromTCPClient(client)
 	local contentLengthStr = object.headers['Content-Length']
 
 	if contentLengthStr then
-		local contentLength = assert(
-			tonumber(contentLengthStr)
-		)
-		
 		object.body = ''
 
-		while contentLength > 0 do
+		repeat
 			local line, close = client:receive()
 
-			assert(not close)
 			object.body = object.body .. line
-			contentLength = contentLength - #line
 
-			if contentLength > 0 then
+			if not close then
 				object.body = object.body .. '\n'
-				contentLength = contentLength - 1
 			end
-		end
+		until close
 	end
 
 	return object
