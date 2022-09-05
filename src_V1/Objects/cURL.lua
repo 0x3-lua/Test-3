@@ -307,6 +307,7 @@ function cURL.clientRequest.fromString(s)
 		end
 	end
 
+
 	object.body = tempStringParser.toEnd()
 
 	return object
@@ -318,13 +319,13 @@ function cURL.clientRequest.fromTCPClient(client)
 	local s = ''
 	repeat
 		local line, isClosed = client:receive()
-
+		print(line)
 		if not isClosed then
 			s = s .. line .. '\n'
 		end
 	until isClosed
 
-	return  cURL.clientRequest.fromString(s)
+	return cURL.clientRequest.fromString(s)
 end
 
 return cURL;
