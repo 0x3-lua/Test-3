@@ -296,7 +296,7 @@ function cURL.clientRequest.fromString(s)
 			print('met')
 			break
 		else
-			local index, value = line:match('(.-): (.+)')
+			local index, value = line:match('([^:]-): (.+)')
 			print('line:', line)
 			print("header: ", index, value)
 
