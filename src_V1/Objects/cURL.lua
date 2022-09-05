@@ -293,18 +293,16 @@ function cURL.clientRequest.fromString(s)
 			'error parsing headers: no line breaks, reached end.'
 		)
 
-		if #line == 0 then
-			print('met end of headers')
-			break
-		else
-			local index, value = line:match('([^:]-): ?(.+)')
-			print('line:', '|' .. line .. '|')
-			print("header: ", index, value)
+		local index, value = line:match('([^:]-): ?(.+)')
+		print('line:', '|' .. line .. '|')
+		print("header: ", index, value)
 
+		if not index then -- this is a pretty bold idea
 			
-
-			object.headers[index] = value
+			break
 		end
+
+		object.headers[index] = value
 	end
 
 
