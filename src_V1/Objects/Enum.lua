@@ -8,4 +8,10 @@ Enum.mimeTypes =  {
 	txt = 'text/plain'
 }
 
+---@enum requestType
+Enum.requestTypes = {
+	GET = 'GET';
+	POST = 'POST'
+}
+
 return Enum

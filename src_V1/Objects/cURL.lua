@@ -17,7 +17,7 @@
 
 ---@class cURL.ClientRequest
 ---@field webPage string
----@field requestType string
+---@field requestType requestType
 ---@field headers Headers
 ---@field httpVersion string
 ---@field body string?
@@ -34,6 +34,7 @@
 ---@class cURL.ClientRequest.constructor
 ---@field new fun(): cURL.ClientRequest
 ---@field fromTCPClient fun(client: TcpServer.client): cURL.ClientRequest
+---@field fromString fun(s: string): cURL.ClientRequest
 
 ---@class cURL.ServerResponse.constructor
 ---@field new fun(): cURL.ServerResponse
@@ -45,11 +46,9 @@
 
 ---@type cURL
 local cURL = {}
-local StringParser = 
-	require('StringParser')
-
-local BashCommand = 
-	require('src_V1.Objects.BashCommand')
+local StringParser = require('StringParser')
+local BashCommand = require('BashCommand')
+local Enum = require('Enum')
 
 ---@module "Static"
 local Static = require('Static')
@@ -257,59 +256,70 @@ function cURL.clientRequest.new()
 	return object
 end
 
+---string to client request
+---@param s string
+---@return cURL.ClientRequest
+function cURL.clientRequest.fromString(s)
+	local object = cURL.clientRequest.new()
+	tempStringParser.reset(s)
+
+	-- request type
+	local requestType = tempStringParser.popUntil' '
+	---@cast requestType requestType
+	object.requestType =
+	assert(requestType, 'missing request type')
+	
+	assert(
+		Enum.requestTypes[requestType],
+		'invalid request type, got ' .. requestType
+	)
+
+	-- web page 
+	local webPage = tempStringParser.popUntil' '
+	object.webPage = assert(webPage, "missing webpage")
+
+	-- http version
+	local httpVersion = tempStringParser.popUntil('\n')
+	object.httpVersion = assert(
+		httpVersion,
+		"missing http version"
+	)
+
+	-- headers
+	while true do
+		local line = assert(
+			tempStringParser.popUntil('\n'),
+			'error parsing headers: no line breaks, reached end.'
+		)
+
+		if #line == 0 then
+			break
+		else
+			local index, value = line:match('(.-): (.+)')
+			print("header: ", index, value)
+
+			object.headers[index] = value
+		end
+	end
+
+	object.body = tempStringParser.toEnd()
+
+	return object
+end
+
 ---@param client TcpServer.client
 ---@return cURL.ClientRequest
 function cURL.clientRequest.fromTCPClient(client)
-	local object = cURL.clientRequest.new()
-
-	-- request Type
-	local temp, tempA = client:receive()
-
-	assert(not tempA and temp)
-
-	local temp = tempStringParser.reset(temp)
-		.popUntil' '
-	object.requestType = assert(temp)
-	-- web page
-
-	temp = tempStringParser.popUntil' '
-	object.webPage = assert(temp)
-
-	-- http version
-	object.httpVersion = tempStringParser.toEnd()
-
-	-- headers
+	local s = ''
 	repeat
-		local line, closed = client:receive()
-		print('A', line)
-		assert(not closed)
+		local line, isClosed = client:receive()
 
-		if line ~= '' then
-			local index = tempStringParser.reset(line)
-				.popUntil(': ')
-			assert(index)
-			
-			object.headers[index] = tempStringParser.toEnd()
+		if not isClosed then
+			s = s .. line .. '\n'
 		end
-	until line == ''
+	until isClosed
 
-	local contentLengthStr = object.headers['Content-Length']
-
-	if contentLengthStr then
-		object.body = ''
-
-		repeat
-			local line, close = client:receive()
-			print('L', line, close)
-			object.body = object.body .. line
-
-			if not close then
-				object.body = object.body .. '\n'
-			end
-		until close
-	end
-
-	return object
+	return  cURL.clientRequest.fromString(s)
 end
 
 return cURL;
