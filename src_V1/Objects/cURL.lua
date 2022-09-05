@@ -281,7 +281,7 @@ function cURL.clientRequest.fromTCPClient(client)
 	-- headers
 	repeat
 		local line, closed = client:receive()
-
+		print('A', line)
 		assert(not closed)
 
 		if line ~= '' then
@@ -300,7 +300,7 @@ function cURL.clientRequest.fromTCPClient(client)
 
 		repeat
 			local line, close = client:receive()
-			print('L', line)
+			print('L', line, close)
 			object.body = object.body .. line
 
 			if not close then
