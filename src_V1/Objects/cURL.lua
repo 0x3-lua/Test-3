@@ -20,6 +20,7 @@
 ---@field requestType string
 ---@field headers Headers
 ---@field httpVersion string
+---@field body string?
 
 ---@class cURL.ServerResponse 
 ---@field body string @bodyContent
@@ -278,7 +279,6 @@ function cURL.clientRequest.fromTCPClient(client)
 	object.httpVersion = tempStringParser.toEnd()
 
 	-- headers
-
 	repeat
 		local line, closed = client:receive()
 
@@ -292,6 +292,29 @@ function cURL.clientRequest.fromTCPClient(client)
 			object.headers[index] = tempStringParser.toEnd()
 		end
 	until line == ''
+
+	local contentLengthStr = object.headers['Content-Length']
+
+	if contentLengthStr then
+		local contentLength = assert(
+			tonumber(contentLengthStr)
+		)
+		
+		object.body = ''
+
+		while contentLength > 0 do
+			local line, close = client:receive()
+
+			assert(not close)
+			object.body = object.body .. line
+			contentLength = contentLength - #line
+
+			if contentLength > 0 then
+				object.body = object.body .. '\n'
+				contentLength = contentLength - 1
+			end
+		end
+	end
 
 	return object
 end

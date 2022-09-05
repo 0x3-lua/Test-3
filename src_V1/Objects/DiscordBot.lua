@@ -2,6 +2,7 @@
 ---@field new fun(apiKey: string?): DiscordBot.bot
 
 ---@class DiscordBot.bot
+---@field verifyEd25519 fun(req: cURL.ClientRequest): boolean
 
 ---@type DiscordBot
 local DiscordBot = {}
@@ -21,7 +22,18 @@ DiscordBot.new = function(apiKey)
 	---@type DiscordBot.bot
 	local object = {}
 
-	
+	---verifies interaction
+	---@param req cURL.ClientRequest
+	---@return boolean
+	object.verifyEd25519 = function (req)
+		local result = false
+		local ed = req.headers['X-Signature-Ed25519']
+		local timeStamp = req.headers['X-Signature-Timestamp']
+		local body = req
+
+		return result
+	end
+
 
 	return object
 end
