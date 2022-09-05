@@ -319,7 +319,7 @@ function cURL.clientRequest.fromTCPClient(client)
 	local requestStr, closed = client:receive('*a')
 
 	assert(not closed, 'unexpected closed')
-
+	print('getting request')
 	return cURL.clientRequest.fromString(requestStr)
 end
 
