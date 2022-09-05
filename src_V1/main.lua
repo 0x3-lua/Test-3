@@ -18,12 +18,13 @@ WebServer.onRequest('/', 'GET', function (client, req, res)
 	res.headers.connection = 'close'
 	res.body = 'Main page'
 end).onInvalidRequest(function (client, req, res)
-	res.statusCode = 404
-	res.statusMessage = 'Bad request'
+	res.statusCode = 200
+	res.statusMessage = 'OK'
 	res.headers.connection = 'close'
-	res.body = 'bad request idk'
+	res.body = 'blank'
 
-	Static.table.toString(req)
+	print(
+	Static.table.toString(req))
 end)
 
 -- always last step

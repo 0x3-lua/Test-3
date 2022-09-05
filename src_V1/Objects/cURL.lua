@@ -319,7 +319,7 @@ function cURL.clientRequest.fromTCPClient(client)
 	local s = ''
 	repeat
 		local line, isClosed = client:receive()
-		print(line)
+
 		if not isClosed then
 			s = s .. line .. '\n'
 		end
