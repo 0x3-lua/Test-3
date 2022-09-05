@@ -294,11 +294,11 @@ function cURL.clientRequest.fromString(s)
 		)
 
 		if #line == 0 then
-			print('met')
+			print('met end of headers')
 			break
 		else
 			local index, value = line:match('([^:]-): ?(.+)')
-			print('line:', line)
+			print('line:', '|' .. line .. '|')
 			print("header: ", index, value)
 
 			
