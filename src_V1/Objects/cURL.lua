@@ -286,6 +286,7 @@ function cURL.clientRequest.fromString(s)
 	)
 
 	-- headers
+	print('met headers')
 	while true do
 		local line = assert(
 			tempStringParser.popUntil('\n'),
