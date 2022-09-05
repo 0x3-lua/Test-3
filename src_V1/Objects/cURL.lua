@@ -316,16 +316,11 @@ end
 ---@param client TcpServer.client
 ---@return cURL.ClientRequest
 function cURL.clientRequest.fromTCPClient(client)
-	local s = ''
-	repeat
-		local line, isClosed = client:receive('*a')
-		print('LA', line)
-		if not isClosed then
-			s = s .. line .. '\n'
-		end
-	until isClosed
+	local requestStr, closed = client:receive('*a')
 
-	return cURL.clientRequest.fromString(s)
+	assert(not closed, 'unexpected closed')
+
+	return cURL.clientRequest.fromString(requestStr)
 end
 
 return cURL;
