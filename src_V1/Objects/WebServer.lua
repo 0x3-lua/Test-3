@@ -30,7 +30,7 @@
 ---@field accept fun(): TcpServer.client
 
 ---@class TcpServer.client: TcpServer.super
----@field receive fun(self: TcpServer.client): string, string?
+---@field receive fun(self: TcpServer.client, s: string?): string, string?
 --- recieves a string from client
 ---@field close fun(self: TcpServer.client) @closes connection to 
 --- client
@@ -117,7 +117,8 @@ function WebServer.new(host, port)
 				local client = object.server:accept()
 				print('met client')
 				
-				local request = cURL.clientRequest
+				local request = cURL
+					.clientRequest
 					.fromTCPClient(client)
 	
 				local responseWebPage = Static.table.access(
