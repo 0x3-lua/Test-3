@@ -119,7 +119,6 @@ function WebServer.new(host, port)
 
 				print'getting request'
 			
-				
 				local request = cURL
 					.clientRequest
 					.fromTCPClient(client)

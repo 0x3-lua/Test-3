@@ -287,14 +287,13 @@ function cURL.clientRequest.fromString(s)
 	)
 
 	-- headers
-	print('met headers')
 	while true do
 		local line = assert(
-			tempStringParser.popUntil('\n'),
+			tempStringParser.popUntil('\13\n'),
 			'error parsing headers: no line breaks, reached end.'
 		)
 
-		if line == '\13' then
+		if #line == 0 then
 			break
 		else
 			tempAStringParser.reset(line)
