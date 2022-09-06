@@ -8,6 +8,7 @@ local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
 local Bot = DiscordBot.new()
 
+Static.luarocks.loadModule('LuaSocket')
 
 -- sample:
 -- let our domain be `https://google.com`
