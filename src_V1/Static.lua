@@ -9,7 +9,7 @@
 ---@field table Static.table
 
 ---@class Static.luarocks
----@field loadModule fun(mod: string): boolean
+---@field loadModule fun(mod: string): {[number]: string}
 
 ---@class Static.math
 ---@field getDigit fun(n: number, base:number, i:number): number
@@ -28,6 +28,7 @@
 
 ---@class Static.table
 ---@field access fun(t: table, ...: any): any
+---@field clone fun(t: table): table
 ---@field empty fun(t: table)
 ---@field flip fun(t: table): table
 ---@field getN fun(t: table): integer
@@ -48,14 +49,21 @@ Static.table = {}
 
 ---loads a module, must preload luarocks
 ---@param mod string module name
----@return boolean success
+---@return {[number]: string} success
 function Static.luarocks.loadModule(mod)
-	local result = false
+	local result = {}
 
-	local str = Static.os.runBash(
+	local diffA = Static.table.clone(package.loaded)
+	-- local str = may need later
+	Static.os.runBash(
 		"luarocks install --local " .. mod
 	)
-	print("got result,", str)
+
+	for i in next, package.loaded do
+		if not diffA[i] then
+			table.insert(result, i)
+		end
+	end
 
 	return result
 end
@@ -278,6 +286,16 @@ function Static.table.access(t, ...)
 	end
 
 	return result
+end
+
+function Static.table.clone(t)
+	local result = {}
+	
+	for i, v in next, t do
+		result[i] = v
+	end
+
+	return t
 end
 
 ---Empties a table
