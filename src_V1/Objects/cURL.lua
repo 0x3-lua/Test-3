@@ -314,8 +314,10 @@ end
 ---@return cURL.ClientRequest
 function cURL.clientRequest.fromTCPClient(client)
 	print('getting all content')
-	local requestStr, closed = client:receive('*a')
+	local requestStr, closed = client:receive()
 	print('got content', requestStr)
+
+	
 	assert(not closed, 'unexpected closed')
 	print('getting request')
 	return cURL.clientRequest.fromString(requestStr)
