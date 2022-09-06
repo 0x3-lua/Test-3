@@ -317,8 +317,8 @@ function cURL.clientRequest.fromTCPClient(client)
 	print('getting all content')
 
 	local content = ''
-	content = client:receive('*a')
-	--[[
+	--content = client:receive('*a')
+	-- [[
 	repeat
 		print('inline')
 		local line, closed = client:receive()
