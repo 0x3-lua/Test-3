@@ -1,7 +1,10 @@
 --run code below
 local Static = require('Static')
 -- local WebServerV3 = require('WebServerV3')
+print(Static.table.toString(
 Static.luarocks.loadModule('pegasus')
+)
+)
 local pegasus = require 'pegasus'
 
 local server = pegasus:new({
