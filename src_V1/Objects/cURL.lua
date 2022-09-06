@@ -313,34 +313,23 @@ end
 ---@param client TcpServer.client
 ---@return cURL.ClientRequest
 function cURL.clientRequest.fromTCPClient(client)
-	
-	print('getting all content')
-
 	local content = ''
 	-- content = client:receive('*a')
 	-- [[
 	repeat
-		print('inline')
 		local line, closed = client:receive()
-		print(('|\\%s|'):format(
-			table.concat({line:byte(1, #line)}, '\\')
-		), closed)
 		if line then
 			content = content .. line .. '\13\n'
 		end
 	until not line or #line == 0
 	--]]
 
-	print('got content', content)
-
-	print('getting request')
 	local result = cURL.clientRequest.fromString(content)
 	local len = result.headers['Content-Length']
 	if len then
 		len = tonumber(len)
 		if len then
 			result.body = client:receive(len)
-			
 		end
 	end
 

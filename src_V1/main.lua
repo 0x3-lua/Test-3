@@ -6,7 +6,7 @@ local WebServer = require('WebServer')
 	.new(nil, 3000)
 local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
--- local Bot = DiscordBot.new()
+local Bot = DiscordBot.new()
 
 
 WebServer.onRequest('/', 'GET', function (_, _, res)
@@ -23,5 +23,7 @@ end).onInvalidRequest(function (_, req, res)
 	print(
 		Static.table.toString(req)
 	)
+
+	Bot.handlePing(req, res)
 end).launch()
 --]]

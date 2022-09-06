@@ -2,11 +2,23 @@
 ---@field new fun(apiKey: string?): DiscordBot.bot
 
 ---@class DiscordBot.bot
+---@field handlePing fun(req: cURL.ClientRequest, res: cURL.ServerResponse): boolean
 ---@field verifyEd25519 fun(req: cURL.ClientRequest): boolean
+
+---@class cjson
+---@field decode fun(s: string): table
+---@field encode fun(t: table): string
 
 ---@type DiscordBot
 local DiscordBot = {}
+local Static = require('Static')
 local Environment = require('Environment')
+
+Static.luarocks.loadModule('lua-cjson')
+---@type cjson
+local json = require('cjson')
+
+local interactionUA = 'Discord-Interactions/1.0 (+https://discord.com)'
 
 ---returns bot
 ---@param apiKey string? default is an Environment variable named "DiscordBotAPIKey"
@@ -21,6 +33,19 @@ DiscordBot.new = function(apiKey)
 	-- main
 	---@type DiscordBot.bot
 	local object = {}
+
+	---handles discord interaction "ping"
+	---@param req cURL.ClientRequest
+	---@param res cURL.ServerResponse
+	---@return boolean
+	object.handlePing = function (req, res)
+		local result = false
+
+		if req.headers['User-Agent'] == interactionUA then
+			print(Static.table.toString(json.decode(req.body)))
+		end
+		return result
+	end
 
 	---verifies interaction
 	---@param req cURL.ClientRequest
