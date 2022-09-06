@@ -8,8 +8,9 @@ local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
 local Bot = DiscordBot.new()
 
+print(
 Static.table.toString(
-Static.luarocks.loadModule('luasec'))
+Static.luarocks.loadModule('luasec')))
 
 WebServer.onRequest('/', 'GET', function (client, req, res)
 	res.statusCode = 200
