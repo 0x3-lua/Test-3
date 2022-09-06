@@ -3,12 +3,12 @@ local Static = require('Static')
 
 pcall(function ()
 	print('inpcall')
-	print(require('lua-cjson'))
+	print(require('json'))
 end)
 
 Static.luarocks.loadModule('lua-cjson')
 
-print(require('lua-cjson'))
+print(require('json'))
 
 --[[
 local WebServer = require('WebServer')
