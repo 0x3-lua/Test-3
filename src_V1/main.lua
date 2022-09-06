@@ -1,7 +1,7 @@
 --run code below
 local Static = require('Static')
 local WebServer = require('WebServer')
-	.new(nil, 9000)
+	.new()
 local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
 local Bot = DiscordBot.new()
