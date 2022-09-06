@@ -17,6 +17,10 @@ WebServer.onRequest('/', 'GET', function (client, req, res)
 	res.statusMessage = 'OK'
 	res.headers.connection = 'close'
 	res.body = 'Main page'
+
+	print(
+		Static.table.toString(req)
+	)
 end).onInvalidRequest(function (client, req, res)
 	res.statusCode = 200
 	res.statusMessage = 'OK'
