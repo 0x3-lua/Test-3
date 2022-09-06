@@ -321,7 +321,7 @@ function cURL.clientRequest.fromTCPClient(client)
 		local line, closed = client:receive()
 		print(line, closed)
 		if line then
-			content = content .. line .. '\n'
+			content = content .. line .. '\13\n'
 		end
 	until not line
 
