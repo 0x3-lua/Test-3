@@ -339,8 +339,7 @@ function cURL.clientRequest.fromTCPClient(client)
 	if len then
 		len = tonumber(len)
 		if len then
-			print'bod'
-			print('getting body', client:receive(len))
+			result.body = client:receive(len)
 			
 		end
 	end
