@@ -1,9 +1,14 @@
 --run code below
 local Static = require('Static')
 
-Static.luarocks.loadModule('lua-cjson')
+pcall(function ()
+	print('inpcall')
+	print(require('socket'))
+end)
 
-print(require('lua-cjson'))
+Static.luarocks.loadModule('LuaSocket')
+
+print(require('socket'))
 
 --[[
 local WebServer = require('WebServer')
