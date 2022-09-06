@@ -30,7 +30,7 @@
 ---@field accept fun(): TcpServer.client
 
 ---@class TcpServer.client: TcpServer.super
----@field receive fun(self: TcpServer.client): string, string?
+---@field receive fun(self: TcpServer.client, s: string?): string, string?
 --- recieves a string from client
 ---@field close fun(self: TcpServer.client) @closes connection to 
 --- client
@@ -116,11 +116,15 @@ function WebServer.new(host, port)
 			while true do
 				print('getting client');
 				local client = object.server:accept()
+
 				print'getting request'
-				local request = cURL.clientRequest
+			
+				
+				local request = cURL
+					.clientRequest
 					.fromTCPClient(client)
 				
-				print('got client')
+				print('got request')
 
 
 				local responseWebPage = Static.table.access(
@@ -135,10 +139,10 @@ function WebServer.new(host, port)
 				response.statusCode = 501
 				response.statusMessage = 'not implemented'
 				response.body = 'oops, server did something wrong'
-				response.headers['Content-Type'] = Enum.mimeTypes.txt
+				response.headers['Content-Type'] =
+					Enum.mimeTypes.txt
 				response.success = false
 				response.httpVersion = request.httpVersion
-
 
 				local _ = (responseWebPage or invalidFunc)(client, request, response)
 				
