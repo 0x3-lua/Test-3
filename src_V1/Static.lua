@@ -593,4 +593,6 @@ function Static.table.toString(t, lvl, depth)
 
 end
 
+Static.os.runBash('  eval "$(luarocks path --bin)"')
+
 return Static;
