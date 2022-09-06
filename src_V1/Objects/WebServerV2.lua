@@ -25,7 +25,7 @@
 ---@type WebServerV2
 local WebServerV2 = {}
 local Static = require('Static')
-Static.luarocks.loadModule('LuaSocket')
+--Static.luarocks.loadModule('LuaSocket')
 
 print(
 	'copas:',
