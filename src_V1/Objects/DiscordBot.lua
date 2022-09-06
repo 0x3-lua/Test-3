@@ -9,14 +9,43 @@
 ---@field decode fun(s: string): table
 ---@field encode fun(t: table): string
 
+---@class luazen
+---@field x25519_sign_public_key fun(s: string): string
+
+---@class utf8
+---@field d fun(s: string) :string
+
 ---@type DiscordBot
 local DiscordBot = {}
+
+-- deps
 local Static = require('Static')
 local Environment = require('Environment')
 
 Static.luarocks.loadModule('lua-cjson')
 ---@type cjson
 local json = require('cjson')
+
+Static.luarocks.loadModule('luazen')
+---@type luazen
+local luazen = require('X25519')
+
+print(
+	'luaz',
+	type(
+		luazen
+)
+)
+
+Static.luarocks.loadModule('utf8')
+---@type utf8
+local utf8 = require('lua-utf8')
+
+print('ut', Static.table.toString(utf8))
+
+
+-- main?
+
 
 local interactionUA = 'Discord-Interactions/1.0 (+https://discord.com)'
 
@@ -54,7 +83,11 @@ DiscordBot.new = function(apiKey)
 		local result = false
 		local ed = req.headers['X-Signature-Ed25519']
 		local timeStamp = req.headers['X-Signature-Timestamp']
-		local body = req
+		local body = req.body
+
+		if ed and timeStamp and body then
+			
+		end
 
 		return result
 	end
