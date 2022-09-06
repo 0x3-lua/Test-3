@@ -1,18 +1,7 @@
 --run code below
 local Static = require('Static')
 
-print(Static.table.toString(package.loaded, nil, 1))
-pcall(function ()
-	print('inpcall')
-	print(require('socket'))
-end)
-
-Static.luarocks.loadModule('LuaSocket')
-
-print(require('socket'))
-print(Static.table.toString(package.loaded, nil ,1))
-
---[[
+-- [[
 local WebServer = require('WebServer')
 	.new(nil, 3000)
 local cURL = require('cURL')
