@@ -328,13 +328,24 @@ function cURL.clientRequest.fromTCPClient(client)
 		if line then
 			content = content .. line .. '\13\n'
 		end
-	until not line -- or #line == 0
+	until not line or #line == 0
 	--]]
 
 	print('got content', content)
 
 	print('getting request')
-	return cURL.clientRequest.fromString(content)
+	local result = cURL.clientRequest.fromString(content)
+	local len = result.headers['Content-Length']
+	if len then
+		len = tonumber(len)
+		if len then
+			print'bod'
+			print('getting body', client:receive(len))
+			
+		end
+	end
+
+	return result
 end
 
 return cURL;
