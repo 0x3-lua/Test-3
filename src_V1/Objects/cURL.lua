@@ -323,7 +323,7 @@ function cURL.clientRequest.fromTCPClient(client)
 		if line then
 			content = content .. line .. '\13\n'
 		end
-	until closed
+	until not line
 
 	print('got content', content)
 
