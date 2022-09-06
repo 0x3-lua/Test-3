@@ -4,6 +4,9 @@ local Static = require('Static')
 
 print(
 	Static.table.toString(
+		Static.luarocks.loadModule('luasec')
+	),
+	Static.table.toString(
 		Static.luarocks.loadModule('lsocket')
 	)
 )
