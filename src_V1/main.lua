@@ -19,6 +19,7 @@ WebServer.onRequest('/', 'GET', function (client, req, res)
 	res.body = 'Main page'
 
 	print(
+		"main", 
 		Static.table.toString(req)
 	)
 end).onInvalidRequest(function (client, req, res)
