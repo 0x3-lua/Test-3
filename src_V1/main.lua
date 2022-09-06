@@ -2,14 +2,11 @@
 local Static = require('Static')
 -- local WebServerV3 = require('WebServerV3')
 
-print(
-	Static.table.toString(
-		Static.luarocks.loadModule('luasec')
-	),
-	Static.table.toString(
-		Static.luarocks.loadModule('lsocket')
-	)
-)
+Static.luarocks.loadModule('luasec')
+Static.luarocks.loadModule('lsocket')
+
+print(Static.table.toString(require('lsocket')))
+
 
 --[[
 local WebServer = require('WebServer')
