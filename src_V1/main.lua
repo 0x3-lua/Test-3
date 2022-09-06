@@ -1,5 +1,11 @@
 --run code below
 local Static = require('Static')
+
+Static.luarocks.loadModule('LuaSocket')
+
+print(require('LuaSocket'))
+
+--[[
 local WebServer = require('WebServer')
 	.new(nil, 3000)
 local cURL = require('cURL')
@@ -12,7 +18,6 @@ local Bot = DiscordBot.new()
 
 -- client sent http request to home, being `google.com`
 WebServer.onRequest('/', 'GET', function (client, req, res)
-	res.success = true
 	res.statusCode = 200
 	res.statusMessage = 'OK'
 	res.headers.connection = 'close'
@@ -34,4 +39,5 @@ end).onInvalidRequest(function (client, req, res)
 end)
 
 -- always last step
-.launch()
+	.launch()
+--]]

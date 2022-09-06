@@ -1,11 +1,15 @@
 ---@meta
 
 ---@class Static
+---@field luarocks Static.luarocks
 ---@field math Static.math
 ---@field os Static.os
 ---@field package Static.package
 ---@field string Static.string
 ---@field table Static.table
+
+---@class Static.luarocks
+---@field loadModule fun(mod: string): boolean
 
 ---@class Static.math
 ---@field getDigit fun(n: number, base:number, i:number): number
@@ -35,11 +39,24 @@
 
 ---@type Static
 local Static = {}
+Static.luarocks = {}
 Static.math = {}
 Static.os = {}
 Static.package = {}
 Static.string = {}
 Static.table = {}
+
+---loads a module, must preload luarocks
+---@param mod string module name
+---@return boolean success
+function Static.luarocks.loadModule(mod)
+	local result = false
+
+	local str = Static.os.runBash("luarocks install " .. mod)
+	print("got result,", str)
+
+	return result
+end
 
 --[[
 	Gets the position of some digit

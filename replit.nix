@@ -2,6 +2,6 @@
 	deps = [
         pkgs.lua
         pkgs.sumneko-lua-language-server
-		pkgs.lua51Packages.luasocket
+		pkgs.lua51Packages.luarocks
 	];
 }

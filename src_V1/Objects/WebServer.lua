@@ -1,5 +1,6 @@
 ---@meta
 
+-- nixOS: pkgs.lua51Packages.luasocket
 -- socket
 -- refer to https://w3.impa.br/~diego/software/luasocket/reference.html
 ---@class WebServer
