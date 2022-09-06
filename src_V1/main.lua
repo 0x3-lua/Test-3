@@ -5,7 +5,7 @@ local Static = require('Static')
 Static.luarocks.loadModule('luasec')
 Static.luarocks.loadModule('lsocket')
 
-print(Static.table.toString(require('lsocket')))
+print(Static.table.toString(require('ssl')))
 
 
 --[[
