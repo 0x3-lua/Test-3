@@ -31,7 +31,7 @@
 ---@field accept fun(): TcpServer.client
 
 ---@class TcpServer.client: TcpServer.super
----@field receive fun(self: TcpServer.client, s: string?): string, string?
+---@field receive fun(self: TcpServer.client, s: (string | integer)?): string, string?
 --- recieves a string from client
 ---@field close fun(self: TcpServer.client) @closes connection to 
 --- client

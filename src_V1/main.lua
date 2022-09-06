@@ -9,17 +9,12 @@ local DiscordBot = require('DiscordBot')
 -- local Bot = DiscordBot.new()
 
 
-WebServer.onRequest('/', 'GET', function (client, req, res)
+WebServer.onRequest('/', 'GET', function (_, _, res)
 	res.statusCode = 200
 	res.statusMessage = 'OK'
 	res.headers.connection = 'close'
 	res.body = 'Main page'
-
-	print(
-		"main", 
-		Static.table.toString(req)
-	)
-end).onInvalidRequest(function (client, req, res)
+end).onInvalidRequest(function (_, req, res)
 	res.statusCode = 200
 	res.statusMessage = 'OK'
 	res.headers.connection = 'close'
