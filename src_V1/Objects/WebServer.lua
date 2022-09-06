@@ -132,10 +132,10 @@ function WebServer.new(host, port)
 				response.statusCode = 501
 				response.statusMessage = 'not implemented'
 				response.body = 'oops, server did something wrong'
-				response.headers['Content-Type'] = Enum.mimeTypes.txt
+				response.headers['Content-Type'] =
+					Enum.mimeTypes.txt
 				response.success = false
 				response.httpVersion = request.httpVersion
-
 
 				local _ = (responseWebPage or invalidFunc)(client, request, response)
 				
