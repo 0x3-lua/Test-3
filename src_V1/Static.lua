@@ -435,8 +435,8 @@ end
 
 -- displays content inside of the table
 ---@param t table
----@param lvl integer?
----@param depth integer?
+---@param lvl integer? current depth
+---@param depth integer? maximum depth
 ---@return string?
 function Static.table.toString(t, lvl, depth)
 	-- pre

@@ -1,7 +1,7 @@
 --run code below
 local Static = require('Static')
 
-print(Static.table.toString(package.loaded))
+print(Static.table.toString(package.loaded, 0, 1))
 pcall(function ()
 	print('inpcall')
 	print(require('json'))
@@ -10,7 +10,7 @@ end)
 Static.luarocks.loadModule('lua-cjson')
 
 print(require('json'))
-print(Static.table.toString(package.loaded))
+print(Static.table.toString(package.loaded, 0 ,1))
 
 --[[
 local WebServer = require('WebServer')
