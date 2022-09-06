@@ -3,7 +3,7 @@ local Static = require('Static')
 
 Static.luarocks.loadModule('LuaSocket')
 
-print(require('LuaSocket'))
+print(require('luasocket'))
 
 --[[
 local WebServer = require('WebServer')
