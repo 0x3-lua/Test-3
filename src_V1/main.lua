@@ -1,7 +1,9 @@
 --run code below
 local Static = require('Static')
+local WebServerV2 = require('WebServerV2')
 
--- [[
+
+--[[
 local WebServer = require('WebServer')
 	.new(nil, 3000)
 local cURL = require('cURL')
@@ -32,3 +34,4 @@ end).onInvalidRequest(function (client, req, res)
 		Static.table.toString(req)
 	)
 end).launch()
+--]]

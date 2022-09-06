@@ -10,6 +10,7 @@
 
 ---@class Static.luarocks
 ---@field loadModule fun(mod: string): {[number]: string}
+---@field loaded {[string]: {[number]: string}}
 
 ---@class Static.math
 ---@field getDigit fun(n: number, base:number, i:number): number
@@ -40,7 +41,7 @@
 
 ---@type Static
 local Static = {}
-Static.luarocks = {}
+Static.luarocks = {loaded = {}}
 Static.math = {}
 Static.os = {}
 Static.package = {}
@@ -51,20 +52,24 @@ Static.table = {}
 ---@param mod string module name
 ---@return {[number]: string} success
 function Static.luarocks.loadModule(mod)
-	local result = {}
+	local result = Static.luarocks.loaded[mod]
 
-	local diffA = Static.table.clone(package.loaded)
-	-- local str = may need later
-	Static.os.runBash(
-		"luarocks install --local " .. mod
-	)
+	if not result then
+		result = {}
+		local diffA = Static.table.clone(package.loaded)
+		-- local str = may need later
+		Static.os.runBash(
+			"luarocks install --local " .. mod
+		)
 
-	for i in next, package.loaded do
-		if not diffA[i] then
-			table.insert(result, i)
+		for i in next, package.loaded do
+			if not diffA[i] then
+				table.insert(result, i)
+			end
 		end
-	end
 
+		Static.luarocks.loaded[mod] = result
+	end
 	return result
 end
 
