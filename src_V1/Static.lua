@@ -52,7 +52,7 @@ Static.table = {}
 function Static.luarocks.loadModule(mod)
 	local result = false
 
-	local str = Static.os.runBash("luarocks install " .. mod)
+	local str = Static.os.runBash("luarocks install --localtree " .. mod)
 	print("got result,", str)
 
 	return result
