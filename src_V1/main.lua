@@ -4,12 +4,12 @@ local Static = require('Static')
 print(Static.table.toString(package.loaded, nil, 1))
 pcall(function ()
 	print('inpcall')
-	print(require('json'))
+	print(require('socket'))
 end)
 
-Static.luarocks.loadModule('lua-cjson')
+Static.luarocks.loadModule('LuaSocket')
 
-print(require('json'))
+print(require('socket'))
 print(Static.table.toString(package.loaded, nil ,1))
 
 --[[
