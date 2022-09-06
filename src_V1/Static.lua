@@ -59,7 +59,7 @@ function Static.luarocks.loadModule(mod)
 		local diffA = Static.table.clone(package.loaded)
 		-- local str = may need later
 		Static.os.runBash(
-			"luarocks-admin install --local " .. mod
+			"luarocks install --local " .. mod
 		)
 
 		for i in next, package.loaded do
