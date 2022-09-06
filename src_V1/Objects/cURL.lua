@@ -317,8 +317,8 @@ function cURL.clientRequest.fromTCPClient(client)
 	print('getting all content')
 
 	local content = ''
-	content = client:receive('*a')
-	--[[
+	-- content = client:receive('*a')
+	-- [[
 	repeat
 		print('inline')
 		local line, closed = client:receive()
@@ -328,7 +328,7 @@ function cURL.clientRequest.fromTCPClient(client)
 		if line then
 			content = content .. line .. '\13\n'
 		end
-	until not line or #line == 0
+	until not line -- or #line == 0
 	--]]
 
 	print('got content', content)
