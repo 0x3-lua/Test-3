@@ -1,7 +1,7 @@
 --run code below
 local Static = require('Static')
 -- local WebServerV3 = require('WebServerV3')
-
+Static.luarocks.loadModule('LuaSocket')
 Static.luarocks.loadModule('luasec')
 Static.luarocks.loadModule('lsocket')
 
