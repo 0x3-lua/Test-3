@@ -63,7 +63,7 @@ function WebServer.new(host, port)
 		'object is constucted only once'
 	)
 	host = host or '*'
-	port = port or 80
+	port = port or 8080
 
 	-- main
 	---@type WebServer.object
