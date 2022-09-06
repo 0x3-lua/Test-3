@@ -52,7 +52,10 @@ local StringParser = require('StringParser')
 local ReplitDataBase = 
 	require('ReplitDatabase')
 
-
+---returns webserver object
+---@param host string?
+---@param port integer?
+---@return WebServer.object
 function WebServer.new(host, port)
 	-- pre
 	assert(
