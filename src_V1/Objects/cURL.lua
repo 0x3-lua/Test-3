@@ -280,7 +280,7 @@ function cURL.clientRequest.fromString(s)
 	object.webPage = assert(webPage, "missing webpage")
 
 	-- http version
-	local httpVersion = tempStringParser.popUntil('\n')
+	local httpVersion = tempStringParser.popUntil('\13\n')
 	object.httpVersion = assert(
 		httpVersion,
 		"missing http version"
