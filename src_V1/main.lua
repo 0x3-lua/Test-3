@@ -8,12 +8,9 @@ local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
 local Bot = DiscordBot.new()
 
-Static.luarocks.loadModule('LuaSocket')
+Static.table.toString(
+Static.luarocks.loadModule('luasec'))
 
--- sample:
--- let our domain be `https://google.com`
-
--- client sent http request to home, being `google.com`
 WebServer.onRequest('/', 'GET', function (client, req, res)
 	res.statusCode = 200
 	res.statusMessage = 'OK'
@@ -33,8 +30,4 @@ end).onInvalidRequest(function (client, req, res)
 	print(
 		Static.table.toString(req)
 	)
-end)
-
--- always last step
-	.launch()
---]]
+end).launch()
