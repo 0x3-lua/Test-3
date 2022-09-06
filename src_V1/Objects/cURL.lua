@@ -313,14 +313,20 @@ end
 ---@param client TcpServer.client
 ---@return cURL.ClientRequest
 function cURL.clientRequest.fromTCPClient(client)
-	print('getting all content')
-	local requestStr, closed = client:receive()
-	print('got content', requestStr)
+	local content = ''
 
-	
-	assert(not closed, 'unexpected closed')
+	print('getting all content')
+	repeat
+		local line, closed = client:receive()
+		if line then
+			content = content .. line .. '\13\n'
+		end
+	until closed
+
+	print('got content', content)
+
 	print('getting request')
-	return cURL.clientRequest.fromString(requestStr)
+	return cURL.clientRequest.fromString(content)
 end
 
 return cURL;
