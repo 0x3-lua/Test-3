@@ -1,6 +1,11 @@
 --run code below
 local Static = require('Static')
 -- local WebServerV3 = require('WebServerV3')
+Static.luarocks.loadModule('luafilesystem')
+Static.luarocks.loadModule('LuaSocket')
+Static.luarocks.loadModule('lzlib')
+Static.luarocks.loadModule('mimetypes')
+
 print(Static.table.toString(
 Static.luarocks.loadModule('pegasus')
 )
