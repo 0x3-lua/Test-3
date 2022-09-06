@@ -317,7 +317,9 @@ function cURL.clientRequest.fromTCPClient(client)
 
 	print('getting all content')
 	repeat
+		print('inline')
 		local line, closed = client:receive()
+		print(line, closed)
 		if line then
 			content = content .. line .. '\13\n'
 		end
