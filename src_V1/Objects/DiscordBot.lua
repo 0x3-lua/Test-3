@@ -9,11 +9,11 @@
 ---@field decode fun(s: string): table
 ---@field encode fun(t: table): string
 
----@class luazen
----@field x25519_sign_public_key fun(s: string): string
+-- -@class luazen
+-- -@field x25519_sign_public_key fun(s: string): string
 
----@class utf8
----@field d fun(s: string) :string
+-- -@class utf8
+-- -@field d fun(s: string) :string
 
 ---@type DiscordBot
 local DiscordBot = {}
