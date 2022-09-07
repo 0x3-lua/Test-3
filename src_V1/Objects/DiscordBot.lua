@@ -28,7 +28,7 @@ local json = require('cjson')
 
 Static.luarocks.loadModule('luazen')
 ---@type luazen
-local luazen = require('X25519')
+local luazen = require('luazen')
 
 print(
 	'luaz',

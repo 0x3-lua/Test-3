@@ -9,6 +9,8 @@ local DiscordBot = require('DiscordBot')
 local Bot = DiscordBot.new()
 
 
+print(loadstring(cURL.get('https://raw.githubusercontent.com/philanc/luazen/master/src/x25519.c').body))
+
 WebServer.onRequest('/', 'GET', function (_, _, res)
 	res.statusCode = 200
 	res.statusMessage = 'OK'
