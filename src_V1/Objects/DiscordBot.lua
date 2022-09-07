@@ -26,10 +26,11 @@ Static.luarocks.loadModule('lua-cjson')
 ---@type cjson
 local json = require('cjson')
 
+--[[
 Static.luarocks.loadModule('luazen')
 ---@type luazen
 local luazen = require('luazen')
-
+--]]
 print(
 	'luaz',
 	type(
