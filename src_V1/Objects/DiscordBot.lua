@@ -30,14 +30,14 @@ local json = require('cjson')
 Static.luarocks.loadModule('luazen')
 ---@type luazen
 local luazen = require('luazen')
---]]
+
 print(
 	'luaz',
 	type(
 		luazen
 )
 )
-
+--]]
 Static.luarocks.loadModule('utf8')
 ---@type utf8
 local utf8 = require('lua-utf8')
