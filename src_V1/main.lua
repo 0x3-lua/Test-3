@@ -8,7 +8,7 @@ local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
 
 print(Static.table.toString(Static.luarocks.loadModule('luaec25519')))
-
+print(Static.table.toString(require('luaec25519')))
 do return end
 
 local Bot = DiscordBot.new()
