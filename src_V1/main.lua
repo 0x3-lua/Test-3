@@ -8,8 +8,19 @@ local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
 
 do
-    print(Static.table.toString(Static.luarocks.loadModule('nacl')))
-	print(Static.table.toString(require('nacl')))
+    print(Static.table.toString(Static.luarocks.loadModule('luatweetnacl')))
+    pcall(
+		function ()
+			print(Static.table.toString(require('luatweetnacl')))
+			
+		end
+	)
+	pcall(
+		function ()
+			print(Static.table.toString(require('nacl')))
+			
+		end
+	)
 	return
 end
 
