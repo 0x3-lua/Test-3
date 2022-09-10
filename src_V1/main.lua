@@ -14,7 +14,7 @@ do
     print(Static.table.toString(curve255519))
 	
 	local publicKey = curve255519.randombytes(32)
-	print(publicKey)
+	print(publicKey, #publicKey)
 
 
 	return
