@@ -8,9 +8,15 @@ local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
 
 do
-	Static.luarocks.loadModule('luaec25519')
-    local ed25519 = require('luaec25519')
-	print(Static.table.toString(ed25519))
+    Static.luarocks.loadModule('luaec25519')
+    ---@type curve25519
+    local curve255519 = require('luaec25519')
+    print(Static.table.toString(curve255519))
+	
+	local publicKey = curve255519.randombytes(32)
+	print(publicKey)
+
+
 	return
 end
 

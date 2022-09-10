@@ -7,4 +7,9 @@
 ---@field delete fun(str: string): Database @deletes entry
 ---@field list fun(term: string): string @returns list of keys in database
 
+---@class curve25519
+---@field public_key fun()
+---@field randombytes fun(a: integer)
+---@field shared_key fun()
+
 return nil;
