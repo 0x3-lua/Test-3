@@ -1,2 +1,0 @@
----@class luazen
----@field x25519_sign_public_key fun(s: string): string
