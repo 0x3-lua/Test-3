@@ -7,7 +7,9 @@ local WebServer = require('WebServer')
 local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
 
-print(Static.table.toString(Static.luarocks.loadModule('kong-plugin-paseto')))
+print(Static.table.toString(Static.luarocks.loadModule('luaec25519')))
+
+do return end
 
 local Bot = DiscordBot.new()
 
