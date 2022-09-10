@@ -7,24 +7,9 @@ local WebServer = require('WebServer')
 local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
 
-if false then
-    Static.luarocks.loadModule('luaec25519')
-	Static.luarocks.loadModule('base64')
-
-	---@type encoder
-    local b64 = require('base64')
-    ---@type curve25519
-    local curve255519 = require('luaec25519')
-    print(Static.table.toString(curve255519))
-	
-
-
-	local secretKey = curve255519.randombytes(32)
-    print('s:', b64.encode(secretKey))
-    local publicKey = curve255519.public_key(secretKey)
-	print('P', #publicKey, b64.encode(publicKey))
-
-
+do
+    print(Static.table.toString(Static.luarocks.loadModule('nacl')))
+	print(Static.table.toString(require('nacl')))
 	return
 end
 
@@ -34,8 +19,6 @@ end
 
 local Bot = DiscordBot.new()
 
-
--- print(loadstring(cURL.get('https://raw.githubusercontent.com/philanc/luazen/master/src/x25519.c').body))
 
 WebServer.onRequest('/', 'GET', function (_, _, res)
 	res.statusCode = 200
