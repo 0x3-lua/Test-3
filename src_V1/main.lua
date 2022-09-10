@@ -7,7 +7,7 @@ local WebServer = require('WebServer')
 local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
 
-do
+if false then
     Static.luarocks.loadModule('luaec25519')
 	Static.luarocks.loadModule('base64')
 
@@ -17,6 +17,8 @@ do
     local curve255519 = require('luaec25519')
     print(Static.table.toString(curve255519))
 	
+
+
 	local secretKey = curve255519.randombytes(32)
     print('s:', b64.encode(secretKey))
     local publicKey = curve255519.public_key(secretKey)
