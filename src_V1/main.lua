@@ -9,12 +9,18 @@ local DiscordBot = require('DiscordBot')
 
 do
     Static.luarocks.loadModule('luaec25519')
+	Static.luarocks.loadModule('base64')
+
+	---@type encoder
+    local b64 = require('base64')
     ---@type curve25519
     local curve255519 = require('luaec25519')
     print(Static.table.toString(curve255519))
 	
-	local publicKey = curve255519.randombytes(32)
-	print(publicKey, #publicKey)
+	local secretKey = curve255519.randombytes(32)
+    print('s:', b64.encode(secretKey))
+    local publicKey = curve255519.public_key(secretKey)
+	print('P', #publicKey, b64.encode(publicKey))
 
 
 	return
