@@ -33,8 +33,8 @@ Ed25519.hexTo256 = function (s)
 	return result
 end
 
--- anything after this is modeled by tweetnacl, I have no idea how this
--- works
--- https://github.com/dchest/tweetnacl-js
+Ed25519.generatePublicKey = function ()
+	error('unimplemented')
+end
 
 return Ed25519
