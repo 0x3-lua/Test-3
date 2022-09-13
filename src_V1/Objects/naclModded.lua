@@ -31,7 +31,7 @@ and function names have been conserved as much as possible.
 ---@field scalarmult fun(n: string, p: string): string
 
 ---@type bit
-local bit = require("bit32") 
+local bit = require("bit") 
 
 local function rshiftBand(a)
 	return bit.band(bit.rshift(a, 16), 1)
