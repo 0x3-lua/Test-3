@@ -14,7 +14,7 @@ do
 
 	---@param s string
 	local function getHexd(s)
-        local digits = { StringRadix.hexdecimal.getDigitSequence(secret:byte(1, 32)) }
+        local digits = { StringRadix.hexdecimal.getDigitSequence(s:byte(1, 32)) }
 		
 		for i = 1, 32 do
             local v = digits[i]
