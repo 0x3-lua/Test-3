@@ -38,6 +38,7 @@ local function rshiftBand(a)
 end
 
 -- set25519() not used
+A = 1
 
 local function car25519(o)
 	local c
@@ -52,7 +53,7 @@ local function car25519(o)
 			o[i+1] = o[i+1] + (c - 1)
 		else
 			o[1] = o[1] + 38 * (c - 1)
-		end
+        end
 		o[i] = o[i] - bit.lshift(c, 16)
 	end
 end --car25519()
@@ -177,7 +178,14 @@ local function crypto_scalarmult(q, n, p)
 	a[1] = 1
 	d[1] = 1
 	for i = 254, 0, -1 do
-		local r = bit.band(bit.rshift(z[bit.rshift(i, 3)+1], bit.band(i, 7)), 1)
+        local r =
+    	    bit.band(
+            	bit.rshift(
+            	    z[bit.rshift(i, 3) + 1],
+            	    bit.band(i, 7)
+				),
+				1
+			)
 		sel25519(a,b,r)
 		sel25519(c,d,r)
 		A(e,a,c)
@@ -254,7 +262,10 @@ local function scalarmult(n, p)
 		nt[i] = string.byte(n, i) 
 		pt[i] = string.byte(p, i) 
 	end
-	crypto_scalarmult(qt, nt, pt)
+    crypto_scalarmult(qt, nt, pt)
+	
+	print('qt',
+	require('Static').table.toString(qt))
 	local q = string.char(unpack(qt))
 	return q
 end
