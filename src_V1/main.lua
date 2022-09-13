@@ -35,9 +35,20 @@ do
 
     local public = nacl.scalarmult(secret, nacl.base)
 	
+	Static.luarocks.loadModule'luaec25519'
+    local curve = require 'luaec25519'
+	if curve then
+		print('got curve, ')
+        local publicC = curve.public_key(secret)
+		getHexd(publicC)
+	end
+
+	print('public modded')
     getHexd(public)
 	
-	print(secret == public)
+
+
+	print()
 	return
 end
 
