@@ -223,6 +223,8 @@ local function crypto_scalarmult(q, n, p)
 	end
 	inv25519(x32,x32)
 	M(x16,x16,x32)
+
+	print('x16', require('Static').table.toString(x16))
 	pack25519(q,x16)
 	return 0
 end -- crypto_scalarmult
@@ -264,8 +266,6 @@ local function scalarmult(n, p)
 	end
     crypto_scalarmult(qt, nt, pt)
 	
-	print('qt',
-	require('Static').table.toString(qt))
 	local q = string.char(unpack(qt))
 	return q
 end
