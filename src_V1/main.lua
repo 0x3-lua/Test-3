@@ -33,7 +33,7 @@ do
 
 	getHexd(secret)
 
-    local public = nacl.scalarmult(secret, nacl.base)
+    local public = nacl.scalarmult(nacl.base, secret)
 	
 	Static.luarocks.loadModule'luaec25519'
     local curve = require 'luaec25519'
