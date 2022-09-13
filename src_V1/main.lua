@@ -7,29 +7,12 @@ local WebServer = require('WebServer')
 local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
 
-do
-    local bc = require('ByteCollection')
-	local a = bc.new()
+do 
+	print(Static.table.toString(Static.luarocks.loadModule'bit'))
 
-	local b = function(a)
-		print(a:gsub('%x%x',function(b)
-			return b .. ','
-		end):sub(1,-2))
-	end
-	
-	b(a.toHexString())                                  -- 00
-	b(a.add(1).toHexString())                           -- 01
-	b(a.add(255).toHexString())                         -- 01,00
-	b(a.add(-1).toHexString())                          -- FF
-	b(a.add(2).mult(2).toHexString())                   -- 02,02
-	b(a.idiv(2).toHexString())                          -- 01,01
-	b(a.idiv(2).toHexString())                          -- 80
-	a.bitwiseFixedLength = 2                            -- sets length
-	b(a.add(-0x80).bitwiseNot().toHexString())          -- 00   -> FF,FF
-	b(a.add(-0xFF).bitwiseAnd(0xF0,0xF0).toHexString()) -- FF00 -> F0,00
-	b(a.add(0xF00).bitwiseOr(0xF0F0).toHexString())     -- FF00 -> FF,0F
-	b(a.add(-0xF0).bitwiseXor(0xF0F0).toHexString())    -- FF00 -> 0F,F0
-
+	pcall(function()
+		print(Static.table.toString(require'bit'))
+	end)
 	return
 end
 
