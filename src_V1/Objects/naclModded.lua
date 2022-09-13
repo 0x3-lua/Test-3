@@ -163,8 +163,11 @@ local function crypto_scalarmult(q, n, p)
 	local d = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 	local e = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 	local f = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-	for i = 1, 31 do z[i] = n[i] end
+    for i = 1, 31 do z[i] = n[i] end
+	
+	print('z32_a', z[32])
 	z[32] = bit.bor(bit.band(n[32], 127), 64)
+	print('z32_a', z[32])
 	z[1] = bit.band(z[1], 248)
 --~ 	pt(z)
 	unpack25519(x, p)

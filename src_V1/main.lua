@@ -46,9 +46,6 @@ do
 	print('public modded')
     getHexd(public)
 	
-
-
-	print()
 	return
 end
 
