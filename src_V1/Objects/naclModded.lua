@@ -30,8 +30,12 @@ and function names have been conserved as much as possible.
 ---@field crypto_scalarmult_base fun(out: integer[], n: integer[]): integer
 ---@field scalarmult fun(n: string, p: string): string
 
-local bit32 -- = require("bit32") 
+---@type bit
+local bit = require("bit") 
 
+local function rshiftBand(a)
+	return bit.band(bit.rshift(a, 16), 1)
+end
 
 -- set25519() not used
 
@@ -49,17 +53,17 @@ local function car25519(o)
 		else
 			o[1] = o[1] + 38 * (c - 1)
 		end
-		o[i] = o[i] - (c << 16)
+		o[i] = o[i] - bit.lshift(c, 16)
 	end
 end --car25519()
 
 local function sel25519(p, q, b)
-	local c = ~(b-1)
+	local c = bit.bnot(b-1)
 	local t
 	for i = 1, 16 do
-		t = c & (p[i] ~ q[i])
-		p[i] = p[i] ~ t
-		q[i] = q[i] ~ t
+		t = bit.band(c, bit.bxor(p[i], q[i]))
+		p[i] = bit.bxor(p[i], t)
+		q[i] = bit.bxor(q[i], t)
 	end
 end --sel25519
 
@@ -74,17 +78,21 @@ local function pack25519(o, n)
 	for _ = 1, 2 do
 		m[1] = t[1] - 0xffed
 		for i = 2, 15 do
-			m[i] = t[i] - 0xffff - ((m[i-1] >> 16) & 1)
-			m[i-1] = m[i-1] & 0xffff
+			m[i] = t[i] - 0xffff - 
+				rshiftBand(b[i-1])
+				-- bit.band(bit.rshift(m[i-1], 16), 1)
+			m[i-1] = bit.band(m[i-1], 0xffff)
 		end
-		m[16] = t[16] - 0x7fff - ((m[15] >> 16) & 1)
-		b = (m[16] >> 16) & 1
-		m[15] = m[15] & 0xffff
+        m[16] = t[16] - 0x7fff -
+			rshiftBand(m(15))
+			-- bit.band(bit.rshift(m[15], 16), 1)
+		b = rshiftBand(m[16]) -- (m[16] >> 16) & 1
+		m[15] = bit.band(m[15], 0xffff)
 		sel25519(t, m, 1-b)
 	end
 	for i = 1, 16 do
-		o[2*i-1] = t[i] & 0xff
-		o[2*i] = t[i] >> 8
+		o[2*i-1] = bit.band(t[i], 0xff)
+		o[2*i] = bit.rshift(t[i], 8)
 	end
 end -- pack25519
 
@@ -94,9 +102,9 @@ end -- pack25519
 local function unpack25519(o, n)
 	-- out o[16], in n[32]
 	for i = 1, 16 do
-		o[i] = n[2*i-1] + (n[2*i] << 8)
+		o[i] = n[2*i-1] + bit.lshift(n[2*i], 8)
 	end
-	o[16] = o[16] & 0x7fff
+	o[16] = bit.band(o[16], 0x7fff)
 end -- unpack25519
 
 local function A(o, a, b) --add
@@ -155,8 +163,8 @@ local function crypto_scalarmult(q, n, p)
 	local e = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 	local f = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 	for i = 1, 31 do z[i] = n[i] end
-	z[32] = (n[32] & 127) | 64
-	z[1] = z[1] & 248
+	z[32] = bit.bor(bit.band(n[32], 127), 64)
+	z[1] = bit.band(z[1], 248)
 --~ 	pt(z)
 	unpack25519(x, p)
 --~ 	pt(x)
@@ -169,7 +177,7 @@ local function crypto_scalarmult(q, n, p)
 	a[1] = 1
 	d[1] = 1
 	for i = 254, 0, -1 do
-		local r = (z[(i>>3)+1] >> (i & 7)) & 1
+		local r = bit.band(bit.rshift(z[bit.rshift(i, 3)+1], bit.band(i, 7)), 1)
 		sel25519(a,b,r)
 		sel25519(c,d,r)
 		A(e,a,c)

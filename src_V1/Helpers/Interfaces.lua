@@ -7,8 +7,21 @@
 ---@field delete fun(str: string): Database @deletes entry
 ---@field list fun(term: string): string @returns list of keys in database
 
----@class encoder
----@field encode fun(s: string): string
----@field decode fun(s: string): string
+---@class bit
+---@field toBit fun(x: integer): integer
+---@field toHex fun(x: integer, bits: integer): integer
+---@field bnot fun(x: integer): integer
+---@field bor bit.bitOperation
+---@field band bit.bitOperation
+---@field bxor bit.bitOperation
+---@field lshift bit.arg2Operation
+---@field rshift bit.arg2Operation
+---@field arshift bit.arg2Operation
+---@field rol bit.arg2Operation
+---@field ror bit.arg2Operation
+---@field bswap fun(x: integer): integer
+
+---@alias bit.bitOperation fun(n: integer, ...:integer): integer
+---@alias bit.arg2Operation fun(n: integer, n2:integer): integer
 
 return nil;

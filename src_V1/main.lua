@@ -7,16 +7,22 @@ local WebServer = require('WebServer')
 local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
 
-do 
-	print(Static.table.toString(Static.luarocks.loadModule'bit'))
+do
+	local StringRadix = require('StringRadix')
+    local nacl = require('naclModded')
+    local secret = ''
+	
+	for i = 1, 32 do
+		secret = secret .. string.char(math.random(256) - 1)
+	end
 
-	pcall(function()
-		print(Static.table.toString(require'bit'))
-	end)
+	print(StringRadix.hexdecimal.getDigitSequence(secret:byte(1,32)))
+
+    local public = nacl.scalarmult(secret, nacl.base)
+	
+	print(StringRadix.hexdecimal.getDigitSequence(public:byte(1,32)))
 	return
 end
-
-
 
 
 
