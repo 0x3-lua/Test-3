@@ -31,7 +31,7 @@ and function names have been conserved as much as possible.
 ---@field scalarmult fun(n: string, p: string): string
 
 ---@type bit
-local bit = require("bit") 
+local bit = require("bit32") 
 
 local function rshiftBand(a)
 	return bit.band(bit.rshift(a, 16), 1)
@@ -244,7 +244,11 @@ end
 local function scalarmult(n, p)
 	-- n, a scalar (little endian) as a 32-byte string
 	-- p, a curve point as a 32-byte string
-	-- return the scalar product np as a 32-byte string
+    -- return the scalar product np as a 32-byte string
+	
+    assert(#n == 32)
+	assert(#p == 32)
+
 	local qt, nt, pt = {}, {}, {} 
 	for i = 1, 32 do 
 		nt[i] = string.byte(n, i) 
