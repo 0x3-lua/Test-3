@@ -35,7 +35,9 @@ do
 
     local public = nacl.scalarmult(secret, nacl.base)
 	
-	getHexd(public)
+    getHexd(public)
+	
+	print(secret == public)
 	return
 end
 
