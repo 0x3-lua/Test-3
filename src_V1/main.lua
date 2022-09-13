@@ -11,16 +11,31 @@ do
 	local StringRadix = require('StringRadix')
     local nacl = require('naclModded')
     local secret = ''
+
+	---@param s string
+	local function getHexd(s)
+        local digits = { StringRadix.hexdecimal.getDigitSequence(secret:byte(1, 32)) }
+		
+		for i = 1, 32 do
+            local v = digits[i]
+			
+			if #v == 1 then
+				digits[i] = '0' .. v
+			end
+        end
+		
+		print(table.concat(digits))
+	end
 	
 	for i = 1, 32 do
 		secret = secret .. string.char(math.random(256) - 1)
 	end
 
-	print(StringRadix.hexdecimal.getDigitSequence(secret:byte(1,32)))
+	getHexd(secret)
 
     local public = nacl.scalarmult(secret, nacl.base)
 	
-	print(StringRadix.hexdecimal.getDigitSequence(public:byte(1,32)))
+	getHexd(public)
 	return
 end
 

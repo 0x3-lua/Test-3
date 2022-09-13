@@ -79,7 +79,7 @@ local function pack25519(o, n)
 		m[1] = t[1] - 0xffed
 		for i = 2, 15 do
 			m[i] = t[i] - 0xffff - 
-				rshiftBand(b[i-1])
+				rshiftBand(m[i-1])
 				-- bit.band(bit.rshift(m[i-1], 16), 1)
 			m[i-1] = bit.band(m[i-1], 0xffff)
 		end
