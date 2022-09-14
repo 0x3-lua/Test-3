@@ -59,7 +59,7 @@ local function car25519(o)
         end
 		
 		if AAA and i == 1 then
-			print(o[i])
+			print('AAAI',o[i])
 		end
         o[i] = o[i] - bit.lshift(c, 16)
 		
