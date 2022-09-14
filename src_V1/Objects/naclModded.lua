@@ -61,11 +61,13 @@ end --car25519()
 
 local function sel25519(p, q, b)
 	local c = bit.bnot(b-1)
-	local t
+    local t
+	
+	
 	for i = 1, 16 do
-        if A then
+        if A then print(c)
 			local a = bit.bxor(p[i], q[i])
-            print(a)
+            print(a, p[i], q[i])
 			print(bit.band(c,a))
 		end
 
