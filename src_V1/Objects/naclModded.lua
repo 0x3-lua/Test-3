@@ -50,7 +50,7 @@ local bitExtra = {
 
 		if tostring(result):find('E') then
 			
-			print(n, iterations, result)
+			print('E',n, iterations, result)
 		end
 
 		return n
