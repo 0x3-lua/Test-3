@@ -49,7 +49,12 @@ local function car25519(o)
 		-- so the following >>16 doesn't work with negative numbers!!
 		-- ...took a bit of time to find this one :-)
 		-- c = o[i] >> 16
-		c = math.floor(o[i] / 65536) -- recheck this later to check accuracy
+        c = math.floor(o[i] / 65536) -- recheck this later to check accuracy
+		
+		if AAA and i == 1 then
+			print(o[i], c)
+		end
+
 		if i < 16 then
 			o[i+1] = o[i+1] + (c - 1)
 		else
@@ -128,11 +133,6 @@ local function M(o, a, b) --mul  gf, gf -> gf
 	for i = 1, 15 do t[i] = t[i] + 38 * t[i+16] end
 	for i = 1, 16 do o[i] = t[i] end
 
-
-    if AAA then
-		print(1)
-		print(Static.table.toString(o))
-	end
     car25519(o)
 	
     if AAA then
