@@ -51,16 +51,17 @@ local function car25519(o)
 		-- c = o[i] >> 16
         c = math.floor(o[i] / 65536) -- recheck this later to check accuracy
 		
-		if AAA and i == 1 then
-			print(o[i], c)
-		end
-
+		-- ok
 		if i < 16 then
 			o[i+1] = o[i+1] + (c - 1)
 		else
 			o[1] = o[1] + 38 * (c - 1)
         end
-		o[i] = o[i] - bit.lshift(c, 16)
+        o[i] = o[i] - bit.lshift(c, 16)
+		
+		if AAA and i == 1 then
+			print(o[i])
+		end
 	end
 end --car25519()
 
