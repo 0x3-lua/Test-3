@@ -191,7 +191,7 @@ local function crypto_scalarmult(q, n, p)
 				1
         )
 		
-        if i == 252 then
+        if i == 253 then
 			print'AAA'
 			print(Static.table.toString(b))
 		end
