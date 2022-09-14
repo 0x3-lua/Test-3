@@ -205,19 +205,19 @@ local function crypto_scalarmult(q, n, p)
 		M(c,b,e)
         A(e, a, c)
 		
-		-- ok 
         
 
 		Z(a,a,c)
 
+		-- ok 
 		
+		S(b,a)
 		if i == 253 then
 			print'AAA'
 			print(Static.table.toString(b))
         end
 
 
-		S(b,a)
         Z(c, d, f)
 		
 		-- not ok
