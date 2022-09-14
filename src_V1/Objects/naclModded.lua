@@ -191,12 +191,12 @@ local function crypto_scalarmult(q, n, p)
 				1
         )
 		
+        sel25519(a, b, r)
+		
         if i == 252 then
 			print'AAA'
 			print(Static.table.toString(a))
 		end
-        sel25519(a, b, r)
-		
 		sel25519(c,d,r)
 		A(e,a,c)
 		Z(a,a,c)
