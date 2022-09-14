@@ -192,6 +192,7 @@ local function crypto_scalarmult(q, n, p)
         )
 		
         sel25519(a, b, r)
+		-- a corrupted at i==252
 		
         if i == 252 then
 			print'AAA'
@@ -220,7 +221,7 @@ local function crypto_scalarmult(q, n, p)
 		sel25519(a,b,r)
 		sel25519(c,d,r)
     end
-	print(Static.table.toString(a))
+	print(Static.table.toString(b))
 
 	for i = 1, 16 do
 		x[i+16] = a[i]
