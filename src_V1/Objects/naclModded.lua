@@ -180,7 +180,8 @@ local function crypto_scalarmult(q, n, p)
 	end
 	a[1] = 1
     d[1] = 1
-	print('got r')
+    print('got r')
+	local test = ''
 	for i = 254, 0, -1 do
         local r =
     	    bit.band(
@@ -190,8 +191,7 @@ local function crypto_scalarmult(q, n, p)
 				),
 				1
         )
-			
-		print(i, r)
+		test = test .. r
 		sel25519(a,b,r)
 		sel25519(c,d,r)
 		A(e,a,c)
@@ -214,7 +214,9 @@ local function crypto_scalarmult(q, n, p)
 		S(b,e)
 		sel25519(a,b,r)
 		sel25519(c,d,r)
-	end
+    end
+	print(test)
+
 	for i = 1, 16 do
 		x[i+16] = a[i]
 		x[i+32] = c[i]
