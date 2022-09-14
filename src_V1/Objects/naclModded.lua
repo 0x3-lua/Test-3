@@ -39,7 +39,7 @@ local function rshiftBand(a)
 end
 
 -- set25519() not used
-A = 1
+AA = 1
 
 local function car25519(o)
 	local c
@@ -65,7 +65,7 @@ local function sel25519(p, q, b)
 	
 	
 	for i = 1, 16 do
-        if A then print(c)
+        if AA then print('AA',c)
 			local a = bit.bxor(p[i], q[i])
             print(a, p[i], q[i])
 			print(bit.band(c,a))
@@ -190,7 +190,7 @@ local function crypto_scalarmult(q, n, p)
 	a[1] = 1
     d[1] = 1
     print('got a') --- a somehow mutated
-	A = true
+	AA = true
 	for i = 254, 0, -1 do
         local r =
     	    bit.band(
@@ -201,7 +201,7 @@ local function crypto_scalarmult(q, n, p)
 				1
         )
         sel25519(a, b, r)
-		A = false
+		AA = false
 		sel25519(c,d,r)
 		A(e,a,c)
 		Z(a,a,c)
