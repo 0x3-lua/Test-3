@@ -166,16 +166,11 @@ local function crypto_scalarmult(q, n, p)
 	local f = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
     for i = 1, 31 do z[i] = n[i] end
 	
-	print('z32_a', z[32])
 	z[32] = bit.bor(bit.band(n[32], 127), 64)
-	print('z32_a', z[32])
 	z[1] = bit.band(z[1], 248)
 --~ 	pt(z)
     unpack25519(x, p)
-	print'upack'
-	print(
-	    Static.table.toString(x)
-)
+	
 --~ 	pt(x)
 	for i = 1, 16 do
 		b[i] = x[i]
@@ -184,7 +179,8 @@ local function crypto_scalarmult(q, n, p)
 		d[i] = 0
 	end
 	a[1] = 1
-	d[1] = 1
+    d[1] = 1
+	print('got r')
 	for i = 254, 0, -1 do
         local r =
     	    bit.band(
@@ -193,7 +189,9 @@ local function crypto_scalarmult(q, n, p)
             	    bit.band(i, 7)
 				),
 				1
-			)
+        )
+			
+		print(i, r)
 		sel25519(a,b,r)
 		sel25519(c,d,r)
 		A(e,a,c)
