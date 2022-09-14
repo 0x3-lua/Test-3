@@ -63,6 +63,13 @@ local function sel25519(p, q, b)
 	local c = bit.bnot(b-1)
 	local t
 	for i = 1, 16 do
+        if A then
+			local a = bit.bxor(p[i], q[i])
+            print(a)
+			print(bit.band(c,a))
+		end
+
+
 		t = bit.band(c, bit.bxor(p[i], q[i]))
 		p[i] = bit.bxor(p[i], t)
 		q[i] = bit.bxor(q[i], t)
@@ -180,7 +187,8 @@ local function crypto_scalarmult(q, n, p)
 	end
 	a[1] = 1
     d[1] = 1
-    print('got a')
+    print('got a') --- a somehow mutated
+	A = true
 	for i = 254, 0, -1 do
         local r =
     	    bit.band(
@@ -190,7 +198,8 @@ local function crypto_scalarmult(q, n, p)
 				),
 				1
         )
-		sel25519(a,b,r)
+        sel25519(a, b, r)
+		A = false
 		sel25519(c,d,r)
 		A(e,a,c)
 		Z(a,a,c)
