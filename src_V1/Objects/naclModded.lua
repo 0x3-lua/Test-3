@@ -34,6 +34,24 @@ and function names have been conserved as much as possible.
 local bit = require("bit") 
 local Static = require("Static")
 
+-- because bit.lshift is signed, needs an unsigned version
+local bitExtra = {
+
+	---unsigned left shift
+    ---@param n integer
+	---@param iterations integer
+	---@return integer
+	uleftShift = function (n, iterations)
+        local result = n
+		
+		for _ = 1, iterations do
+			result = result * 2
+		end
+
+		return n
+	end
+}
+
 local function rshiftBand(a)
 	return bit.band(bit.rshift(a, 16), 1)
 end
@@ -58,11 +76,11 @@ local function car25519(o)
 			o[1] = o[1] + 38 * (c - 1)
         end
 		
-        o[i] = o[i] - bit.lshift(c, 16)
+        o[i] = o[i] - bitExtra.uleftShift(c, 16)
 		
 		if AAA and i == 1 then
             print('AAAI', o[i], c)
-			print(bit.lshift(c, 16))
+			print(bitExtra.uleftShift(c, 16))
 		end
 	end
 end --car25519()
@@ -112,7 +130,7 @@ end -- pack25519
 local function unpack25519(o, n)
 	-- out o[16], in n[32]
 	for i = 1, 16 do
-		o[i] = n[2*i-1] + bit.lshift(n[2*i], 8)
+		o[i] = n[2*i-1] + bitExtra.uleftShift(n[2*i], 8)
 	end
 	o[16] = bit.band(o[16], 0x7fff)
 end -- unpack25519
