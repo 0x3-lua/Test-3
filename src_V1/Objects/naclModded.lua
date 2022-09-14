@@ -41,11 +41,16 @@ local bitExtra = {
     ---@param n integer
 	---@param iterations integer
 	---@return integer
-	uleftShift = function (n, iterations)
+    uleftShift = function(n, iterations)
         local result = n
 		
 		for _ = 1, iterations do
 			result = result * 2
+		end
+
+		if tostring(result):find('E') then
+			
+			print(n, iterations, result)
 		end
 
 		return n
