@@ -1,12 +1,6 @@
 --run code below
 local Static = require('Static')
 
--- [[
-local WebServer = require('WebServer')
-	.new(nil, 3000)
-local cURL = require('cURL')
-local DiscordBot = require('DiscordBot')
-
 do
 	local StringRadix = require('StringRadix')
     local nacl = require('naclModded')
@@ -49,7 +43,10 @@ do
 	return
 end
 
-
+local WebServer = require('WebServer')
+	.new(nil, 3000)
+local cURL = require('cURL')
+local DiscordBot = require('DiscordBot')
 
 local Bot = DiscordBot.new()
 
