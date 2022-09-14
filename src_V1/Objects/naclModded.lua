@@ -191,13 +191,13 @@ local function crypto_scalarmult(q, n, p)
 				1
         )
 		
+        if i == 252 then
+			print'AAA'
+			print(Static.table.toString(b))
+		end
         sel25519(a, b, r)
 		-- a corrupted at i==252
 		
-        if i == 252 then
-			print'AAA'
-			print(Static.table.toString(a))
-		end
 		sel25519(c,d,r)
 		A(e,a,c)
 		Z(a,a,c)
