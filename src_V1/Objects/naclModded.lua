@@ -181,7 +181,6 @@ local function crypto_scalarmult(q, n, p)
 	a[1] = 1
     d[1] = 1
     print('got a') --- a somehow mutated
-	AA = true
 	for i = 254, 0, -1 do
         local r =
     	    bit.band(
@@ -204,11 +203,10 @@ local function crypto_scalarmult(q, n, p)
 		M(c,b,e)
         A(e, a, c)
 		
-        if AA then
+        if i == 2 then
 			print'AAA'
 			print(Static.table.toString(a))
 		end
-		AA = false
 		Z(a,a,c)
 		S(b,a)
 		Z(c,d,f)
@@ -237,8 +235,6 @@ local function crypto_scalarmult(q, n, p)
 	end
 	inv25519(x32,x32)
 	M(x16,x16,x32)
-
-	print('x16', require('Static').table.toString(x16))
 	pack25519(q,x16)
 	return 0
 end -- crypto_scalarmult
