@@ -77,11 +77,6 @@ local function car25519(o)
         end
 		
         o[i] = o[i] - bitExtra.uleftShift(c, 16)
-		
-		if AAA and i == 1 then
-            print('AAAI', o[i], c)
-			print(bitExtra.uleftShift(c, 16))
-		end
 	end
 end --car25519()
 
@@ -155,11 +150,6 @@ local function M(o, a, b) --mul  gf, gf -> gf
 	for i = 1, 16 do o[i] = t[i] end
 
     car25519(o)
-	
-    if AAA then
-		print(2)
-		print(Static.table.toString(o))
-	end
 	car25519(o)
 end
 
@@ -212,7 +202,6 @@ local function crypto_scalarmult(q, n, p)
 	end
 	a[1] = 1
     d[1] = 1
-    print('got a') --- a somehow mutated
 	for i = 254, 0, -1 do
         local r =
     	    bit.band(
@@ -236,25 +225,8 @@ local function crypto_scalarmult(q, n, p)
 		M(a,c,a)
 		M(c,b,e)
         A(e, a, c)
-		
-        
-
 		Z(a,a,c)
-
-		-- ok 
-		
-		if i == 253 then
-			print'AAA'
-			AAA = true
-        end
 		S(b,a)
-        AAA = false
-		
-		
-
-
-        -- not ok
-		
         Z(c, d, f)
 		M(a,c,t_121665)
         A(a, a, d)
@@ -265,7 +237,6 @@ local function crypto_scalarmult(q, n, p)
 		sel25519(a,b,r)
 		sel25519(c,d,r)
     end
-	-- print(Static.table.toString(b))
 
 	for i = 1, 16 do
 		x[i+16] = a[i]
