@@ -62,16 +62,7 @@ end --car25519()
 local function sel25519(p, q, b)
 	local c = bit.bnot(b-1)
     local t
-	
-	
 	for i = 1, 16 do
-        if AA then print('AA',c)
-			local a = bit.bxor(p[i], q[i])
-            print(a, p[i], q[i])
-			print(bit.band(c,a))
-		end
-
-
 		t = bit.band(c, bit.bxor(p[i], q[i]))
 		p[i] = bit.bxor(p[i], t)
 		q[i] = bit.bxor(q[i], t)
@@ -201,7 +192,7 @@ local function crypto_scalarmult(q, n, p)
 				1
         )
         sel25519(a, b, r)
-		AA = false
+		-- ok
 		sel25519(c,d,r)
 		A(e,a,c)
 		Z(a,a,c)
@@ -211,7 +202,13 @@ local function crypto_scalarmult(q, n, p)
 		S(f,a)
 		M(a,c,a)
 		M(c,b,e)
-		A(e,a,c)
+        A(e, a, c)
+		
+        if AA then
+			print'AAA'
+			print(Static.table.toString(a))
+		end
+		AA = false
 		Z(a,a,c)
 		S(b,a)
 		Z(c,d,f)
