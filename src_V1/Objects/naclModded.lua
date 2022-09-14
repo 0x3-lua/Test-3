@@ -129,9 +129,14 @@ local function M(o, a, b) --mul  gf, gf -> gf
 	for i = 1, 16 do o[i] = t[i] end
 
 
+    if AAA then
+		print(1)
+		print(Static.table.toString(o))
+	end
     car25519(o)
 	
-	if AAA then
+    if AAA then
+		print(2)
 		print(Static.table.toString(o))
 	end
 	car25519(o)
