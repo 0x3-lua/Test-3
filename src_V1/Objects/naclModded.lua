@@ -58,11 +58,12 @@ local function car25519(o)
 			o[1] = o[1] + 38 * (c - 1)
         end
 		
-		if AAA and i == 1 then
-			print('AAAI',o[i])
-		end
         o[i] = o[i] - bit.lshift(c, 16)
 		
+		if AAA and i == 1 then
+            print('AAAI', o[i], c)
+			print(bit.lshift(c, 16))
+		end
 	end
 end --car25519()
 
