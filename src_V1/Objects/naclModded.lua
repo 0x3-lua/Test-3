@@ -127,6 +127,11 @@ local function M(o, a, b) --mul  gf, gf -> gf
 	end
 	for i = 1, 15 do t[i] = t[i] + 38 * t[i+16] end
 	for i = 1, 16 do o[i] = t[i] end
+
+	if AAA then
+		print(Static.table.toString(AAA))
+	end
+
 	car25519(o)
 	car25519(o)
 end
@@ -211,15 +216,14 @@ local function crypto_scalarmult(q, n, p)
 
 		-- ok 
 		
-		S(b,a)
-
-		
 		if i == 253 then
 			print'AAA'
-            print(Static.table.toString(b))
-			print(Static.table.toString(a))
-
+			AAA = true
         end
+		S(b,a)
+        AAA = false
+		
+		
 
 
         -- not ok
