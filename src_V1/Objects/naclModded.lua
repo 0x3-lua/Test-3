@@ -32,6 +32,7 @@ and function names have been conserved as much as possible.
 
 ---@type bit
 local bit = require("bit") 
+local Static = require("Static")
 
 local function rshiftBand(a)
 	return bit.band(bit.rshift(a, 16), 1)
@@ -170,7 +171,11 @@ local function crypto_scalarmult(q, n, p)
 	print('z32_a', z[32])
 	z[1] = bit.band(z[1], 248)
 --~ 	pt(z)
-	unpack25519(x, p)
+    unpack25519(x, p)
+	print'upack'
+	print(
+	    Static.table.toString(x)
+)
 --~ 	pt(x)
 	for i = 1, 16 do
 		b[i] = x[i]
