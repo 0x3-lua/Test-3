@@ -3,7 +3,7 @@ local Static = require('Static')
 
 do
 	local StringRadix = require('StringRadix')
-    local nacl = require('naclModded')
+    local nacl = require('NaclLua51')
     local secret = ''
 
 	---@param s string
