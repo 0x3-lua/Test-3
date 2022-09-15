@@ -1,6 +1,6 @@
 ---@meta
 
--- see https://github.com/philanc/plc
+-- see https://github.com/philanc/plc and tweetnacl
 -- Class specs after licence
 
 -- Copyright (c) 2015  Phil Leblanc  -- see LICENSE file
@@ -29,26 +29,22 @@ and function names have been conserved as much as possible.
 ---@field crypto_scalarmult fun(out: integer[], n: integer[], p: integer[]): integer
 ---@field crypto_scalarmult_base fun(out: integer[], n: integer[]): integer
 ---@field scalarmult fun(n: string, p: string): string
+---@field getPublicKey fun(secret: string): string
+---@field getSignature fun(secretKey: string, message: string): string
+---@field verify fun(message: string, signature: string, publicKey: string): boolean
 
 ---@type bit
-local bit = require("bit") 
+local bit = require("bit")
 local Static = require("Static")
 
--- because bit.lshift is signed, needs an unsigned version
+-- because bit.lshift is signed, we need an unsigned version
 local bitExtra = {
-
 	---unsigned left shift
     ---@param n integer
 	---@param iterations integer
 	---@return integer
-    uleftShift = function(n, iterations)
-        local result = n
-		
-		for _ = 1, iterations do
-			result = result * 2
-		end
-
-		return result
+    uleftShift = function(n, digits)
+        return n * math.floor(2 ^ digits)
 	end
 }
 
@@ -378,8 +374,8 @@ a common session key (for a symmetric encryption algorithm).
   
 ]]
 
-
-return {
+---@type nacl
+local nacl51 = {
 	crypto_scalarmult = crypto_scalarmult,
 	crypto_scalarmult_base = crypto_scalarmult_base,
 	--
@@ -387,8 +383,93 @@ return {
 	--
 	scalarmult = scalarmult,
 	base = base,
-	--
+    ---- end of ec25519 module
 }
- -- end of ec25519 module
+
+--####################################################
+-- additions
+--####################################################
+
+---@param s string
+---@return integer[]
+function stringToByteArray(s)
+	local result = {}
+
+	for i = 1, #s do
+		result[i] = s:sub(i,i):byte()
+	end
+
+	return result
+end
+
+---@param a integer[]
+---@return string
+function byteArrayToStr(a)
+    local result = ''
+	
+	for i = 1, #a do
+		result = result .. a[i]
+	end
+
+    return result
+end
 
 
+function crypto_sign(result, message, len, secretKey)
+	
+end
+
+---returns public key (ok why is the signature 64 byte key like this?)
+---@param secretKey string
+---@return string
+nacl51.getPublicKey = function (secretKey)
+    local result
+	
+	if #secretKey == 32 then
+		result = nacl51.scalarmult(secretKey, base)
+	elseif #secretKey == 64 then
+		result = secretKey:sub(33)
+    else
+		error('invalid secret key length:' .. #secretKey)
+	end
+	
+	return result
+end
+
+---returns signature
+---@param message string
+---@param secretKey string
+---@return string
+nacl51.getSignature = function (message, secretKey)
+    -- pre
+    assert(#secretKey == 64)
+
+	local signedMessage = {}
+
+    crypto_sign(
+        signedMessage,
+        stringToByteArray(message),
+        #message,
+        stringToByteArray(secretKey)
+	);
+
+	return byteArrayToStr(signedMessage)
+end
+
+---comment
+---@param message string
+---@param signature string must be exactly 64 bytes
+---@param publicKey string must be exactly 32 bytes
+---@return boolean
+nacl51.verify = function (message, signature, publicKey)
+    -- pre
+    assert(#signature == 64, 'bad signature length')
+    assert(#publicKey == 32, 'bad public key length')
+	
+	-- main
+	
+
+	return false
+end
+
+return nacl51
