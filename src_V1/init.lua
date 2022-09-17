@@ -31,7 +31,7 @@ require = function(mod)
 				)
 			else
 				local fileContent = file:read'*a'
-				local func = loadstring(string.dump(fileContent))
+				local func = loadstring(fileContent)
 				file:close()
 				
 				if func then

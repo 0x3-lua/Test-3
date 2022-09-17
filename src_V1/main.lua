@@ -3,7 +3,7 @@ local Static = require('Static')
 
 do
 	local StringRadix = require('StringRadix')
-    local nacl = require('NaclLua51')
+    local nacl = require('nacl')
     local secret = '3TQlyPJUmdKG2b3YVdyzbRn17O0YDrJQn2qBTrc7Oth+RSrxvkij3aoKrKL0QQMll/Spdyt3a3/h3eVtYQOWKg=='
 
 	Static.luarocks.loadModule('base64')
