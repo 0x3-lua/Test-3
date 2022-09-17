@@ -28,9 +28,7 @@ do
 		print(table.concat(digits))
 	end
 	
-	for i = 1, 64 do
-		secret = secret .. string.char(math.random(256) - 1)
-	end
+	-- for i = 1, 64 do secret = secret .. string.char(math.random(256) - 1)end
 
     getHexd(secret)
 	
