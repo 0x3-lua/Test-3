@@ -1006,7 +1006,11 @@ nacl51.getKeyPair = function (secretKey)
 	secretKey = secretKey or nacl51.getRandomString()
 	-- main
 	local publicKeyArray = getNA32()
-	local secretKeyArray = {secretKey:byte(1, 64)}
+	local secretKeyArray = getNA64()
+
+	for i = 1, #secretKey do
+		secretKeyArray[i] = secretKey:byte(i,i)
+	end
 
 	crypto_sign_keypair(publicKeyArray, secretKeyArray)
 
