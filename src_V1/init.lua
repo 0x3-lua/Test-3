@@ -42,8 +42,9 @@ require = function(mod)
 						:format(
                             fullName,
 							fileContent
-						)
+                        )
                     print 'Met error:'
+					print(func)
 					-- print(errorMessage)
 					error(errorMessage)
 				end
