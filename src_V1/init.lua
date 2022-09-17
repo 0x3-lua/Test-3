@@ -14,6 +14,7 @@ require = function (mod)
     if not fullName or #fullName == 0 then
         result = overridenRequire(mod)
     else
+        print(loadfile)
         result = loadfile(fullName:sub(1, -2))()
     end
 
