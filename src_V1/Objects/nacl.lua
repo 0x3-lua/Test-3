@@ -990,21 +990,21 @@ nacl51.getRandomString = function(len)
 	return result
 end
 
----returns public key (ok why is the signature 64 byte key like this?)
+---returns a key pair, the secret prefix, and the public key,
+---note that the secret key compromises of a prefix and public key
 ---@param secretKey string?
 ---@return string, string
 nacl51.getKeyPair = function (secretKey)
     -- pre
 	secretKey = secretKey or nacl51.getRandomString()
     -- main
-	local publicKey
-
     local publicKeyArray = getNA32()
 	local secretKeyArray = {secretKey:byte(1, 64)}
 
 	crypto_sign_keypair(publicKeyArray, secretKeyArray)
 
-	return publicKey, secretKey
+    return byteArrayToStr(secretKeyArray),
+		byteArrayToStr(publicKeyArray)
 end
 
 ---returns signature

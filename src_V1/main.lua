@@ -4,13 +4,11 @@ local Static = require('Static')
 do
 	local StringRadix = require('StringRadix')
     local nacl = require('nacl')
-    local secret = '3TQlyPJUmdKG2b3YVdyzbRn17O0YDrJQn2qBTrc7Oth+RSrxvkij3aoKrKL0QQMll/Spdyt3a3/h3eVtYQOWKg=='
+    local seed = ''
+	-- local secret = ''
 
 	Static.luarocks.loadModule('base64')
 
-    local base64 = require('base64')
-	print('secret')
-	secret = base64.decode(secret)
 
 	---@param s string
     local function getHexd(s)
@@ -28,30 +26,18 @@ do
 		print(table.concat(digits))
 	end
 	
-	-- for i = 1, 64 do secret = secret .. string.char(math.random(256) - 1)end
+    for i = 1, 32 do seed = seed .. string.char(math.random(256) - 1) end
 
-    getHexd(secret)
-	
-	local test = secret:sub(1, 32)
-	local test2 = secret:sub(33)
+	print('seed')
+    getHexd(seed)
+	local skp, pk = nacl.getKeyPair(seed)
 
-	print'test'
-	getHexd(test)
-    print('test2')
-    getHexd(test2)
+	print('secret key prefix')
+	getHexd(skp)
+
+    print('public key')
+	getHexd(pk)
 	
-    local public = nacl.scalarmult(test, nacl.base)
-	--[[
-	Static.luarocks.loadModule'luaec25519'
-    local curve = require 'luaec25519'
-	if curve then
-		print('got curve, ')
-        local publicC = curve.public_key(secret)
-		getHexd(publicC)
-	end
-	--]]
-	print('public modded')
-    getHexd(public)
 	
 	return
 end
