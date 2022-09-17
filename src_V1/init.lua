@@ -36,7 +36,8 @@ require = function(mod)
 				
 				if func then
 					result = func()
-				else
+                else
+					print'Met error:'
 					error(
                         ('unfound file: \nname: %s\ncontent: %s')
 						:format(
