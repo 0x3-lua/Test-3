@@ -459,7 +459,8 @@ end
 ---@param x integer[]
 ---@param i integer
 ---@return nacl.range
-function dl64(x, i) 
+function dl64(x, i)
+	print(Static.table.toString(x), i)
 	local h = bit.bor(
 		bitExtra.uleftShift(x[i], 24),
 		bitExtra.uleftShift(x[i + 1], 16),
@@ -681,9 +682,6 @@ function crypto_hashblocks(result, array, n)
 	local t;
 	
     for i = 1, 8 do
-	print(
-
-		Static.table.toString(result))
         a[i] = dl64(result, 8 * (i - 1));
         z[i] = a[i]
 	end
