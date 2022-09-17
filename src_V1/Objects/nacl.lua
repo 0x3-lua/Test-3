@@ -29,7 +29,8 @@ and function names have been conserved as much as possible.
 ---@field crypto_scalarmult fun(out: integer[], n: integer[], p: integer[]): integer
 ---@field crypto_scalarmult_base fun(out: integer[], n: integer[]): integer
 ---@field scalarmult fun(n: string, p: string): string
----@field getPublicKey fun(secret: string): string
+---@field getRandomString fun(len: integer?): string
+---@field getKeyPair fun(secret: string?): string, string
 ---@field getSignature fun(secretKey: string, message: string): string
 ---@field verify fun(message: string, signature: string, publicKey: string): boolean
 
@@ -946,21 +947,64 @@ function crypto_sign(result, message, len, secretKey)
 	return smlen
 end
 
----returns public key (ok why is the signature 64 byte key like this?)
----@param secretKey string
----@return string
-nacl51.getPublicKey = function (secretKey)
-    local result
+function crypto_sign_keypair(pk, sk)
+    local d = getNA64()
+	local p = {gf(),gf(),gf(),gf()}
 	
-	if #secretKey == 32 then
-		result = nacl51.scalarmult(secretKey, base)
-	elseif #secretKey == 64 then
-		result = secretKey:sub(33)
-    else
-		error('invalid secret key length:' .. #secretKey)
+    crypto_hash(d, sk, 32)
+    d[1] = bit.band(d[1], 248)
+	d[32] = bit.bor(bit.band(d[32], 127), 64)
+
+    scalarbase(p, d)
+    pack(pk, p)
+	for i = 1, 32 do
+		sk[i + 32] = pk
 	end
+end
+
+--[[
 	
+	  scalarbase(p, d);
+	  pack(pk, p);
+	
+	  for (i = 0; i < 32; i++) sk[i+32] = pk[i];
+	  return 0;
+	}
+
+]]
+
+---returns a string of random characters, with bytes 0 to 255
+---@param len integer?
+---@return string
+nacl51.getRandomString = function(len)
+	-- pre
+    len = len or 32
+	
+	-- main
+    local result = ''
+
+	for _ = 1, len do
+		result = result .. string.char(math.random(1, 256) - 1)
+	end
+
 	return result
+end
+
+---returns public key (ok why is the signature 64 byte key like this?)
+---@param secretKey string?
+---@return string, string
+nacl51.getKeyPair = function (secretKey)
+    -- pre
+	secretKey = secretKey or nacl51.getRandomString()
+    -- main
+	local publicKey
+
+    local publicKeyArray = getNA32()
+	local secretKeyArray = {secretKey:byte(1, 64)}
+
+	crypto_sign_keypair(publicKeyArray, secretKeyArray)
+
+	return publicKey, secretKey
 end
 
 ---returns signature
