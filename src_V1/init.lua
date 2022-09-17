@@ -30,7 +30,8 @@ require = function(mod)
 					:format(subName, fullName)
 				)
 			else
-				print(file:read'*a')
+                result = loadstring(file:read '*a')()
+				file:close()
 			end
 		else
 			result = func()
