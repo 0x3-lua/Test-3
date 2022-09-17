@@ -15,9 +15,9 @@ do
 	---@param s string
     local function getHexd(s)
 		assert(type(s) == 'string')
-        local digits = { StringRadix.hexdecimal.getDigitSequence(s:byte(1, 32)) }
+        local digits = { StringRadix.hexdecimal.getDigitSequence(s:byte(1, #s)) }
 		
-		for i = 1, 32 do
+		for i = 1, #s do
             local v = digits[i]
 			
 			if #v == 1 then
