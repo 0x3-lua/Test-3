@@ -4,7 +4,7 @@ local Static = require('Static')
 do
 	local StringRadix = require('StringRadix')
     local nacl = require('nacl')
-    local seed = ''
+
 	-- local secret = ''
 
 	Static.luarocks.loadModule('base64')
@@ -26,7 +26,7 @@ do
 		print(table.concat(digits))
 	end
 	
-    for i = 1, 32 do seed = seed .. string.char(math.random(256) - 1) end
+    local seed = nacl.getRandomString()
 
 	print('seed')
     getHexd(seed)
