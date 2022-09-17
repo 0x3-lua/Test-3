@@ -30,8 +30,22 @@ require = function(mod)
 					:format(subName, fullName)
 				)
 			else
-                result = loadstring(file:read '*a')()
+				local fileContent = file:read'*a'
+				local func = loadstring(fileContent)
 				file:close()
+				
+				if func then
+					result = func()
+				else
+					error(
+                        ('unfound file: \nname: %s\ncontent: %s')
+						:format(
+                            fullName,
+							fileContent
+						)
+					)
+				end
+
 			end
 		else
 			result = func()
