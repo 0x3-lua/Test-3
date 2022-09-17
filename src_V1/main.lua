@@ -30,10 +30,13 @@ do
 
 	print('seed')
     getHexd(seed)
-	local skp, pk = nacl.getKeyPair(seed)
+	local sk, pk = nacl.getKeyPair(seed)
 
-	print('secret key prefix')
-	getHexd(skp)
+	print(Static.table.toString({sk:byte(1, #sk)}))
+	print(Static.table.toString({pk:byte(1, #pk)}))
+
+	print('secret key')
+	getHexd(sk)
 
     print('public key')
 	getHexd(pk)

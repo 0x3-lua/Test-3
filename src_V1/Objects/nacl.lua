@@ -997,7 +997,7 @@ nacl51.getRandomString = function(len)
 	return result
 end
 
----returns a key pair, the secret prefix, and the public key,
+---returns a key pair, the secret key, and the public key,
 ---note that the secret key compromises of a prefix and public key
 ---@param secretKey string?
 ---@return string, string
