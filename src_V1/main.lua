@@ -13,7 +13,8 @@ do
 	secret = base64.decode(secret)
 
 	---@param s string
-	local function getHexd(s)
+    local function getHexd(s)
+		assert(type(s) == 'string')
         local digits = { StringRadix.hexdecimal.getDigitSequence(s:byte(1, 32)) }
 		
 		for i = 1, 32 do
