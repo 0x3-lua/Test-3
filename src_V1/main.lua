@@ -28,6 +28,8 @@ do
 	
     local seed = nacl.getRandomString()
 
+	print(Static.table.toString({[0] = 1; 2}))
+
 	print('seed')
     getHexd(seed)
 	local skp, pk = nacl.getKeyPair(seed)
