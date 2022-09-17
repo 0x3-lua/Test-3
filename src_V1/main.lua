@@ -9,6 +9,7 @@ do
 	Static.luarocks.loadModule('base64')
 
     local base64 = require('base64')
+	print('secret')
 	secret = base64.decode(secret)
 
 	---@param s string
