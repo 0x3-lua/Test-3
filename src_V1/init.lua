@@ -44,7 +44,8 @@ require = function(mod)
 							fileContent
                         )
                     print 'Met error:'
-					print(func)
+                    print(func)
+					print(loadstring('return "foo"'))
 					-- print(errorMessage)
 					error(errorMessage)
 				end
