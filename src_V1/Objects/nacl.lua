@@ -680,7 +680,13 @@ function crypto_hashblocks(result, array, n)
 	local z,b,a,w = {}, {}, {}, {}
 	local t;
 	
-	for i = 1, 8 do a[i] = dl64(result, 8 * (i - 1)); z[i] = a[i] end
+    for i = 1, 8 do
+	print(
+
+		Static.table.toString(result))
+        a[i] = dl64(result, 8 * (i - 1));
+        z[i] = a[i]
+	end
 
 	local pos = 0
 
