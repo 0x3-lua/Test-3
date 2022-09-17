@@ -602,7 +602,7 @@ function Maj(x,y,z)
         bit.bxor(
 			bit.band(x.lo, y.lo), 
 			bit.band(x.lo, z.lo),
-			bit.band(y.lo & z.lo)
+			bit.band(y.lo, z.lo)
 		)
 	)
 end

@@ -19,38 +19,7 @@ require = function(mod)
 		local func = loadfile(subName)
 
 		if not func then
-			local file = io.open(subName,'r+b')
-			if not file then
-				--print(subName:byte(1,#subName))
-				error(
-					(
-						'unfound module file: \nfile: %s\nfullname'
-							.. ': %s'
-					)
-					:format(subName, fullName)
-				)
-			else
-				local fileContent = file:read'*a'
-				local func = loadstring(fileContent)
-				file:close()
-				
-				if func then
-					result = func()
-                else
-                    local errorMessage = 'error met' or ('unfound file: \nname:'
-						..' %s\ncontent: %s')
-						:format(
-                            fullName,
-							fileContent
-                        )
-                    print 'Met error:'
-                    print(func)
-					print(loadstring('return "foo"'))
-					-- print(errorMessage)
-					error(errorMessage)
-				end
-
-			end
+			error('possible parsing error, please check: ' .. subName)
 		else
 			result = func()
 		end
