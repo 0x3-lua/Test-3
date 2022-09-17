@@ -460,7 +460,8 @@ end
 ---@param i integer
 ---@return nacl.range
 function dl64(x, i)
-	print(Static.table.toString(x), i)
+    -- print(Static.table.toString(x), i)
+	i = i + 1
 	local h = bit.bor(
 		bitExtra.uleftShift(x[i], 24),
 		bitExtra.uleftShift(x[i + 1], 16),
