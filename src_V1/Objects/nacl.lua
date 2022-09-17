@@ -965,7 +965,7 @@ function crypto_sign_keypair(pk, sk)
 	scalarbase(p, d)
 	pack(pk, p)
 	for i = 1, 32 do
-		sk[i + 32] = pk
+		sk[i + 32] = pk[i]
 	end
 end
 
@@ -1010,7 +1010,7 @@ nacl51.getKeyPair = function (secretKey)
 
 	crypto_sign_keypair(publicKeyArray, secretKeyArray)
 
-    print(Static.table.toString(publicKeyArray), Static.table.toString(secretKeyArray))
+    -- print(Static.table.toString(publicKeyArray), Static.table.toString(secretKeyArray))
 
 	return byteArrayToStr(secretKeyArray),
 		byteArrayToStr(publicKeyArray)
