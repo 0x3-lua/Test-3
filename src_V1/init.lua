@@ -18,6 +18,7 @@ require = function (mod)
         local func = loadfile(subName)
 
         if not func then
+            print(subName:byte(1,#subName))
             error(
                 (
                     'unfound module file: \nfile: %s\nfullname'
