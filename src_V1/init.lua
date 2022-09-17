@@ -5,32 +5,39 @@ local overridenRequire = require
 
 ---overriden Require, can be better
 ---@param mod string
-require = function (mod)
-    local result
+require = function(mod)
+	local result
 
-    local fullName = io.popen(
-        ('find -name \'%s.lua\''):format(mod))
-        :read'*a'
-    if not fullName or #fullName == 0 then
-        result = overridenRequire(mod)
-    else
-        local subName = fullName:sub(1, -2)
-        local func = loadfile(subName)
+	local fullName = io.popen(
+			('find -name \'%s.lua\''):format(mod)
+		):read '*a'
+		
+	if not fullName or #fullName == 0 then
+		result = overridenRequire(mod)
+	else
+		local subName = fullName:sub(1, -2)
+		local func = loadfile(subName)
 
-        if not func then
-            print(subName:byte(1,#subName))
-            error(
-                (
-                    'unfound module file: \nfile: %s\nfullname'
-                        ..': %s')
-                    :format(subName, fullName)
-            )
-        end
+		if not func then
+			local file = io.open(subName,'r+b')
+			if not file then
+				--print(subName:byte(1,#subName))
+				error(
+					(
+						'unfound module file: \nfile: %s\nfullname'
+							.. ': %s'
+					)
+					:format(subName, fullName)
+				)
+			else
+				print(file:read'*a')
+			end
+		else
+			result = func()
+		end
+	end
 
-        result = loadfile(fullName:sub(1, -2))()
-    end
-
-    return result
+	return result
 end
 
 require('main')
