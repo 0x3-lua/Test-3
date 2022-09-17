@@ -14,7 +14,18 @@ require = function (mod)
     if not fullName or #fullName == 0 then
         result = overridenRequire(mod)
     else
-        print(loadfile)
+        local subName = fullName:sub(1, -2)
+        local func = loadfile(subName)
+
+        if not func then
+            error(
+                (
+                    'unfound module file: \nfile: %s\nfullname'
+                        ..': %s')
+                    :format(subName, fullName)
+            )
+        end
+
         result = loadfile(fullName:sub(1, -2))()
     end
 
