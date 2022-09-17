@@ -37,14 +37,15 @@ require = function(mod)
 				if func then
 					result = func()
                 else
-					print'Met error:'
-					error(
-                        ('unfound file: \nname: %s\ncontent: %s')
+                    local errorMessage = ('unfound file: \nname:'
+						..' %s\ncontent: %s')
 						:format(
                             fullName,
 							fileContent
 						)
-					)
+                    print 'Met error:'
+					print(errorMessage)
+					error(errorMessage)
 				end
 
 			end
