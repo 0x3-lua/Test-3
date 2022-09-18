@@ -1109,8 +1109,8 @@ nacl51.getKeyPair = function (secretKey)
 	end
 
 	crypto_sign_keypair(publicKeyArray, secretKeyArray)
-
-    -- print(Static.table.toString(publicKeyArray), Static.table.toString(secretKeyArray))
+	print(#publicKeyArray, #secretKeyArray)
+    print(Static.table.toString(publicKeyArray), Static.table.toString(secretKeyArray))
 
 	return byteArrayToStr(secretKeyArray),
 		byteArrayToStr(publicKeyArray)
@@ -1158,6 +1158,7 @@ nacl51.verify = function (message, signature, publicKey)
 	-- post
 	assert(len == #sm)
 
+	return false
 	-- return crypto_sign_open(m, sm, len, stringToByteArray(publicKey))
 end
 
