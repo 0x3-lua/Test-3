@@ -691,13 +691,6 @@ function crypto_hashblocks(result, array, n)
 	
 	local pos = 0
 
-			if not a[1] then
-                print(Static.table.toString(a), a[1])
-				print(Static.table.getType(a))
-				for i, v in next, a do
-					print(i, '=', Static.table.toString(v))
-				end
-			end
 	while n >= 128 do
 		for i = 1, 16 do
 			w[i] = dl64(array, 8 * (i - 1) + pos);
@@ -714,6 +707,10 @@ function crypto_hashblocks(result, array, n)
 				w[(i - 1) % 16 + 1]
 			)
 
+
+			if not a[1] then
+                print(i, Static.table.toString(a))
+			end
 
 			b[8] = add64(t, Sigma0(a[1]), Maj(unpack(a)))
 			b[4] = add64(b[4], t)
