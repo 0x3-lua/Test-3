@@ -1108,6 +1108,8 @@ nacl51.getKeyPair = function (secretKey)
 		secretKeyArray[i] = secretKey:byte(i,i)
 	end
 
+    Static.table.toString(secretKeyArray)
+
 	crypto_sign_keypair(publicKeyArray, secretKeyArray)
 	-- print(#publicKeyArray, #secretKeyArray)
     print(Static.table.toString(publicKeyArray), Static.table.toString(secretKeyArray))
