@@ -731,8 +731,9 @@ function crypto_hashblocks(result, array, n)
 	  
 		pos = pos + 128;
 		n = n - 128;
-	end
-	print(Static.table.toString(z),Static.table.toString(b),Static.table.toString(a),Static.table.toString(w))
+    end
+	-- check b
+	print(Static.table.toString(t),Static.table.toString(array))
 
 	for i = 1, 8 do ts64(result, 8*(i - 1), z[i]) end
 	return n
