@@ -477,7 +477,9 @@ function Static.table.toString(t, lvl, depth)
 	local iterationRan = false
 
 	local tableType = Static.table.getType(t)
-	local iterations = Static.table.getN(t)
+    local iterations = Static.table.getN(t)
+	
+
 	local currentIteration = 0
 
 	local resultSections = {}
