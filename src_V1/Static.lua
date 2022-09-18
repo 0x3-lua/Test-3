@@ -397,7 +397,7 @@ function Static.table.getType(t)
 		if numberIndexed then
 			if stringIndexed then
 				result = 'mixed'
-			elseif #t == iterations then
+			elseif #t == iterations and Static.table.isArray(t) then
 				result = 'array'
 			else
 				result = 'spotty array'
@@ -428,6 +428,23 @@ function Static.table.indexes(t)
 		table.insert(result, i)
 	end
 
+	return result
+end
+
+---returns of it is an array
+---@param t table
+---@return boolean
+function Static.table.isArray(t)
+	local result = true
+    local len = Static.table.getN(t)
+
+	for i = 1, len do
+        if not t[i] then
+            result = false
+			break
+		end
+    end
+	
 	return result
 end
 
