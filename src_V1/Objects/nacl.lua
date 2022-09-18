@@ -690,11 +690,6 @@ function crypto_hashblocks(result, array, n)
     end
 	
 	local pos = 0
-
-
-			if not a[1] then
-                print(n, -1, Static.table.toString(a))
-    end
 			
 	while n >= 128 do
 		for i = 1, 16 do
@@ -721,11 +716,10 @@ function crypto_hashblocks(result, array, n)
 			b[8] = add64(t, Sigma0(a[1]), Maj(unpack(a)))
 			b[4] = add64(b[4], t)
 
-			for j = 1, 8 do a[j % 8] = b[j - 1] end
 			
-			if i == 1 and n == 128 then
-                print('aaa',n, i, Static.table.toString(a))
-            end
+
+			for j = 1, 8 do a[j % 8 + 1] = b[j] end
+			
 			
 			if (i - 1) % 16 == 15 then
 				for j = 1, 16 do
