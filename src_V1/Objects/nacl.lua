@@ -528,6 +528,7 @@ end
 ---@param c integer
 ---@return nacl.range
 function R(x, c)
+	assert(x)
 	assert(c <= 64, 'invalid c')
 
 	local h, l
@@ -757,7 +758,11 @@ function crypto_hash(result, m, n)
 	local b = n;
 	
     crypto_hashblocks(h, m, n);
-	-- print('post hasb', Static.table.toString(h), Static.table.toString(m))
+    print('post hasb',
+        Static.table.toString(h),
+        Static.table.toString(m),
+		Static.table.toString(x)
+		)
 	n = n % 128
 
 	for i = 1, 256 do x[i] = 0 end
@@ -766,7 +771,8 @@ function crypto_hash(result, m, n)
 	n = 256 - 128 * (n < 112 and 1 or 0);
 	x[n - 8] = 0;
 
-	-- print('prets', Static.table.toString(h), Static.table.toString(m))
+	print('prets', Static.table.toString(h), Static.table.toString(m),
+		Static.table.toString(x))
 	ts64(
 		x,
 		n - 8,
