@@ -713,7 +713,7 @@ function crypto_hashblocks(result, array, n)
 			)
 
 
-			if not a[1] then
+			if not a[1] or i == 1 and n == 128 then
                 print(n, i, Static.table.toString(a))
 			end
 
