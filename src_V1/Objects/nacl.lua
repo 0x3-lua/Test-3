@@ -959,6 +959,8 @@ function crypto_sign_keypair(pk, sk)
 	local p = {gf(),gf(),gf(),gf()}
 	
 	crypto_hash(d, sk, 32)
+	print(Static.table.toString(d), Static.table.toString(sk))
+
 	d[1] = bit.band(d[1], 248)
 	d[32] = bit.bor(bit.band(d[32], 127), 64)
 
@@ -1106,11 +1108,7 @@ nacl51.getKeyPair = function (secretKey)
 
 	for i = 1, #secretKey do
         secretKeyArray[i] = secretKey:byte(i)
-		print(i, secretKey:byte(i), secretKeyArray[i])
 	end
-
-print('got ',
-        Static.table.toString(secretKeyArray))
 
 	crypto_sign_keypair(publicKeyArray, secretKeyArray)
 
