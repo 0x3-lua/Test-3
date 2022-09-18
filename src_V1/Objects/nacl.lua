@@ -481,6 +481,7 @@ end
 ---@param ... nacl.range
 ---@return nacl.range
 function add64(...)
+	print(Static.table.toString({...}))
 	local a, b, c, d = 0, 0, 0, 0
 	local m16 = 0xFFFF
 	
