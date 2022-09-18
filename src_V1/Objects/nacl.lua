@@ -490,7 +490,7 @@ function add64(...)
 		a = a + bit.band(l, m16)
 		b = b + bit.rshift(l, 16)
 		c = c + bit.band(h, m16)
-		d = d + bit.rshift
+		d = d + bit.rshift(h, 16)
 	end
 	
 	b = b + bit.rshift(a, 16)
