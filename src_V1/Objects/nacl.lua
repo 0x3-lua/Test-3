@@ -685,7 +685,9 @@ function crypto_hashblocks(result, array, n)
     for i = 1, 8 do
         a[i] = dl64(result, 8 * (i - 1));
         z[i] = a[i]
-	end
+    end
+	
+	print(Static.table.toString(result))
 
 	local pos = 0
 
@@ -756,7 +758,7 @@ function crypto_hash(result, m, n)
 	local b = n;
 	
     crypto_hashblocks(h, m, n);
-	print(Static.table.toString(h), Static.table.toString(m))
+	-- print(Static.table.toString(h), Static.table.toString(m))
 	n = n % 128
 
 	for i = 1, 256 do x[i] = 0 end
