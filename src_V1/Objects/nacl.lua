@@ -732,11 +732,8 @@ function crypto_hashblocks(result, array, n)
 		pos = pos + 128;
 		n = n - 128;
     end
-	    
-    print('pre res', Static.table.toString(result))
 
-	for i = 1, 8 do ts64(result, 8*(i - 1), z[i]) end -- !
-    print('post res', Static.table.toString(result))
+	for i = 1, 8 do ts64(result, 8*(i - 1), z[i]) end
 	return n
 end
 
@@ -760,7 +757,7 @@ function crypto_hash(result, m, n)
 	local b = n;
 	
     crypto_hashblocks(h, m, n);
-	-- print(Static.table.toString(h), Static.table.toString(m))
+	print(Static.table.toString(h), Static.table.toString(m))
 	n = n % 128
 
 	for i = 1, 256 do x[i] = 0 end
@@ -768,6 +765,8 @@ function crypto_hash(result, m, n)
 	x[n + 1] = 128
 	n = 256 - 128 * (n < 112 and 1 or 0);
 	x[n - 8] = 0;
+
+
 	ts64(
 		x,
 		n - 8,
