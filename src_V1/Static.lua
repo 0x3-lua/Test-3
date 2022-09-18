@@ -439,9 +439,9 @@ function Static.table.isArray(t)
     local len = Static.table.getN(t)
 
 	for i = 1, len do
-        if not t[i] then
+        if nil == t[i] then
             result = false
-			break
+            break
 		end
     end
 	
