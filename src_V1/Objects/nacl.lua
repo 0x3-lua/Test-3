@@ -757,7 +757,7 @@ function crypto_hash(result, m, n)
 	local b = n;
 	
     crypto_hashblocks(h, m, n);
-	print(Static.table.toString(h), Static.table.toString(m))
+	-- print('post hasb', Static.table.toString(h), Static.table.toString(m))
 	n = n % 128
 
 	for i = 1, 256 do x[i] = 0 end
@@ -766,7 +766,7 @@ function crypto_hash(result, m, n)
 	n = 256 - 128 * (n < 112 and 1 or 0);
 	x[n - 8] = 0;
 
-
+	-- print('prets', Static.table.toString(h), Static.table.toString(m))
 	ts64(
 		x,
 		n - 8,
@@ -775,7 +775,7 @@ function crypto_hash(result, m, n)
 			bitExtra.uleftShift(b, 3)
 		)
 	);
-	
+	crypto_hashblocks(h, x, n)
 	for i = 1, 64 do result[i] = h[i]; end
 end
 
