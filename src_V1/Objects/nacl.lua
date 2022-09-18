@@ -755,7 +755,8 @@ function crypto_hash(result, m, n)
 	local x = getNumberArray(256);
 	local b = n;
 	
-	crypto_hashblocks(h, m, n);
+    crypto_hashblocks(h, m, n);
+	print(Static.table.toString(h), Static.table.toString(m))
 	n = n % 128
 
 	for i = 1, 256 do x[i] = 0 end
@@ -767,7 +768,7 @@ function crypto_hash(result, m, n)
 		x,
 		n - 8,
 		u64(
-			bit.bor((b / 0x20000000), 0),
+			bit.bor(math.floor(b / 0x20000000), 0),
 			bitExtra.uleftShift(b, 3)
 		)
 	);
@@ -959,7 +960,7 @@ function crypto_sign_keypair(pk, sk)
 	local p = {gf(),gf(),gf(),gf()}
 	
 	crypto_hash(d, sk, 32)
-	print(Static.table.toString(d), Static.table.toString(sk))
+	-- print(Static.table.toString(d), Static.table.toString(sk))
 
 	d[1] = bit.band(d[1], 248)
 	d[32] = bit.bor(bit.band(d[32], 127), 64)
