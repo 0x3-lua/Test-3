@@ -1105,15 +1105,13 @@ nacl51.getKeyPair = function (secretKey)
 	local secretKeyArray = getNA64()
 
 	for i = 1, #secretKey do
-		secretKeyArray[i] = secretKey:byte(i,i)
+		secretKeyArray[i] = secretKey:byte(i)
 	end
 
 print('got ',
-    Static.table.toString(secretKeyArray))
-
+        Static.table.toString(secretKeyArray))
+		
 	crypto_sign_keypair(publicKeyArray, secretKeyArray)
-	-- print(#publicKeyArray, #secretKeyArray)
-    print(Static.table.toString(publicKeyArray), Static.table.toString(secretKeyArray))
 
 	return byteArrayToStr(secretKeyArray),
 		byteArrayToStr(publicKeyArray)
