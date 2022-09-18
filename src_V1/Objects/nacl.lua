@@ -415,7 +415,7 @@ function byteArrayToStr(a)
 	local result = ''
 	
 	for i = 1, #a do
-		result = result .. a[i]
+		result = result .. string.char(a[i])
 	end
 
 	return result
