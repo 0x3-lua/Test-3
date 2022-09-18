@@ -708,7 +708,7 @@ function crypto_hashblocks(result, array, n)
 			)
 			if not a[1] then
                 print(Static.table.toString(a), a[1])
-				
+				print(Static.table.getType(a))
 				for i, v in next, a do
 					print(i, '=', Static.table.toString(v))
 				end
