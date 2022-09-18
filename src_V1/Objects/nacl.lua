@@ -786,8 +786,6 @@ function crypto_hash(result, m, n)
 		)
     );
 	
-	print('post ts',Static.table.toString(x))
-
 	crypto_hashblocks(h, x, n)
 	for i = 1, 64 do result[i] = h[i]; end
 end
@@ -941,6 +939,13 @@ function crypto_sign(result, message, len, secretKey)
 	local p = { getNA32(), getNA32(), getNA32(), getNA32() }
 	
 	crypto_hash(d, secretKey, 32);
+
+    print('post hash',
+        Static.table.toString(d), 
+		Static.table.toString(
+		secretKey)
+	)
+
 	d[1] = bit.band(d[1], 248);
 	d[32] = bit.bor(bit.band(d[32], 127), 64)
 	
