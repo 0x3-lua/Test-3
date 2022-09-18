@@ -618,7 +618,7 @@ end
 function ts64(x, i, u)
 	for j = 0, 7 do
 		local a = j < 4 and 'hi' or 'lo'
-		x[i + j] = bit.band(
+		x[i + j + 1] = bit.band(
 			bitExtra.uleftShift(u[a], 24 - (j % 4) * 8),
 			0xFF
 		)
