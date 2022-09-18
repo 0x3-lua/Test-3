@@ -713,7 +713,7 @@ function crypto_hashblocks(result, array, n)
 			)
 
 
-			if not a[1] or i == 1 and n == 128 then
+			if not a[1] then
                 print(n, i, Static.table.toString(a))
 			end
 
@@ -731,6 +731,10 @@ function crypto_hashblocks(result, array, n)
 						sigma1(w[(j+13)%16 + 1])
 					)
 				end
+			end
+            ---i == 1 and n == 128
+			if i == 1 and n == 128 then
+                print(n, i, Static.table.toString(a))
 			end
 		end
 		
