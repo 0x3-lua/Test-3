@@ -691,6 +691,11 @@ function crypto_hashblocks(result, array, n)
 	
 	local pos = 0
 
+
+			if not a[1] then
+                print(n, 2, Static.table.toString(a))
+    end
+			
 	while n >= 128 do
 		for i = 1, 16 do
 			w[i] = dl64(array, 8 * (i - 1) + pos);
