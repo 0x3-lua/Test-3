@@ -786,13 +786,16 @@ function crypto_hash(result, m, n)
 		)
     );
 	
+
+	crypto_hashblocks(h, x, n)
+
+
     print('pre hashb',
         Static.table.toString(h),
         Static.table.toString(m),
 		Static.table.toString(x)
 	)
 
-	crypto_hashblocks(h, x, n)
 	for i = 1, 64 do result[i] = h[i]; end
 end
 
