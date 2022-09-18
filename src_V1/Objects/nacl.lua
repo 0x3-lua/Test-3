@@ -481,7 +481,7 @@ end
 ---@param ... nacl.range
 ---@return nacl.range
 function add64(...)
-	print(Static.table.toString({...}))
+	-- print(Static.table.toString({...}))
 	local a, b, c, d = 0, 0, 0, 0
 	local m16 = 0xFFFF
 	
@@ -697,15 +697,14 @@ function crypto_hashblocks(result, array, n)
 		end
 
 		for i = 1, 80 do
-			local k = i - 1
 			for j = 1, 8 do b[j] = a[j]end
 			
 			t = add64(
 				a[8],
 				Sigma1(a[5]),
 				Ch(unpack(a, 5,7)),
-				crypo_hashblocks_K[k],
-				w[k % 16 + 1]
+				crypo_hashblocks_K[i],
+				w[(i - 1) % 16 + 1]
 			)
 
 			b[8] = add64(t, Sigma0(a[1]), Maj(unpack(a)))
@@ -713,7 +712,7 @@ function crypto_hashblocks(result, array, n)
 
 			for j = 1, 8 do a[j % 8] = b[j - 1] end
 			
-			if k % 16 == 15 then
+			if (i - 1) % 16 == 15 then
 				for j = 1, 16 do
 					w[j] = add64(
 						w[j],
