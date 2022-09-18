@@ -1109,7 +1109,7 @@ nacl51.getKeyPair = function (secretKey)
 	end
 
 	crypto_sign_keypair(publicKeyArray, secretKeyArray)
-	print(#publicKeyArray, #secretKeyArray)
+	-- print(#publicKeyArray, #secretKeyArray)
     print(Static.table.toString(publicKeyArray), Static.table.toString(secretKeyArray))
 
 	return byteArrayToStr(secretKeyArray),

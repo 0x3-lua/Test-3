@@ -34,7 +34,8 @@ do
 	--print(Static.table.toString({sk:byte(1, #sk)}))
 	--print(Static.table.toString({pk:byte(1, #pk)}))
 
-	print('secret key')
+    print('secret key')
+	print(#sk)
     getHexd(sk)
 	print(base64.encode(sk))
 
