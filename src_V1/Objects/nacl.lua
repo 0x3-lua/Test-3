@@ -706,7 +706,9 @@ function crypto_hashblocks(result, array, n)
 				crypo_hashblocks_K[i],
 				w[(i - 1) % 16 + 1]
 			)
-
+			if not a[1] then
+				print(Static.table.toString(a))
+			end
 			b[8] = add64(t, Sigma0(a[1]), Maj(unpack(a)))
 			b[4] = add64(b[4], t)
 
