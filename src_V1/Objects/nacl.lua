@@ -969,13 +969,109 @@ function crypto_sign_keypair(pk, sk)
 	end
 end
 
+function pow2523(o, i)
+    local c = gf()
+    for a = 1, 16 do c[a] = i[i] end
+	for a = 250, 0, -1 do
+        S(c, c)
+		if a ~= 1 then M(c, c, i) end
+    end
+	for a = 1, 16 do o[a] = c[a] end
+end
+
+local unpackneg_D_K = gf({ 0x78a3, 0x1359, 0x4dca, 0x75eb, 0xd8ab, 0x4141, 0x0a4d, 0x0070, 0xe898, 0x7779, 0x4079, 0x8cc7,
+    0xfe73, 0x2b6f, 0x6cee, 0x5203 })
+
+function unpackneg(r, p)
+    local t, chk, num, den, den2, den4, den6 = gf(), gf(), gf(), gf(), gf(), gf(), gf()
+	
+    set25519(r[3], scalarbase_K_gf1)
+    unpack25519(r[2], p)
+    S(num, r[2])
+    M(den, num, unpackneg_D_K)
+    Z(num, num, r[3])
+    A(den, r[3], den)
+	
+    S(den2, den)
+    S(den4, den2)
+    M(den6, den4, den2)
+    M(t, den6, num)
+    M(t, t, den)
+	
+    pow2523(t, t)
+    M(t, t, num)
+    M(t, t, den)
+    M(t, t, den)
+    M(r[1], t, den)
+	
+	S(chk, r[1])
+    M(chk, chk, den)
+	
+end
+
 --[[
 	
-	  scalarbase(p, d);
-	  pack(pk, p);
 	
-	  for (i = 0; i < 32; i++) sk[i+32] = pk[i];
+	  S(chk, r[0]);
+	  M(chk, chk, den);
+	  if (neq25519(chk, num)) M(r[0], r[0], I);
+	
+	  S(chk, r[0]);
+	  M(chk, chk, den);
+	  if (neq25519(chk, num)) return -1;
+	
+	  if (par25519(r[0]) === (p[31]>>7)) Z(r[0], gf0, r[0]);
+	
+	  M(r[3], r[0], r[1]);
 	  return 0;
+	}
+
+]]
+function crypto_sign_open(m, sm, n, pk)
+    -- pre
+	if n < 64 then
+		return -1
+	end
+	
+	local q = {gf(), gf(), gf(), gf()}
+
+	local t = getNA32()
+    local h = getNA32()
+    local p = {gf(), gf(), gf(), gf()}
+
+
+end
+
+--[[
+
+	function crypto_sign_open(m, sm, n, pk) {
+	  var i;
+	  var t = new Uint8Array(32), h = new Uint8Array(64);
+	  var p = [gf(), gf(), gf(), gf()],
+		  q = [gf(), gf(), gf(), gf()];
+	
+	  if (n < 64) return -1;
+	
+	  if (unpackneg(q, pk)) return -1;
+	
+	  for (i = 0; i < n; i++) m[i] = sm[i];
+	  for (i = 0; i < 32; i++) m[i+32] = pk[i];
+	  crypto_hash(h, m, n);
+	  reduce(h);
+	  scalarmult(p, q, h);
+	
+	  scalarbase(q, sm.subarray(32));
+	  add(p, q);
+	  pack(t, p);
+	
+	  n -= 64;
+	  if (crypto_verify_32(sm, 0, t, 0)) {
+		for (i = 0; i < n; i++) m[i] = 0;
+		return -1;
+	  }
+	
+	  for (i = 0; i < n; i++) m[i] = sm[i + 64];
+	  return n;
 	}
 
 ]]
@@ -1051,9 +1147,18 @@ nacl51.verify = function (message, signature, publicKey)
 	assert(#publicKey == 32, 'bad public key length')
 	
 	-- main
+    local len = #message + 32
 	
+    local sm = {}
+	local m = getNumberArray(len)
 
-	return false
+    for i = 1, 64 do sm[i] = signature:byte(i, i) end
+	for i = 1, #message do sm[i + 64] = message:byte(i,i)end
+
+	-- post
+	assert(len == #sm)
+
+	-- return crypto_sign_open(m, sm, len, stringToByteArray(publicKey))
 end
 
 return nacl51

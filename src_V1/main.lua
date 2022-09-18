@@ -4,11 +4,8 @@ local Static = require('Static')
 do
 	local StringRadix = require('StringRadix')
     local nacl = require('nacl')
-
-	-- local secret = ''
-
 	Static.luarocks.loadModule('base64')
-
+	local base64 = require('base64')
 
 	---@param s string
     local function getHexd(s)
@@ -26,21 +23,39 @@ do
 		print(table.concat(digits))
 	end
 	
+    -- used https://ed25519.herokuapp.com/ for testing
+	
     local seed = nacl.getRandomString()
-
-	print('seed')
+	
+	print('attempting keypair: \nseed')
     getHexd(seed)
 	local sk, pk = nacl.getKeyPair(seed)
 
-	print(Static.table.toString({sk:byte(1, #sk)}))
-	print(Static.table.toString({pk:byte(1, #pk)}))
+	--print(Static.table.toString({sk:byte(1, #sk)}))
+	--print(Static.table.toString({pk:byte(1, #pk)}))
 
 	print('secret key')
-	getHexd(sk)
+    getHexd(sk)
+	print(base64.encode(sk))
 
     print('public key')
-	getHexd(pk)
+    getHexd(pk)
+    print(base64.encode(pk))
 	
+    do return end
+	
+	print('attempting signing')
+
+    local message = "robert" -- someone wanted to name bytecollection this so now its here
+	
+    print('got message: ', message)
+
+	local signature = nacl.getSignature(sk, message)
+
+	print('got signature: ', signature)
+	
+
+
 	
 	return
 end
