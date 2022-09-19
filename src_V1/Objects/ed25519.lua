@@ -24,7 +24,7 @@ and function names have been conserved as much as possible.
 ------------------------------------------------------------
 
 -- specs
----@class nacl
+---@class ed25519
 ---@field base string
 ---@field crypto_scalarmult fun(out: integer[], n: integer[], p: integer[]): integer
 ---@field crypto_scalarmult_base fun(out: integer[], n: integer[]): integer
@@ -34,7 +34,7 @@ and function names have been conserved as much as possible.
 ---@field getSignature fun(secretKey: string, message: string): string
 ---@field verify fun(message: string, signature: string, publicKey: string): boolean
 
----@class nacl.range
+---@class ed25519.range
 ---@field hi integer
 ---@field lo integer
 
@@ -381,7 +381,7 @@ a common session key (for a symmetric encryption algorithm).
   
 ]]
 
----@type nacl
+---@type ed25519
 local nacl51 = {
 	crypto_scalarmult = crypto_scalarmult,
 	crypto_scalarmult_base = crypto_scalarmult_base,
@@ -444,11 +444,29 @@ end
 function getNA64()return getNumberArray(64)end
 function getNA32()return getNumberArray(32)end
 function gf(init)return getNumberArray(16, init)end
+function getGF4()return {gf(), gf(), gf(), gf()}end
+
+
+---@param from table
+---@param to table
+---@param iterations integer?
+---@param offset integer?
+function imprint(from, to, iterations, offset)
+	-- pre
+	iterations = iterations or #from
+	offset = offset or 1
+
+	-- main
+	for i = offset, iterations do
+		to[i] = from[i]
+	end
+end
+
 -- sub main
 
 ---@param high integer
 ---@param low integer
----@return nacl.range
+---@return ed25519.range
 function u64(high, low)
 	return {
 		hi = bit.bor(high, bit.rshift(0, 0)); 
@@ -458,9 +476,8 @@ end
 
 ---@param x integer[]
 ---@param i integer
----@return nacl.range
+---@return ed25519.range
 function dl64(x, i)
-    -- print(Static.table.toString(x), i)
 	i = i + 1
 	local h = bit.bor(
 		bitExtra.uleftShift(x[i], 24),
@@ -478,8 +495,8 @@ function dl64(x, i)
 	return u64(h, l);
 end
 
----@param ... nacl.range
----@return nacl.range
+---@param ... ed25519.range
+---@return ed25519.range
 function add64(...)
 	-- print(Static.table.toString({...}))
 	local a, b, c, d = 0, 0, 0, 0
@@ -510,8 +527,8 @@ function add64(...)
 	)
 end
 
----@param ... nacl.range
----@return nacl.range
+---@param ... ed25519.range
+---@return ed25519.range
 function xor64(...)
 	local l = 0
 	local h = 0
@@ -524,9 +541,9 @@ function xor64(...)
 	return u64(h, l)
 end
 
----@param x nacl.range
+---@param x ed25519.range
 ---@param c integer
----@return nacl.range
+---@return ed25519.range
 function R(x, c)
 	assert(x)
 	assert(c <= 64, 'invalid c')
@@ -543,17 +560,17 @@ function R(x, c)
 	return u64(h,l)
 end
 
----@param x nacl.range
----@return nacl.range
+---@param x ed25519.range
+---@return ed25519.range
 function Sigma0(x)return xor64(R(x,28), R(x,34), R(x,39))end
 
----@param x nacl.range
----@return nacl.range
+---@param x ed25519.range
+---@return ed25519.range
 function Sigma1(x)return xor64(R(x,14), R(x,18), R(x,41))end
 
----@param x nacl.range
+---@param x ed25519.range
 ---@param c integer
----@return nacl.range
+---@return ed25519.range
 function shr64(x, c)
 	return u64(
 		bit.rshift(x.hi, c),
@@ -564,18 +581,18 @@ function shr64(x, c)
 	);
 end
 
----@param x nacl.range
----@return nacl.range
+---@param x ed25519.range
+---@return ed25519.range
 function sigma0(x)return xor64(R(x, 1), R(x, 8), shr64(x,7))end
 
----@param x nacl.range
----@return nacl.range
+---@param x ed25519.range
+---@return ed25519.range
 function sigma1(x)return xor64(R(x,19), R(x,61), shr64(x,6))end
 
----@param x nacl.range
----@param y nacl.range
----@param z nacl.range
----@return nacl.range
+---@param x ed25519.range
+---@param y ed25519.range
+---@param z ed25519.range
+---@return ed25519.range
 function Ch(x,y,z)
 	return u64(
 		bit.bxor(
@@ -595,10 +612,10 @@ function Ch(x,y,z)
 	)
 end
 
----@param x nacl.range
----@param y nacl.range
----@param z nacl.range
----@return nacl.range
+---@param x ed25519.range
+---@param y ed25519.range
+---@param z ed25519.range
+---@return ed25519.range
 function Maj(x,y,z)
 	return u64(
 		bit.bxor(
@@ -616,7 +633,7 @@ end
 
 ---@param x integer[]
 ---@param i integer
----@param u nacl.range
+---@param u ed25519.range
 function ts64(x, i, u)
 	for j = 0, 7 do
 		local a = j < 4 and 'hi' or 'lo'
@@ -684,21 +701,18 @@ function crypto_hashblocks(result, array, n)
 	local z,b,a,w = {}, {}, {}, {}
 	local t;
 	
-    for i = 1, 8 do
-        a[i] = dl64(result, 8 * (i - 1));
-        z[i] = a[i]
-    end
+	for i = 1, 8 do a[i] = dl64(result, 8 * (i - 1));end
+
+	imprint(a, z)
 	
 	local pos = 0
 			
 	while n >= 128 do
-		for i = 1, 16 do
-			w[i] = dl64(array, 8 * (i - 1) + pos);
-		end
+		for i = 1, 16 do w[i] = dl64(array, 8 * (i - 1) + pos);end
 
-        for i = 1, 80 do
-			
-			for j = 1, 8 do b[j] = a[j]end
+		for i = 1, 80 do
+			imprint(a, b)
+			-- for j = 1, 8 do b[j] = a[j]end
 			
 			t = add64(
 				a[8],
@@ -708,18 +722,14 @@ function crypto_hashblocks(result, array, n)
 				w[(i - 1) % 16 + 1]
 			)
 
-
 			if not a[1] then
-                print(n, i, Static.table.toString(a))
+				print(n, i, Static.table.toString(a))
 			end
 
 			b[8] = add64(t, Sigma0(a[1]), Maj(unpack(a)))
 			b[4] = add64(b[4], t)
 
-			
-
 			for j = 1, 8 do a[j % 8 + 1] = b[j] end
-			
 			
 			if (i - 1) % 16 == 15 then
 				for j = 1, 16 do
@@ -731,18 +741,15 @@ function crypto_hashblocks(result, array, n)
 					)
 				end
 			end
-            ---i == 1 and n == 128
-			
 		end
 		
-		for i = 1, 8 do
-			a[i] = add64(a[i], z[i]);
-			z[i] = a[i];
-		end
+		for i = 1, 8 do a[i] = add64(a[i], z[i]); end
+		
+		imprint(a, z)
 	  
 		pos = pos + 128;
 		n = n - 128;
-    end
+	end
 
 	for i = 1, 8 do ts64(result, 8*(i - 1), z[i]) end
 	return n
@@ -767,7 +774,7 @@ function crypto_hash(result, m, n)
 	local x = getNumberArray(256);
 	local b = n;
 	
-    crypto_hashblocks(h, m, n);
+	crypto_hashblocks(h, m, n);
    
 	n = n % 128
 
@@ -784,19 +791,13 @@ function crypto_hash(result, m, n)
 			bit.bor(math.floor(b / 0x20000000), 0),
 			bitExtra.uleftShift(b, 3)
 		)
-    );
+	);
 	
 
 	crypto_hashblocks(h, x, n)
 
-
-    print('pre hashb',
-        Static.table.toString(h),
-        Static.table.toString(m),
-		Static.table.toString(x)
-	)
-
-	for i = 1, 64 do result[i] = h[i]; end
+	imprint(h, result)
+	-- for i = 1, 64 do result[i] = h[i]; end
 end
 
 local modL_K = {0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6, 0x9c, 0xf7, 0xa2, 0xde, 0xf9, 0xde, 0x14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x10}
@@ -804,7 +805,7 @@ local modL_K = {0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6, 0x9c, 0xf7
 ---@param r integer[]
 ---@param x integer[]
 function modL(r, x)
-	local carry, i, j, k
+	local carry
 	
 	for i = 63, 32, -1 do
 		carry = 0
@@ -841,13 +842,13 @@ end
 ---@param r integer[]
 function reduce(r)
 	local x = getNA64();
-	for i = 1, 64 do x[i] = r[i]; end
+	imprint(r, x)
+	-- for i = 1, 64 do x[i] = r[i]; end
 	for i = 1, 64 do r[i] = 0; end
 	modL(r, x);
 end
 
 function set25519(r, a)for i = 1, 16 do r[i] = bit.bor(a[i], 0)end end
-
 function cswap(p, q, b)for i = 1, 4 do sel25519(p[i], q[i], b)end end
 
 local add_D2_K = getNumberArray(16, {0xf159, 0x26b2, 0x9b94, 0xebd6, 0xb156, 0x8283, 0x149a, 0x00e0, 0xd130, 0xeef3, 0x80f2, 0x198e, 0xfce7, 0x56df, 0xd9dc, 0x2406})
@@ -949,8 +950,9 @@ function crypto_sign(result, message, len, secretKey)
 	
 	crypto_hash(d, secretKey, 32);
 
-    print('post hash',
-        Static.table.toString(d), 
+-- check
+	print('post hash',
+		Static.table.toString(d), 
 		Static.table.toString(
 		secretKey)
 	)
@@ -973,7 +975,8 @@ function crypto_sign(result, message, len, secretKey)
 	reduce(h)
 	
 	for i = 1, 64 do x[i] = 0 end
-	for i = 1, 32 do x[i] = r[i] end
+	
+	imprint(r, x, 32)-- for i = 1, 32 do x[i] = r[i] end
 	
 	for i = 1, 32 do
 		for j = 1, 32 do
@@ -987,7 +990,7 @@ end
 
 function crypto_sign_keypair(pk, sk)
 	local d = getNA64()
-	local p = {gf(),gf(),gf(),gf()}
+	local p = getGF4() -- {gf(),gf(),gf(),gf()}
 	
 	crypto_hash(d, sk, 32)
 	--print('kp', Static.table.toString(d), Static.table.toString(sk))
@@ -1003,111 +1006,120 @@ function crypto_sign_keypair(pk, sk)
 end
 
 function pow2523(o, i)
-    local c = gf()
-    for a = 1, 16 do c[a] = i[i] end
+	local c = gf()
+	imprint(i, c)
+	-- for a = 1, 16 do c[a] = i[a] end
 	for a = 250, 0, -1 do
-        S(c, c)
+		S(c, c)
 		if a ~= 1 then M(c, c, i) end
-    end
-	for a = 1, 16 do o[a] = c[a] end
+	end
+	imprint(c, o)
+	-- for a = 1, 16 do o[a] = c[a] end
 end
 
-local unpackneg_D_K = gf({ 0x78a3, 0x1359, 0x4dca, 0x75eb, 0xd8ab, 0x4141, 0x0a4d, 0x0070, 0xe898, 0x7779, 0x4079, 0x8cc7,
-    0xfe73, 0x2b6f, 0x6cee, 0x5203 })
+---@param x integer[]
+---@param xi integer
+---@param y integer[]
+---@param yi integer
+---@param n integer
+---@return boolean
+function vn(x, xi, y, yi, n)
+	local d = 0
+	for i = 1, n do
+		d = bit.bor(
+			d,
+			bit.bxor(x[xi + i], y[yi + i])
+		)
+	end
+
+	return (bit.band(1, bit.rshift(d - 1, 8)) - 1) ~= 0
+end
+
+function crypto_verify_32(x, xi, y, yi)return vn(x, xi, y, yi, 32)end
+
+function neq25519(a, b)
+	local c, d = getNA32(), getNA32()
+	pack25519(c, a)
+	pack25519(d, b)
+	return crypto_verify_32(c, 0, d, 0)
+end
+
+local unpackneg_D_K = gf{ 0x78a3, 0x1359, 0x4dca, 0x75eb, 0xd8ab, 0x4141, 0x0a4d, 0x0070, 0xe898, 0x7779, 0x4079, 0x8cc7,
+	0xfe73, 0x2b6f, 0x6cee, 0x5203 }
+
+local unpackneg_I_K = gf{0xa0b0, 0x4a0e, 0x1b27, 0xc4ee, 0xe478, 0xad2f, 0x1806, 0x2f43, 0xd7a7, 0x3dfb, 0x0099, 0x2b4d,
+	0xdf0b, 0x4fc1, 0x2480, 0x2b83};
 
 function unpackneg(r, p)
-    local t, chk, num, den, den2, den4, den6 = gf(), gf(), gf(), gf(), gf(), gf(), gf()
+	local t, chk, num, den, den2, den4, den6 = gf(), gf(), gf(), gf(), gf(), gf(), gf()
 	
-    set25519(r[3], scalarbase_K_gf1)
-    unpack25519(r[2], p)
-    S(num, r[2])
-    M(den, num, unpackneg_D_K)
-    Z(num, num, r[3])
-    A(den, r[3], den)
+	set25519(r[3], scalarbase_K_gf1)
+	unpack25519(r[2], p)
+	S(num, r[2])
+	M(den, num, unpackneg_D_K)
+	Z(num, num, r[3])
+	A(den, r[3], den)
 	
-    S(den2, den)
-    S(den4, den2)
-    M(den6, den4, den2)
-    M(t, den6, num)
-    M(t, t, den)
+	S(den2, den)
+	S(den4, den2)
+	M(den6, den4, den2)
+	M(t, den6, num)
+	M(t, t, den)
 	
-    pow2523(t, t)
-    M(t, t, num)
-    M(t, t, den)
-    M(t, t, den)
-    M(r[1], t, den)
+	pow2523(t, t)
+	M(t, t, num)
+	M(t, t, den)
+	M(t, t, den)
+	M(r[1], t, den)
 	
 	S(chk, r[1])
-    M(chk, chk, den)
+	M(chk, chk, den)
+	if neq25519(chk, num) then M(r[1], r[1], unpackneg_I_K) end
 	
+	S(chk, r[1])
+	M(chk, chk, den)
+	if neq25519(chk, num) then return true; end
+	
+	if par25519(r[1]) == bit.rshift(p[32], 7) then Z(r[1], scalarbase_K_gf0, r[1]) end
+
+	M(r[4], r[1], r[2])
+	return false
 end
 
---[[
-	
-	
-	  S(chk, r[0]);
-	  M(chk, chk, den);
-	  if (neq25519(chk, num)) M(r[0], r[0], I);
-	
-	  S(chk, r[0]);
-	  M(chk, chk, den);
-	  if (neq25519(chk, num)) return -1;
-	
-	  if (par25519(r[0]) === (p[31]>>7)) Z(r[0], gf0, r[0]);
-	
-	  M(r[3], r[0], r[1]);
-	  return 0;
-	}
-
-]]
 function crypto_sign_open(m, sm, n, pk)
-    -- pre
-	if n < 64 then
-		return -1
-	end
+	-- pre
+	if n < 64 then return -1; end
 	
-	local q = {gf(), gf(), gf(), gf()}
+	local q = getGF4() -- {gf(), gf(), gf(), gf()}
+
+	if unpackneg(q, pk) then return -1; end
 
 	local t = getNA32()
-    local h = getNA32()
-    local p = {gf(), gf(), gf(), gf()}
+	local h = getNA32()
+	local p = getGF4() -- {gf(), gf(), gf(), gf()}
 
+	imprint(sm, m, n)
+	-- for i = 1, n do m[i] = sm[i] end
+	for i = 1, 32 do m[i + 32] = pk[i] end
 
+	crypto_hash(h, m, n);
+	reduce(h);
+	scalarmult_2(p, q, h);
+	scalarbase(q, {unpack(sm, 33)})
+	add(p, q)
+	pack(t, p)
+	
+	n = n - 64
+
+	if crypto_verify_32(sm, 0, t, 0) then
+		for i = 1, n do m[i] = 0 end
+		return -1
+	end
+
+	for i = 1, n do m[i] = sm[i + 64] end
+
+	return n
 end
-
---[[
-
-	function crypto_sign_open(m, sm, n, pk) {
-	  var i;
-	  var t = new Uint8Array(32), h = new Uint8Array(64);
-	  var p = [gf(), gf(), gf(), gf()],
-		  q = [gf(), gf(), gf(), gf()];
-	
-	  if (n < 64) return -1;
-	
-	  if (unpackneg(q, pk)) return -1;
-	
-	  for (i = 0; i < n; i++) m[i] = sm[i];
-	  for (i = 0; i < 32; i++) m[i+32] = pk[i];
-	  crypto_hash(h, m, n);
-	  reduce(h);
-	  scalarmult(p, q, h);
-	
-	  scalarbase(q, sm.subarray(32));
-	  add(p, q);
-	  pack(t, p);
-	
-	  n -= 64;
-	  if (crypto_verify_32(sm, 0, t, 0)) {
-		for (i = 0; i < n; i++) m[i] = 0;
-		return -1;
-	  }
-	
-	  for (i = 0; i < n; i++) m[i] = sm[i + 64];
-	  return n;
-	}
-
-]]
 
 ---returns a string of random characters, with bytes 0 to 255
 ---@param len integer?
@@ -1138,7 +1150,7 @@ nacl51.getKeyPair = function (secretKey)
 	local secretKeyArray = getNA64()
 
 	for i = 1, #secretKey do
-        secretKeyArray[i] = secretKey:byte(i)
+		secretKeyArray[i] = secretKey:byte(i)
 	end
 
 	crypto_sign_keypair(publicKeyArray, secretKeyArray)
@@ -1178,19 +1190,18 @@ nacl51.verify = function (message, signature, publicKey)
 	assert(#publicKey == 32, 'bad public key length')
 	
 	-- main
-    local len = #message + 32
+	local len = #message + 32
 	
-    local sm = {}
+	local sm = {}
 	local m = getNumberArray(len)
 
-    for i = 1, 64 do sm[i] = signature:byte(i, i) end
+	for i = 1, 64 do sm[i] = signature:byte(i, i) end
 	for i = 1, #message do sm[i + 64] = message:byte(i,i)end
 
 	-- post
 	assert(len == #sm)
 
-	return false
-	-- return crypto_sign_open(m, sm, len, stringToByteArray(publicKey))
+	return crypto_sign_open(m, sm, len, stringToByteArray(publicKey)) >= 0
 end
 
 return nacl51
