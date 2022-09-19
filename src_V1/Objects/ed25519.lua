@@ -993,7 +993,7 @@ function crypto_sign_keypair(pk, sk)
 	local p = getGF4() -- {gf(),gf(),gf(),gf()}
 	
 	crypto_hash(d, sk, 32)
-	--print('kp', Static.table.toString(d), Static.table.toString(sk))
+	print('kp', Static.table.toString(d), Static.table.toString(sk))
 
 	d[1] = bit.band(d[1], 248)
 	d[32] = bit.bor(bit.band(d[32], 127), 64)

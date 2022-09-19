@@ -50,7 +50,7 @@ do
 	
     print('got message: ', message)
 
-	local signature = nacl.getSignature(sk, message)
+	local signature = ed.getSignature(sk, message)
 
 	print('got signature: ', signature)
 	
