@@ -723,11 +723,7 @@ function crypto_hashblocks(result, array, n)
 				w[(i - 1) % 16 + 1]
 			)
 
-			if not a[1] then
-				print(n, i, Static.table.toString(a))
-			end
-
-			b[8] = add64(t, Sigma0(a[1]), Maj(unpack(a)))
+			b[8] = add64(t, Sigma0(a[1]), Maj(unpack(a, 1, 3)))
 			b[4] = add64(b[4], t)
 
 			for j = 1, 8 do a[j % 8 + 1] = b[j] end
@@ -744,9 +740,9 @@ function crypto_hashblocks(result, array, n)
 			end
 		end
 		
-		for i = 1, 8 do a[i] = add64(a[i], z[i]); end
+		for i = 1, 8 do a[i] = add64(a[i], z[i]); end -- z
 		
-		imprint(a, z)
+		imprint(a, z) -- z
 	  
 		pos = pos + 128;
 		n = n - 128;
@@ -755,7 +751,7 @@ function crypto_hashblocks(result, array, n)
 		print('hasbb', Static.table.toString(z), Static.table.toString(b), Static.table.toString(a), Static.table.toString(w), Static.table.toString(result), Static.table.toString(array))
 	end
 
-	
+
 	for i = 1, 8 do ts64(result, 8*(i - 1), z[i]) end
 	return n
 end
