@@ -795,8 +795,10 @@ function crypto_hash(result, m, n)
 		)
 	);
 	
+	AAA = true
     --print('hashb', Static.table.toString(h), Static.table.toString(m), Static.table.toString(x))
-	crypto_hashblocks(h, x, n) -- no match
+    crypto_hashblocks(h, x, n) -- no match
+	AAA = false
 
 	imprint(h, result)
 	-- for i = 1, 64 do result[i] = h[i]; end
