@@ -3,7 +3,7 @@ local Static = require('Static')
 
 do
 	local StringRadix = require('StringRadix')
-    local nacl = require('nacl')
+    local ed = require('ed25519')
 	Static.luarocks.loadModule('base64')
 	local base64 = require('base64')
 
@@ -25,11 +25,11 @@ do
 	
     -- used https://ed25519.herokuapp.com/ for testing
 	
-    local seed = nacl.getRandomString()
+    local seed = ed.getRandomString()
 	
 	print('attempting keypair: \nseed')
     getHexd(seed)
-	local sk, pk = nacl.getKeyPair(seed)
+	local sk, pk = ed.getKeyPair(seed)
 
 	--print(Static.table.toString({sk:byte(1, #sk)}))
 	--print(Static.table.toString({pk:byte(1, #pk)}))
