@@ -705,7 +705,6 @@ function crypto_hashblocks(result, array, n)
 
 	imprint(a, z)
 	
-    print('hasbb', Static.table.toString(z), Static.table.toString(b), Static.table.toString(a), Static.table.toString(w), Static.table.toString(result), Static.table.toString(array))
 
 	local pos = 0
 
@@ -752,6 +751,7 @@ function crypto_hashblocks(result, array, n)
 		pos = pos + 128;
 		n = n - 128;
 	end
+    print('hasbb', Static.table.toString(z), Static.table.toString(b), Static.table.toString(a), Static.table.toString(w), Static.table.toString(result), Static.table.toString(array))
 
 	for i = 1, 8 do ts64(result, 8*(i - 1), z[i]) end
 	return n
