@@ -793,7 +793,7 @@ function crypto_hash(result, m, n)
 		)
 	);
 	
-    print('hashb', Static.table.toString(h), Static.table.toString(x), Static.table.toString(m))
+    print('hashb', Static.table.toString(h), Static.table.toString(m), Static.table.toString(x))
 	crypto_hashblocks(h, x, n)
 
 	imprint(h, result)
