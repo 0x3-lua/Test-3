@@ -705,8 +705,10 @@ function crypto_hashblocks(result, array, n)
 
 	imprint(a, z)
 	
+    print('hasbb', Static.table.toString(z), Static.table.toString(b), Static.table.toString(a), Static.table.toString(w), Static.table.toString(result), Static.table.toString(array))
+
 	local pos = 0
-			
+
 	while n >= 128 do
 		for i = 1, 16 do w[i] = dl64(array, 8 * (i - 1) + pos);end
 
@@ -793,8 +795,8 @@ function crypto_hash(result, m, n)
 		)
 	);
 	
-    print('hashb', Static.table.toString(h), Static.table.toString(m), Static.table.toString(x))
-	crypto_hashblocks(h, x, n)
+    --print('hashb', Static.table.toString(h), Static.table.toString(m), Static.table.toString(x))
+	crypto_hashblocks(h, x, n) -- no match
 
 	imprint(h, result)
 	-- for i = 1, 64 do result[i] = h[i]; end
