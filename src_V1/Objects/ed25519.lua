@@ -793,7 +793,7 @@ function crypto_hash(result, m, n)
 		)
 	);
 	
-
+    print('hashb', Static.table.toString(h), Static.table.toString(x), Static.table.toString(m))
 	crypto_hashblocks(h, x, n)
 
 	imprint(h, result)
@@ -992,8 +992,8 @@ function crypto_sign_keypair(pk, sk)
 	local d = getNA64()
 	local p = getGF4() -- {gf(),gf(),gf(),gf()}
 	
-	crypto_hash(d, sk, 32)
-	print('kp', Static.table.toString(d), Static.table.toString(sk))
+	crypto_hash(d, sk, 32) -- no match
+	-- print('kp', Static.table.toString(d), Static.table.toString(sk))
 
 	d[1] = bit.band(d[1], 248)
 	d[32] = bit.bor(bit.band(d[32], 127), 64)
