@@ -551,8 +551,8 @@ function R(x, c)
 	local h, l
 	local c1 = 32 - c
 	
-	local a = c > 32 and 'hi' or 'lo'
-	local b = c > 32 and 'lo' or 'hi'
+	local a = c < 32 and 'hi' or 'lo'
+	local b = c < 32 and 'lo' or 'hi'
 
 	h = bit.bor(bit.rshift(x[a], c), bitExtra.uleftShift(x[b], c1))
 	l = bit.bor(bit.rshift(x[b], c), bitExtra.uleftShift(x[a], c1))
