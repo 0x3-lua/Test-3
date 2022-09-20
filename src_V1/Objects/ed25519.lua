@@ -557,6 +557,10 @@ function R(x, c)
 	local a = c < 32 and 'hi' or 'lo'
 	local b = c < 32 and 'lo' or 'hi'
 
+	if c == 41 then
+		print(c1)
+	end
+
 	h = bit.bor(bit.rshift(x[a], c), bitExtra.uleftShift(x[b], c1))
 	l = bit.bor(bit.rshift(x[b], c), bitExtra.uleftShift(x[a], c1))
 	
