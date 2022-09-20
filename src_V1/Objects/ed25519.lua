@@ -750,9 +750,6 @@ function crypto_hashblocks(result, array, n)
 			end
 		end
 		
-		if AAA and n == 0 then
-			print('aaa', Static.table.toString(a))
-		end
 
 		for i = 1, 8 do a[i] = add64(a[i], z[i]); end -- z
 		
@@ -762,7 +759,7 @@ function crypto_hashblocks(result, array, n)
 		n = n - 128;
     end
 	if AAA then
-        -- print('hasbb', Static.table.toString(z), Static.table.toString(b), Static.table.toString(a), Static.table.toString(w), Static.table.toString(result), Static.table.toString(array))
+        print('hasbb', Static.table.toString(z), Static.table.toString(b), Static.table.toString(a), Static.table.toString(w), Static.table.toString(result), Static.table.toString(array))
 		--//11
 	end
 
