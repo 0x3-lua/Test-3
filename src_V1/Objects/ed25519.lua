@@ -714,7 +714,7 @@ function crypto_hashblocks(result, array, n)
 			imprint(a, b)
 			-- for j = 1, 8 do b[j] = a[j]end
 			if AAA and n == 128 and i == 1 then
-                print('a5', Static.table.toString(a[5]), Static.table.toString(Sigma1(a[5])))
+                print('a5', Static.table.toString(Ch(unpack(a, 5,7))))
 			AAB = true
 		end
 			t = add64(
