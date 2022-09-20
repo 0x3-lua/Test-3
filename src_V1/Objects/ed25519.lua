@@ -559,7 +559,7 @@ function R(x, c)
 
 	if c == 41 and AAB then
         print(c1, x[a], bit.rshift(x[a], c))
-		print('c', x[b], bitExtra.uleftShift( x[b], c1 ) )
+		print('c', x[b], bitExtra.uleftShift( x[b], c1 ), bit.lshift(x[b], c1) )
 
 	end
 
