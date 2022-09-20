@@ -750,7 +750,7 @@ function crypto_hashblocks(result, array, n)
 			end
 		end
 		
-		if AAA and n == 128 then
+		if AAA and n == 0 then
 			print('aaa', Static.table.toString(a))
 		end
 
