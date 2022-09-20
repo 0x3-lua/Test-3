@@ -54,8 +54,6 @@ do
 
 	print('got signature: ', signature)
 	
-
-
 	
 	return
 end

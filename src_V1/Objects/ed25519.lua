@@ -551,8 +551,12 @@ function R(x, c)
 	local h, l
 	local c1 = 32 - c
 	
-	local a = c < 32 and 'hi' or 'lo'
-	local b = c < 32 and 'lo' or 'hi'
+	local a = c <= 32 and 'hi' or 'lo'
+	local b = c <= 32 and 'lo' or 'hi'
+
+	if c > 64 then
+		print('got weird c', c)
+	end
 	
 	h = bit.bor(bit.rshift(x[a], c), bitExtra.uleftShift(x[b], c1))
 	l = bit.bor(bit.rshift(x[b], c), bitExtra.uleftShift(x[a], c1))
@@ -748,7 +752,8 @@ function crypto_hashblocks(result, array, n)
 		n = n - 128;
     end
 	if AAA then
-		print('hasbb', Static.table.toString(z), Static.table.toString(b), Static.table.toString(a), Static.table.toString(w), Static.table.toString(result), Static.table.toString(array))
+        -- print('hasbb', Static.table.toString(z), Static.table.toString(b), Static.table.toString(a), Static.table.toString(w), Static.table.toString(result), Static.table.toString(array))
+		--//11
 	end
 
 
