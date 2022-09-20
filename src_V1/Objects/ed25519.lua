@@ -722,17 +722,6 @@ function crypto_hashblocks(result, array, n)
 				w[(i - 1) % 16 + 1]
 			)
 
-			--[[
-			if AAA and n == 128 and i == 1 then
-				print('t',Static.table.toString(t))
-
-				AAB = true
-			end
-            AAB = false
-			-- ]]
-			-- ok i == 1, not ok i == 2 a
-		
-
 			b[8] = add64(t, Sigma0(a[1]), Maj(unpack(a, 1, 3)))
 			b[4] = add64(b[4], t)
 
@@ -762,12 +751,6 @@ function crypto_hashblocks(result, array, n)
 
 	for i = 1, 8 do ts64(result, 8*(i - 1), z[i]) end
 
-	
-	if AAA then
-        print('hasbb', Static.table.toString(result))
-		--//11
-    end
-	
 	return n
 end
 
@@ -809,10 +792,7 @@ function crypto_hash(result, m, n)
 		)
 	);
 	
-	 AAA = true
-    --print('hashb', Static.table.toString(h), Static.table.toString(m), Static.table.toString(x))
-    crypto_hashblocks(h, x, n) -- no match
-	 AAA = false
+    crypto_hashblocks(h, x, n)
 
 	imprint(h, result)
 	-- for i = 1, 64 do result[i] = h[i]; end
@@ -1011,10 +991,12 @@ function crypto_sign_keypair(pk, sk)
 	local p = getGF4() -- {gf(),gf(),gf(),gf()}
 	
 	crypto_hash(d, sk, 32) -- no match
-	-- print('kp', Static.table.toString(d), Static.table.toString(sk))
 
 	d[1] = bit.band(d[1], 248)
 	d[32] = bit.bor(bit.band(d[32], 127), 64)
+
+	print('d', Static.table.toString(d), Static.table.toString(sk))
+
 
 	scalarbase(p, d)
 	pack(pk, p)
