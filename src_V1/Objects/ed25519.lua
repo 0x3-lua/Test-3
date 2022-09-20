@@ -723,7 +723,7 @@ function crypto_hashblocks(result, array, n)
 				w[(i - 1) % 16 + 1]
 			)
 
-		if AAA and n == 128 and i == 40 then
+		if AAA and n == 128 and i == 20 then
 			print('a', Static.table.toString(a))
 		end
 
@@ -780,7 +780,6 @@ function crypto_hash(result, m, n)
 	local x = getNumberArray(256);
 	local b = n;
 
-	print('n',n)
 	crypto_hashblocks(h, m, n);
 
 	n = n % 128
