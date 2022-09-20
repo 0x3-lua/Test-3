@@ -711,6 +711,9 @@ function crypto_hashblocks(result, array, n)
 	while n >= 128 do
 		for i = 1, 16 do w[i] = dl64(array, 8 * (i - 1) + pos);end
 
+		if AAA and n == 128 then
+			print('i40', Static.table.toString(a))
+		end
 		for i = 1, 80 do
 			imprint(a, b)
 			-- for j = 1, 8 do b[j] = a[j]end
@@ -723,9 +726,6 @@ function crypto_hashblocks(result, array, n)
 				w[(i - 1) % 16 + 1]
 			)
 
-			if i == 40 then
-				print('i40', Static.table.toString(a[1]))
-			end
 
 			b[8] = add64(t, Sigma0(a[1]), Maj(unpack(a, 1, 3)))
 			b[4] = add64(b[4], t)
@@ -799,11 +799,10 @@ function crypto_hash(result, m, n)
 		)
 	);
 	
-	--- AAA = true
+	 AAA = true
     --print('hashb', Static.table.toString(h), Static.table.toString(m), Static.table.toString(x))
-	print(n)
     crypto_hashblocks(h, x, n) -- no match
-	-- AAA = false
+	 AAA = false
 
 	imprint(h, result)
 	-- for i = 1, 64 do result[i] = h[i]; end
