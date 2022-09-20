@@ -723,6 +723,9 @@ function crypto_hashblocks(result, array, n)
 				w[(i - 1) % 16 + 1]
 			)
 
+		if AAA and n == 128 and i == 40 then
+			print('a', Static.table.toString(a))
+		end
 
 			b[8] = add64(t, Sigma0(a[1]), Maj(unpack(a, 1, 3)))
 			b[4] = add64(b[4], t)
@@ -741,9 +744,6 @@ function crypto_hashblocks(result, array, n)
 			end
 		end
 		
-		if AAA and n == 128 then
-			print('a', Static.table.toString(a))
-		end
 		for i = 1, 8 do a[i] = add64(a[i], z[i]); end -- z
 		
 		imprint(a, z) -- z
@@ -780,6 +780,7 @@ function crypto_hash(result, m, n)
 	local x = getNumberArray(256);
 	local b = n;
 
+	print('n',n)
 	crypto_hashblocks(h, m, n);
 
 	n = n % 128
