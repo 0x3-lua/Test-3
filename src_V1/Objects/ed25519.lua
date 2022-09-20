@@ -722,12 +722,14 @@ function crypto_hashblocks(result, array, n)
 				w[(i - 1) % 16 + 1]
 			)
 
+			--[[
 			if AAA and n == 128 and i == 1 then
 				print('t',Static.table.toString(t))
 
 				AAB = true
 			end
-AAB = false
+            AAB = false
+			-- ]]
 			-- ok i == 1, not ok i == 2 a
 		
 
@@ -748,6 +750,10 @@ AAB = false
 			end
 		end
 		
+		if AAA and n == 128 then
+			print('aaa', Static.table.toString(a))
+		end
+
 		for i = 1, 8 do a[i] = add64(a[i], z[i]); end -- z
 		
 		imprint(a, z) -- z
