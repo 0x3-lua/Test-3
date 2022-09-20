@@ -724,13 +724,13 @@ function crypto_hashblocks(result, array, n)
 			)
 
 			-- ok i == 1, not ok i == 2 a
-		
+		if AAA and n == 128 and i == 1 then
+			print('t', Static.table.toString(t))
+		end
 
 			b[8] = add64(t, Sigma0(a[1]), Maj(unpack(a, 1, 3)))
 			b[4] = add64(b[4], t)
-if AAA and n == 128 and i == 1 then
-			print('b', Static.table.toString(b))
-		end
+
 			for j = 1, 8 do a[j % 8 + 1] = b[j] end
 			
 			if (i - 1) % 16 == 15 then
