@@ -712,7 +712,7 @@ function crypto_hashblocks(result, array, n)
 		for i = 1, 16 do w[i] = dl64(array, 8 * (i - 1) + pos);end
 
 		if AAA and n == 128 then
-			print('i40', Static.table.toString(a))
+			print('a', Static.table.toString(a))
 		end
 		for i = 1, 80 do
 			imprint(a, b)
