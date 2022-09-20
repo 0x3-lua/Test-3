@@ -724,7 +724,7 @@ function crypto_hashblocks(result, array, n)
 
 			-- ok i == 1, not ok i == 2 a
 		if AAA and n == 128 and i == 1 then
-			print('a5', Static.table.toString(Sigma1(a[5])))
+			print('a5', Static.table.toString(a[5]), Static.table.toString(Sigma1(a[5])))
 		end
 
 			b[8] = add64(t, Sigma0(a[1]), Maj(unpack(a, 1, 3)))
