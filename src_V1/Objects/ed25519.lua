@@ -498,6 +498,10 @@ end
 ---@param ... ed25519.range
 ---@return ed25519.range
 function add64(...)
+	if AAB then
+		print('add64', Static.table.toString{...})
+	end
+
 	local a, b, c, d = 0, 0, 0, 0
 	local m16 = 0xFFFF
 	
@@ -704,7 +708,6 @@ function crypto_hashblocks(result, array, n)
 
 	imprint(a, z)
 	
-
 	local pos = 0
 
 	while n >= 128 do
@@ -714,9 +717,9 @@ function crypto_hashblocks(result, array, n)
 			imprint(a, b)
 			-- for j = 1, 8 do b[j] = a[j]end
 			if AAA and n == 128 and i == 1 then
-                print('a5', Static.table.toString(Ch(unpack(a, 5,7))))
-			AAB = true
-		end
+				print('a5', Static.table.toString(Ch(unpack(a, 5,7))))
+				AAB = true
+			end
 			t = add64(
 				a[8],
 				Sigma1(a[5]),
