@@ -498,7 +498,6 @@ end
 ---@param ... ed25519.range
 ---@return ed25519.range
 function add64(...)
-	-- print(Static.table.toString({...}))
 	local a, b, c, d = 0, 0, 0, 0
 	local m16 = 0xFFFF
 	
@@ -699,7 +698,7 @@ crypo_hashblocks_K = {
 
 function crypto_hashblocks(result, array, n)
 	local z,b,a,w = {}, {}, {}, {}
-	local t;
+	local t; -- is hi-lo struct
 	
 	for i = 1, 8 do a[i] = dl64(result, 8 * (i - 1));end
 
@@ -725,7 +724,7 @@ function crypto_hashblocks(result, array, n)
 
 			-- ok i == 1, not ok i == 2 a
 		if AAA and n == 128 and i == 1 then
-			print('t', Static.table.toString(t))
+			print('a5', Static.table.toString(Sigma1(a[5])))
 		end
 
 			b[8] = add64(t, Sigma0(a[1]), Maj(unpack(a, 1, 3)))
