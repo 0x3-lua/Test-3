@@ -909,7 +909,7 @@ function scalarmult_2(p, q, s)
 end
 
 function scalarbase(p, s)
-	local q = { getNA32(), getNA32(), getNA32(), getNA32() }
+	local q = getGF4()
 	
 	set25519(q[1], scalarbase_K_X)
 	set25519(q[2], scalarbase_K_Y)
@@ -995,10 +995,11 @@ function crypto_sign_keypair(pk, sk)
 	d[1] = bit.band(d[1], 248)
 	d[32] = bit.bor(bit.band(d[32], 127), 64)
 
-	print('d', Static.table.toString(d), Static.table.toString(sk))
+-- ok
 
+    scalarbase(p, d)
+		print('d', Static.table.toString(d))
 
-	scalarbase(p, d)
 	pack(pk, p)
 	for i = 1, 32 do
 		sk[i + 32] = pk[i]
