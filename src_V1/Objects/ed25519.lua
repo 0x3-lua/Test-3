@@ -563,8 +563,8 @@ function R(x, c)
 
 	end
 
-	h = bit.bor(bit.rshift(x[a], c), bitExtra.uleftShift(x[b], c1))
-	l = bit.bor(bit.rshift(x[b], c), bitExtra.uleftShift(x[a], c1))
+	h = bit.bor(bit.rshift(x[a], c), bit.lshift(x[b], c1))
+	l = bit.bor(bit.rshift(x[b], c), bit.lshift(x[a], c1))
 	
 	return u64(h,l)
 end
