@@ -711,9 +711,6 @@ function crypto_hashblocks(result, array, n)
 	while n >= 128 do
 		for i = 1, 16 do w[i] = dl64(array, 8 * (i - 1) + pos);end
 
-		if AAA and n == 128 then
-			print('a', Static.table.toString(a))
-		end
 		for i = 1, 80 do
 			imprint(a, b)
 			-- for j = 1, 8 do b[j] = a[j]end
@@ -744,6 +741,9 @@ function crypto_hashblocks(result, array, n)
 			end
 		end
 		
+		if AAA and n == 128 then
+			print('a', Static.table.toString(a))
+		end
 		for i = 1, 8 do a[i] = add64(a[i], z[i]); end -- z
 		
 		imprint(a, z) -- z
