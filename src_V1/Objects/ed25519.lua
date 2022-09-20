@@ -529,10 +529,6 @@ end
 ---@param ... ed25519.range
 ---@return ed25519.range
 function xor64(...)
-	if AAB then
-		print(Static.table.toString{...})
-	end
-
 	local l = 0
 	local h = 0
 
@@ -556,12 +552,6 @@ function R(x, c)
 	
 	local a = c < 32 and 'hi' or 'lo'
 	local b = c < 32 and 'lo' or 'hi'
-
-	if c == 41 and AAB then
-        print(c1, x[a], bit.rshift(x[a], c))
-		print('c', x[b], bitExtra.uleftShift( x[b], c1 ), bit.lshift(x[b], c1) )
-
-	end
 
 	h = bit.bor(bit.rshift(x[a], c), bit.lshift(x[b], c1))
 	l = bit.bor(bit.rshift(x[b], c), bit.lshift(x[a], c1))
@@ -724,7 +714,7 @@ function crypto_hashblocks(result, array, n)
 			imprint(a, b)
 			-- for j = 1, 8 do b[j] = a[j]end
 			if AAA and n == 128 and i == 1 then
-                -- print('a5', Static.table.toString(a[5]), Static.table.toString(Sigma1(a[5])))
+                print('a5', Static.table.toString(a[5]), Static.table.toString(Sigma1(a[5])))
 			AAB = true
 		end
 			t = add64(
