@@ -779,9 +779,11 @@ function crypto_hash(result, m, n)
 	local h = Static.table.clone(crypto_hash_K)
 	local x = getNumberArray(256);
 	local b = n;
-	
+	print('pre hashb', Static.table.toString(h), Static.table.toString(m), Static.table.toString(x))
+
 	crypto_hashblocks(h, m, n);
-   
+    print('hashb', Static.table.toString(h), Static.table.toString(m), Static.table.toString(x))
+
 	n = n % 128
 
 	for i = 1, 256 do x[i] = 0 end
@@ -799,10 +801,10 @@ function crypto_hash(result, m, n)
 		)
 	);
 	
-	AAA = true
+	--- AAA = true
     --print('hashb', Static.table.toString(h), Static.table.toString(m), Static.table.toString(x))
     crypto_hashblocks(h, x, n) -- no match
-	AAA = false
+	-- AAA = false
 
 	imprint(h, result)
 	-- for i = 1, 64 do result[i] = h[i]; end
