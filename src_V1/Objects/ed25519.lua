@@ -557,7 +557,7 @@ function R(x, c)
 	local a = c < 32 and 'hi' or 'lo'
 	local b = c < 32 and 'lo' or 'hi'
 
-	if c == 41 then
+	if c == 41 and AAB then
 		print(c1)
 	end
 
