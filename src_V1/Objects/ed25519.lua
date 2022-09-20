@@ -529,6 +529,10 @@ end
 ---@param ... ed25519.range
 ---@return ed25519.range
 function xor64(...)
+	if AAB then
+		print(Static.table.toString{...})
+	end
+
 	local l = 0
 	local h = 0
 
@@ -713,7 +717,10 @@ function crypto_hashblocks(result, array, n)
 		for i = 1, 80 do
 			imprint(a, b)
 			-- for j = 1, 8 do b[j] = a[j]end
-			
+			if AAA and n == 128 and i == 1 then
+                -- print('a5', Static.table.toString(a[5]), Static.table.toString(Sigma1(a[5])))
+			AAB = true
+		end
 			t = add64(
 				a[8],
 				Sigma1(a[5]),
@@ -721,11 +728,9 @@ function crypto_hashblocks(result, array, n)
 				crypo_hashblocks_K[i],
 				w[(i - 1) % 16 + 1]
 			)
-
+AAB = false
 			-- ok i == 1, not ok i == 2 a
-		if AAA and n == 128 and i == 1 then
-			print('a5', Static.table.toString(a[5]), Static.table.toString(Sigma1(a[5])))
-		end
+		
 
 			b[8] = add64(t, Sigma0(a[1]), Maj(unpack(a, 1, 3)))
 			b[4] = add64(b[4], t)
