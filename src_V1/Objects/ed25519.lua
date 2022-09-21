@@ -60,7 +60,6 @@ local function rshiftBand(a)
 end
 
 -- set25519() not used
-AA = 1
 
 local function car25519(o)
 	local c
@@ -382,7 +381,7 @@ a common session key (for a symmetric encryption algorithm).
 ]]
 
 ---@type ed25519
-local nacl51 = {
+local ed25519 = {
 	crypto_scalarmult = crypto_scalarmult,
 	crypto_scalarmult_base = crypto_scalarmult_base,
 	--
@@ -798,7 +797,9 @@ function crypto_hash(result, m, n)
 	-- for i = 1, 64 do result[i] = h[i]; end
 end
 
-local modL_K = {0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6, 0x9c, 0xf7, 0xa2, 0xde, 0xf9, 0xde, 0x14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x10}
+local modL_K = {0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6,
+	0x9c, 0xf7, 0xa2, 0xde, 0xf9, 0xde, 0x14, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0x10}
 
 ---@param r integer[]
 ---@param x integer[]
@@ -849,7 +850,7 @@ end
 function set25519(r, a)for i = 1, 16 do r[i] = bit.bor(a[i], 0)end end
 function cswap(p, q, b)for i = 1, 4 do sel25519(p[i], q[i], b)end end
 
-local add_D2_K = getNumberArray(16, {0xf159, 0x26b2, 0x9b94, 0xebd6, 0xb156, 0x8283, 0x149a, 0x00e0, 0xd130, 0xeef3, 0x80f2, 0x198e, 0xfce7, 0x56df, 0xd9dc, 0x2406})
+local add_D2_K = gf{0xf159, 0x26b2, 0x9b94, 0xebd6, 0xb156, 0x8283, 0x149a, 0x00e0, 0xd130, 0xeef3, 0x80f2, 0x198e, 0xfce7, 0x56df, 0xd9dc, 0x2406}
 
 function add(p, q)
 	local a, b, c, d, e, f, g, h, t = 
@@ -878,13 +879,14 @@ function add(p, q)
 	M(p[4], e, h);
 end
 
-local scalarbase_K_X = getNumberArray(16, {0xd51a, 0x8f25, 0x2d60,
-	0xc956, 0xa7b2, 0x9525, 0xc760, 0x692c, 0xdc5c, 0xfdd6, 0xe231, 0xc0a4, 0x53fe,
-	0xcd6e, 0x36d3, 0x2169})
-local scalarbase_K_Y = getNumberArray(16, { 0x6658, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666,
-	0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, })
-local scalarbase_K_gf1 = getNumberArray(16, {1})
-local scalarbase_K_gf0 = getNumberArray(16)
+local scalarbase_K_X = gf{0xd51a, 0x8f25, 0x2d60, 0xc956, 0xa7b2,
+	0x9525, 0xc760, 0x692c, 0xdc5c, 0xfdd6, 0xe231, 0xc0a4, 0x53fe,
+	0xcd6e, 0x36d3, 0x2169}
+local scalarbase_K_Y = gf{0x6658, 0x6666, 0x6666, 0x6666, 0x6666,
+    0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666,
+	0x6666, 0x6666, 0x6666}
+local scalarbase_K_gf1 = gf{1}
+local scalarbase_K_gf0 = gf()
 
 function scalarmult_2(p, q, s)
 	set25519(p[1], scalarbase_K_gf0)
@@ -998,7 +1000,7 @@ function crypto_sign_keypair(pk, sk)
 -- ok
 
     scalarbase(p, d)
-		print('d', Static.table.toString(d))
+		print('p', Static.table.toString(p))
 
 	pack(pk, p)
 	for i = 1, 32 do
@@ -1045,11 +1047,13 @@ function neq25519(a, b)
 	return crypto_verify_32(c, 0, d, 0)
 end
 
-local unpackneg_D_K = gf{ 0x78a3, 0x1359, 0x4dca, 0x75eb, 0xd8ab, 0x4141, 0x0a4d, 0x0070, 0xe898, 0x7779, 0x4079, 0x8cc7,
-	0xfe73, 0x2b6f, 0x6cee, 0x5203 }
+local unpackneg_D_K = gf{0x78a3, 0x1359, 0x4dca, 0x75eb, 0xd8ab,
+	0x4141, 0x0a4d, 0x0070, 0xe898, 0x7779, 0x4079, 0x8cc7, 0xfe73,
+	0x2b6f, 0x6cee, 0x5203}
 
-local unpackneg_I_K = gf{0xa0b0, 0x4a0e, 0x1b27, 0xc4ee, 0xe478, 0xad2f, 0x1806, 0x2f43, 0xd7a7, 0x3dfb, 0x0099, 0x2b4d,
-	0xdf0b, 0x4fc1, 0x2480, 0x2b83};
+local unpackneg_I_K = gf { 0xa0b0, 0x4a0e, 0x1b27, 0xc4ee, 0xe478,
+	0xad2f, 0x1806, 0x2f43, 0xd7a7, 0x3dfb, 0x0099, 0x2b4d,0xdf0b,
+	0x4fc1, 0x2480, 0x2b83};
 
 function unpackneg(r, p)
 	local t, chk, num, den, den2, den4, den6 = gf(), gf(), gf(), gf(), gf(), gf(), gf()
@@ -1125,7 +1129,7 @@ end
 ---returns a string of random characters, with bytes 0 to 255
 ---@param len integer?
 ---@return string
-nacl51.getRandomString = function(len)
+ed25519.getRandomString = function(len)
 	-- pre
 	len = len or 32
 	
@@ -1143,9 +1147,9 @@ end
 ---note that the secret key compromises of a prefix and public key
 ---@param secretKey string?
 ---@return string, string
-nacl51.getKeyPair = function (secretKey)
+ed25519.getKeyPair = function (secretKey)
 	-- pre
-	secretKey = secretKey or nacl51.getRandomString()
+	secretKey = secretKey or ed25519.getRandomString()
 	-- main
 	local publicKeyArray = getNA32()
 	local secretKeyArray = getNA64()
@@ -1164,7 +1168,7 @@ end
 ---@param message string
 ---@param secretKey string
 ---@return string
-nacl51.getSignature = function (message, secretKey)
+ed25519.getSignature = function (message, secretKey)
 	-- pre
 	assert(#secretKey == 64)
 
@@ -1185,7 +1189,7 @@ end
 ---@param signature string must be exactly 64 bytes
 ---@param publicKey string must be exactly 32 bytes
 ---@return boolean
-nacl51.verify = function (message, signature, publicKey)
+ed25519.verify = function (message, signature, publicKey)
 	-- pre
 	assert(#signature == 64, 'bad signature length')
 	assert(#publicKey == 32, 'bad public key length')
@@ -1205,4 +1209,4 @@ nacl51.verify = function (message, signature, publicKey)
 	return crypto_sign_open(m, sm, len, stringToByteArray(publicKey)) >= 0
 end
 
-return nacl51
+return ed25519
