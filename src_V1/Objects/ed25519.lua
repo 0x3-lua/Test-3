@@ -855,6 +855,12 @@ function reduce(r)
 	imprint(r, x)
 	-- for i = 1, 64 do x[i] = r[i]; end
 	for i = 1, 64 do r[i] = 0; end
+
+	if AAA then
+        print('aaa', #r, Static.table.toString(r), Static.table.toString(x))
+
+	end
+
 	modL(r, x);
 end
 
@@ -973,10 +979,12 @@ function crypto_sign(result, message, len, secretKey)
     crypto_hash(r, { unpack(result, 33) }, len + 32);
 	
 	-- ok
-
+	AAA = true
 	reduce(r)
+	AAA = false
 
-	    print('post r', Static.table.toString(r))
+ -- not ok
+	   --  print('post r', Static.table.toString(r))
 
 
 	scalarbase(p, r)
