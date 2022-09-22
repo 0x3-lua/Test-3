@@ -915,7 +915,9 @@ function scalarmult_2(p, q, s)
 				bit.rshift(
 						s[bit.bor(math.floor(i/8), 0) + 1],
 						i % 7
-					)
+					),
+					s[bit.bor(math.floor(i/8), 0) + 1],
+					i % 7
 
 
 				,Static.table.toString(s)
