@@ -48,7 +48,7 @@ do
 	
     print('got message: ', message)
 
-	local signature = ed.getSignature(sk, message)
+	local signature = ed.getSignature(message, sk)
 
 	print('got signature: ', signature)
 	

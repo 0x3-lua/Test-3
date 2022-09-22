@@ -31,7 +31,7 @@ and function names have been conserved as much as possible.
 ---@field scalarmult fun(n: string, p: string): string
 ---@field getRandomString fun(len: integer?): string
 ---@field getKeyPair fun(secret: string?): string, string
----@field getSignature fun(secretKey: string, message: string): string
+---@field getSignature fun(message: string, secretKey: string): string
 ---@field verify fun(message: string, signature: string, publicKey: string): boolean
 
 ---@class ed25519.range
