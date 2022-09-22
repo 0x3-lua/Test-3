@@ -964,7 +964,9 @@ function crypto_sign(result, message, len, secretKey)
 
 	d[1] = bit.band(d[1], 248);
 	d[32] = bit.bor(bit.band(d[32], 127), 64)
-	
+
+	print('chash', Static.table.toString(d))
+
 	local smlen = len + 64
 	
 	for i = 1, len do result[64 + i] = message[i]end
@@ -979,6 +981,9 @@ function crypto_sign(result, message, len, secretKey)
         Static.table.toString(x),
 		Static.table.toString(p)
     )
+
+	-- not ok
+
 
 	crypto_hash(r, {unpack(result, 33)}, len+32);
 	reduce(r)
