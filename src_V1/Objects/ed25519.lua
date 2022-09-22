@@ -49,7 +49,15 @@ local bitExtra = {
 	---@param digits integer
 	---@return integer
 	uleftShift = function(n, digits)
-		assert(n and digits, debug.traceback())
+        assert(
+            n and digits,
+            ('bad args: n=%s,d=%s,tr=%s')
+            :format(
+                tostring(n),
+				tostring(digits),
+				debug.traceback()
+			)
+		)
 
 		return n * math.floor(2 ^ digits)
 	end
