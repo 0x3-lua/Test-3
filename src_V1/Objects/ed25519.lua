@@ -783,11 +783,14 @@ function crypto_hash(result, m, n)
 	local x = getNumberArray(256);
 	local b = n;
 
+	if AAA then
+		
     print(
 		'h',
         Static.table.toString(h),
 		Static.table.toString(m)
 	)
+	end
 	crypto_hashblocks(h, m, n);
 
 	if AAA then
