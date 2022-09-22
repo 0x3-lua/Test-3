@@ -788,7 +788,7 @@ function crypto_hash(result, m, n)
 
 	if AAA then
 		
-	    print('post hashblocks', Static.table.toString(h))
+	    print('post hashblocks', n, Static.table.toString(h))
 	end
 	n = n % 128
 
