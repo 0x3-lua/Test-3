@@ -958,12 +958,7 @@ function crypto_sign(result, message, len, secretKey)
 	
 	crypto_hash(d, secretKey, 32);
 
--- check
-	print('post hash',
-		Static.table.toString(d), 
-		Static.table.toString(
-		secretKey)
-	)
+	-- check?
 
 	d[1] = bit.band(d[1], 248);
 	d[32] = bit.bor(bit.band(d[32], 127), 64)
