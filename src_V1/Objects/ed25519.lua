@@ -915,13 +915,10 @@ function scalarbase(p, s)
 	
 	set25519(q[1], scalarbase_K_X)
 	set25519(q[2], scalarbase_K_Y)
-
-
 	set25519(q[3], scalarbase_K_gf1)
-
-	
     M(q[4], scalarbase_K_X, scalarbase_K_Y)
-	    print('q',Static.table.toString(q), Static.table.toString(scalarbase_K_gf1))
+	
+	print('s', Static.table.toString(s), Static.table.toString(p))
 
 	scalarmult_2(p, q, s);
 end
