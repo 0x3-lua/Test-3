@@ -993,7 +993,7 @@ function crypto_sign(result, message, len, secretKey)
 		end
 	end
 
-	modL({ unpack(secretKey, 33) }, x);
+	modL({ unpack(result, 33) }, x);
 	return smlen
 end
 
