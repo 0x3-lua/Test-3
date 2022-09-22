@@ -42,8 +42,6 @@ do
     getHexd(pk)
     print(base64.encode(pk))
 	
-    do return end
-	
 	print('attempting signing')
 
     local message = "robert" -- someone wanted to name bytecollection this so now its here
@@ -53,7 +51,6 @@ do
 	local signature = ed.getSignature(sk, message)
 
 	print('got signature: ', signature)
-	
 	
 	return
 end

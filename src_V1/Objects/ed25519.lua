@@ -903,14 +903,7 @@ function scalarmult_2(p, q, s)
 			)
 		)
 
-        if i == 255 then
-			print('b',b, Static.table.toString(p),Static.table.toString(q) )
-		end
 		cswap(p, q, b);
-		if i == 255 then
-			print('post', Static.table.toString(p), Static.table.toString(q))
-		end
-
 		add(q, p);
 		add(p, p);
 		cswap(p, q, b);
