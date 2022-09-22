@@ -904,7 +904,7 @@ function scalarmult_2(p, q, s)
 		)
 
         if i == 255 then
-			print(Static.table.toString(s))
+			print(Static.table.toString(s), bit.bor(math.floor(i/8), 0) + 1)
            --  print('b',b, Static.table.toString(p),Static.table.toString(q))
 		end
 		cswap(p, q, b);
