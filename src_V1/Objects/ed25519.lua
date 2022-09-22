@@ -783,18 +783,10 @@ function crypto_hash(result, m, n)
 	local x = getNumberArray(256);
 	local b = n;
 
-	if AAA then
-		
-    print(
-		'h',
-        Static.table.toString(h)
-	)
-	end
 	crypto_hashblocks(h, m, n);
 
 	if AAA then
-		
-	    print('post hashblocks', n, Static.table.toString(h))
+	    print('post hashblocks', Static.table.toString(h))
 	end
 	n = n % 128
 
