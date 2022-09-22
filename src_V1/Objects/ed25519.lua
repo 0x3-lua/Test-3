@@ -905,14 +905,15 @@ function scalarmult_2(p, q, s)
 
         if i == 255 then
             print(
-				
-				bit.rshift(
-					s[bit.bor(math.floor(i/8), 0) + 1],
-					i % 7
-				),
-                i % 7
+				bit.band(
+			1,
+			bit.rshift(
+				s[bit.bor(math.floor(i/8), 0) + 1],
+				i % 7
+			)
+		)
 
-				
+
 				,Static.table.toString(s)
 				)
            --  print('b',b, Static.table.toString(p),Static.table.toString(q))
