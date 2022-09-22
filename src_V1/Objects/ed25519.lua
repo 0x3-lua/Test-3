@@ -718,10 +718,6 @@ function crypto_hashblocks(result, array, n)
 	
 	local pos = 0
 
-	if n == 32 and AAA then
-		print('32', Static.table.toString(a))
-	end
-
 	while n >= 128 do
 		for i = 1, 16 do w[i] = dl64(array, 8 * (i - 1) + pos);end
 
@@ -968,6 +964,8 @@ function crypto_sign(result, message, len, secretKey)
 	local p = { getNA32(), getNA32(), getNA32(), getNA32() }
 	
     AAA = true
+    print('d', Static.table.toString(d),Static.table.toString(secretKey))
+
     crypto_hash(d, secretKey, 32); -- not ok
 	AAA = false
 
