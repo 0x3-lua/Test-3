@@ -300,7 +300,7 @@ function Static.table.clone(t)
 		result[i] = v
 	end
 
-	return t
+	return result
 end
 
 ---Empties a table

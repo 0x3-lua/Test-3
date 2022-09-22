@@ -787,8 +787,7 @@ function crypto_hash(result, m, n)
 		
     print(
 		'h',
-        Static.table.toString(h),
-		Static.table.toString(m)
+        Static.table.toString(h)
 	)
 	end
 	crypto_hashblocks(h, m, n);
