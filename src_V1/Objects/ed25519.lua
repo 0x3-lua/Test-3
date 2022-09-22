@@ -486,6 +486,10 @@ end
 ---@return ed25519.range
 function dl64(x, i)
 	i = i + 1
+	if not x[i] then
+		print('x', Static.table.toString(x))
+	end
+
 	local h = bit.bor(
 		bitExtra.uleftShift(x[i], 24),
 		bitExtra.uleftShift(x[i + 1], 16),
