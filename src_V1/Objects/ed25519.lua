@@ -972,15 +972,15 @@ function crypto_sign(result, message, len, secretKey)
 	for i = 1, len do result[63 + i] = message[i]end
 	for i = 1, 32 do result[31 + i] = d[31 + i]end
 	
-	print('ch', Static.table.toString({unpack(result, 33)}))
 
 	crypto_hash(r, {unpack(result, 33)}, len+32);
 	reduce(r)
 	scalarbase(p, r)
 	pack(result, p);
 	
-	for i = 32, 64 do result[i] = secretKey[i]end
-	crypto_hash(h, secretKey, len + 64)
+    for i = 33, 64 do result[i] = secretKey[i] end
+
+	crypto_hash(h, result, len + 64)
 	reduce(h)
 	
 	for i = 1, 64 do x[i] = 0 end
