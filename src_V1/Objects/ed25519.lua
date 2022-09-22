@@ -1182,7 +1182,7 @@ ed25519.getSignature = function (message, secretKey)
 	-- pre
 	assert(#secretKey == 64)
 
-	local signedMessage = {}
+	local signedMessage = getNumberArray(64 + #message)
 
 	crypto_sign(
 		signedMessage,
