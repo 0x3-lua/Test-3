@@ -50,7 +50,8 @@ do
 
 	local signature = ed.getSignature(message, sk)
 
-	print('got signature: ', signature)
+    print('got signature: ')
+	getHexd(signature)
 	
 	return
 end
