@@ -898,12 +898,19 @@ function scalarmult_2(p, q, s)
 		local b = bit.band(
 			1,
 			bit.rshift(
-				s[bit.bor(i/8,0) + 1],
+				s[bit.bor(math.floor(i/8),0) + 1],
 				i % 7
 			)
 		)
 
+		if i == 255 then
+            print('b',b, Static.table.toString(p),Static.table.toString(q))
+		end
 		cswap(p, q, b);
+		if i == 255 then
+			print('post', Static.table.toString(p), Static.table.toString(q))
+		end
+
 		add(q, p);
 		add(p, p);
 		cswap(p, q, b);
@@ -917,9 +924,6 @@ function scalarbase(p, s)
 	set25519(q[2], scalarbase_K_Y)
 	set25519(q[3], scalarbase_K_gf1)
     M(q[4], scalarbase_K_X, scalarbase_K_Y)
-	
-	print('s', Static.table.toString(s), Static.table.toString(p))
-
 	scalarmult_2(p, q, s);
 end
 
@@ -1003,7 +1007,8 @@ function crypto_sign_keypair(pk, sk)
 -- ok
 
     scalarbase(p, d)
-		print('p', Static.table.toString(p))
+		
+		-- print('p', Static.table.toString(p))
 
 	pack(pk, p)
 	for i = 1, 32 do
