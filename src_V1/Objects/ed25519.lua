@@ -785,9 +785,6 @@ function crypto_hash(result, m, n)
 
 	crypto_hashblocks(h, m, n);
 
-	if AAA then
-	    print('post hashblocks', Static.table.toString(h))
-	end
 	n = n % 128
 
 	for i = 1, 256 do x[i] = 0 end
@@ -962,13 +959,8 @@ function crypto_sign(result, message, len, secretKey)
 		
 	local p = { getNA32(), getNA32(), getNA32(), getNA32() }
 	
-    AAA = true
-
-    crypto_hash(d, secretKey, 32); -- not ok
-	AAA = false
-
-	print('chash', Static.table.toString(d))
-
+    crypto_hash(d, secretKey, 32)
+	
 	d[1] = bit.band(d[1], 248);
 	d[32] = bit.bor(bit.band(d[32], 127), 64)
 
@@ -978,21 +970,14 @@ function crypto_sign(result, message, len, secretKey)
 	for i = 1, len do result[64 + i] = message[i]end
 	for i = 1, 32 do result[32 + i] = d[32 + i]end
 	
-    print(
-        'sign a',
-        Static.table.toString(result),
-        Static.table.toString(d),
-        Static.table.toString(h),
-        Static.table.toString(r),
-        Static.table.toString(x),
-		Static.table.toString(p)
-    )
+	-- ok
 
-	-- not ok
+    crypto_hash(r, { unpack(result, 33) }, len + 32);
+	
+    print('post r', Static.table.toString(r))
 
-
-	crypto_hash(r, {unpack(result, 33)}, len+32);
 	reduce(r)
+
 	scalarbase(p, r)
 	pack(result, p);
 	
