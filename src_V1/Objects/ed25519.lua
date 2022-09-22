@@ -783,6 +783,11 @@ function crypto_hash(result, m, n)
 	local x = getNumberArray(256);
 	local b = n;
 
+    print(
+		'h',
+        Static.table.toString(h),
+		Static.table.toString(m)
+	)
 	crypto_hashblocks(h, m, n);
 
 	if AAA then
@@ -964,7 +969,6 @@ function crypto_sign(result, message, len, secretKey)
 	local p = { getNA32(), getNA32(), getNA32(), getNA32() }
 	
     AAA = true
-    print('d', Static.table.toString(d),Static.table.toString(secretKey))
 
     crypto_hash(d, secretKey, 32); -- not ok
 	AAA = false
