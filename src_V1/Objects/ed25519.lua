@@ -899,34 +899,16 @@ function scalarmult_2(p, q, s)
 			1,
 			bit.rshift(
 				s[bit.bor(math.floor(i/8), 0) + 1],
-				i % 7
+				bit.band(i, 7)
 			)
 		)
 
         if i == 255 then
-            print(
-				bit.band(
-					1,
-					bit.rshift(
-						s[bit.bor(math.floor(i/8), 0) + 1],
-						i % 7
-					)
-				),
-				bit.rshift(
-						s[bit.bor(math.floor(i/8), 0) + 1],
-						i % 7
-					),
-					s[bit.bor(math.floor(i/8), 0) + 1],
-					i % 7
-
-
-				,Static.table.toString(s)
-				)
-           --  print('b',b, Static.table.toString(p),Static.table.toString(q))
+			print('b',b, Static.table.toString(p),Static.table.toString(q) )
 		end
 		cswap(p, q, b);
 		if i == 255 then
-			-- print('post', Static.table.toString(p), Static.table.toString(q))
+			print('post', Static.table.toString(p), Static.table.toString(q))
 		end
 
 		add(q, p);
