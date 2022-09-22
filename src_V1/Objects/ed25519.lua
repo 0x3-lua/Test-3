@@ -961,11 +961,11 @@ function crypto_sign(result, message, len, secretKey)
 	local p = { getNA32(), getNA32(), getNA32(), getNA32() }
 	
 	crypto_hash(d, secretKey, 32);
+	print('chash', Static.table.toString(d))
 
 	d[1] = bit.band(d[1], 248);
 	d[32] = bit.bor(bit.band(d[32], 127), 64)
 
-	print('chash', Static.table.toString(d))
 
 	local smlen = len + 64
 	
