@@ -824,13 +824,7 @@ function modL(r, x)
 		local j = i - 32
 
         while j < k do
-			local a = x[j] + carry - 16 * x[i] * modL_K[j - (i - 32) + 1];
-
-			if AAA and i == 64 and j == 33 then
-				print('a', a)
-			end
-
-			x[j] = a
+			x[j] =  x[j] + carry - 16 * x[i] * modL_K[j - (i - 32) + 1]
 			carry = math.floor((x[j] + 128) / 256);
 			x[j] = x[j] - carry * 256;
 			j = j + 1
@@ -838,6 +832,10 @@ function modL(r, x)
 
 		x[j] = x[j] + carry
 		x[i] = 0
+
+		if AAA and i == 64 then
+			print('aaa', Static.table.toString(x))
+		end
 	end
 
 	-- not ok
