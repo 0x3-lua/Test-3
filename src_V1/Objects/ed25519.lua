@@ -824,10 +824,10 @@ function modL(r, x)
 		local j = i - 32
 
 		while j < k do
-			j = j + 1
 			x[j] = x[j] + carry - 16 * x[i] * modL_K[j - (i - 32)];
 			carry = math.floor((x[j] + 128) / 256);
 			x[j] = x[j] - carry * 256;
+			j = j + 1
 		end
 
 		x[j] = x[j] + carry
