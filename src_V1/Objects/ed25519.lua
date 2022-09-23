@@ -824,10 +824,6 @@ function modL(r, x)
 		local j = i - 32
 
 		while j < k do
-			if (i == 64 and AAA) then
-				print('aaa', i, j)
-			end
-
 			x[j] = x[j] + carry - 16 * x[i] * modL_K[j - (i - 32) + 1];
 			carry = math.floor((x[j] + 128) / 256);
 			x[j] = x[j] - carry * 256;
@@ -838,9 +834,7 @@ function modL(r, x)
 		x[i] = 0
 	end
 
-	if AAA then
-		print('modl', Static.table.toString(x))
-	end
+	-- ok
 	
 	carry = 0;
 
@@ -849,6 +843,10 @@ function modL(r, x)
 		carry = bit.rshift(x[j], 8)
 		x[j] = bit.band(x[j], 0xFF)
 	end
+	
+	if AAA then
+		print('aaa', Static.table.toString(x))
+    end
 	
 	for j = 1, 32 do x[j] = x[j] - carry * modL_K[j] end
 	for i = 1, 32 do
