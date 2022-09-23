@@ -836,6 +836,10 @@ function modL(r, x)
 
 	-- ok
 	
+	if AAA then
+		print('aaa1', Static.table.toString(x))
+    end
+	
 	carry = 0;
 
 	for j = 1, 32 do
@@ -844,9 +848,6 @@ function modL(r, x)
 		x[j] = bit.band(x[j], 0xFF)
 	end
 	
-	if AAA then
-		print('aaa1', Static.table.toString(x))
-    end
 	
 	for j = 1, 32 do x[j] = x[j] - carry * modL_K[j] end
 	for i = 1, 32 do
