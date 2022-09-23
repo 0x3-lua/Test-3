@@ -826,7 +826,7 @@ function modL(r, x)
         while j < k do
 			local a = x[j] + carry - 16 * x[i] * modL_K[j - (i - 32) + 1];
 
-			if AAA and i == 64 and j == 32 then
+			if AAA and i == 64 and j == 33 then
 				print('a', a)
 			end
 
