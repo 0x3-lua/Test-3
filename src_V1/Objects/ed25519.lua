@@ -833,6 +833,10 @@ function modL(r, x)
 		x[j] = x[j] + carry
 		x[i] = 0
 	end
+
+	if AAA then
+		print('modl', Static.table.toString(x))
+	end
 	
 	carry = 0;
 
