@@ -817,7 +817,7 @@ local modL_K = {0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6,
 function modL(r, x)
 	local carry
 	
-	for i = 63, 32, -1 do
+	for i = 64, 32, -1 do -- analyze
 		carry = 0
 		
 		local k = i - 12
@@ -856,10 +856,7 @@ function reduce(r)
 	-- for i = 1, 64 do x[i] = r[i]; end
 	for i = 1, 64 do r[i] = 0; end
 
-	if AAA then
-        print('aaa', #r, Static.table.toString(r), Static.table.toString(x))
-
-	end
+	-- ok
 
 	modL(r, x);
 end
