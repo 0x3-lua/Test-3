@@ -845,7 +845,7 @@ function modL(r, x)
 	end
 	
 	if AAA then
-		print('aaa', Static.table.toString(x))
+		print('aaa1', Static.table.toString(x))
     end
 	
 	for j = 1, 32 do x[j] = x[j] - carry * modL_K[j] end
