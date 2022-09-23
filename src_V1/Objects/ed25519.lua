@@ -828,7 +828,7 @@ function modL(r, x)
 				print('aaa', i, j)
 			end
 
-			x[j] = x[j] + carry - 16 * x[i] * modL_K[j - (i - 32)];
+			x[j] = x[j] + carry - 16 * x[i] * modL_K[j - (i - 32) + 1];
 			carry = math.floor((x[j] + 128) / 256);
 			x[j] = x[j] - carry * 256;
 			j = j + 1
