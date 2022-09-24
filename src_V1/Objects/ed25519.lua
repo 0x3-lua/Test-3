@@ -45,7 +45,7 @@ Static.luarocks.loadModule('bit')
 
 -- bit may not be implied
 ---@type bit
-local bit = require("bit")
+local bit = require("bit");
 
 -- because bit.lshift is signed, we need an unsigned version
 local bitExtra = {
