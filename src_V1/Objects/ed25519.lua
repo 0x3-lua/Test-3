@@ -38,9 +38,12 @@ and function names have been conserved as much as possible.
 ---@field hi integer
 ---@field lo integer
 
+
+local Static = require("Static")
+
+Static.luarocks.loadModule('bit --server=https://luarocks.org/dev')
 ---@type bit
 local bit = require("bit")
-local Static = require("Static")
 
 -- because bit.lshift is signed, we need an unsigned version
 local bitExtra = {
