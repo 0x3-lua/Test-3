@@ -41,9 +41,11 @@ and function names have been conserved as much as possible.
 
 local Static = require("Static")
 
-Static.luarocks.loadModule('bit --server=https://luarocks.org/dev')
+Static.luarocks.loadModule('bit32')
+
+-- bit may not be implied
 ---@type bit
-local bit = require("bit")
+local bit = require("bit32")
 
 -- because bit.lshift is signed, we need an unsigned version
 local bitExtra = {
