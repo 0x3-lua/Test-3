@@ -836,7 +836,7 @@ function modL(r, x)
 		x[j] = x[j] + carry
 		x[i] = 0
 
-		if AAA and i == 41 then
+		if AAA and i == 37 then
 			print('aaa', Static.table.toString(x))
 		end
 	end
