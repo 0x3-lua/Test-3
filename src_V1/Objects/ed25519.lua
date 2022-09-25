@@ -849,7 +849,7 @@ function modL(r, x)
 
         if AAA -- and (j == 5 or j == 4)
 			 then
-			print('aaai', j, carry,  x[j], bit.rshift(x[j], 8))
+			print('aaai', j, carry,  x[j], bit.rshift(x[j], 8), bit.arshift(x[j], 8))
 		end
 		
 		-- not ok
