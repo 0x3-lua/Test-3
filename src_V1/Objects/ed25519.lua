@@ -842,20 +842,19 @@ function modL(r, x)
 	-- ok
     for j = 1, 32 do
 	
-		if AAA and (j == 5 or j == 4) then
-			print('aaai', j, x[5])
+		-- ok
+
+        if AAA -- and (j == 5 or j == 4)
+			 then
+			print('aaai', j, carry)
 		end
+
 		x[j] = x[j] + carry - bit.rshift(x[32], 4) * modL_K[j]
 
 		
 		-- not ok
         carry = bit.rshift(x[j], 8)
-		
-		
-
 		x[j] = bit.band(x[j], 0xFF)
-
-		
 	end
 	
 	-- not ok
