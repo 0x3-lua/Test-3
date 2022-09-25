@@ -835,22 +835,24 @@ function modL(r, x)
 
 		x[j] = x[j] + carry
 		x[i] = 0
-
-		
 	end
 
-	carry = 0;
-
+    carry = 0
+	
+	-- ok
 	for j = 1, 32 do
 		x[j] = x[j] + carry - bit.rshift(x[32], 4) * modL_K[j]
 		carry = bit.rshift(x[j], 8)
 		x[j] = bit.band(x[j], 0xFF)
+
+		
+		if AAA  then
+			print('aaai', j, x[5])
+		end
 	end
 	
+	-- not ok
 	
-if AAA  then
-			print('aaa', Static.table.toString(x))
-		end
 	
 	for j = 1, 32 do x[j] = x[j] - carry * modL_K[j] end
 	for i = 1, 32 do
