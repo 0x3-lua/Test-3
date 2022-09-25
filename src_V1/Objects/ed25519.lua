@@ -849,14 +849,18 @@ function modL(r, x)
 	
 	for j = 1, 32 do x[j] = x[j] - carry * modL_K[j] end
 	
-	if AAA then
-		print('aaa', Static.table.toString(x))
-	end
+	-- ok 
 	for i = 1, 32 do
+
+		
+	if AAA then
+		print('aaa', i, x[i], bit.arshift(x[i], 8))
+    end
 		x[i + 1] = bit.arshift(x[i], 8)
 		r[i] = bit.band(x[i], 0xFF)
 	end
 
+	-- not ok
 end
 
 ---@param r integer[]
