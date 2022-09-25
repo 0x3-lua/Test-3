@@ -41,9 +41,7 @@ and function names have been conserved as much as possible.
 
 local Static = require("Static")
 
-Static.luarocks.loadModule('bitlib')
-
--- bit may not be implied
+Static.luarocks.loadModule('luabitop') -- bit may not be implied
 ---@type bit
 local bit = require("bit");
 
@@ -838,7 +836,7 @@ function modL(r, x)
 		x[j] = x[j] + carry
 		x[i] = 0
 
-		if AAA and i == 64 then
+		if AAA and i == 49 then
 			print('aaa', Static.table.toString(x))
 		end
 	end
