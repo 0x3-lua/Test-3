@@ -41,7 +41,7 @@ and function names have been conserved as much as possible.
 
 local Static = require("Static")
 
-Static.luarocks.loadModule('luabitop') -- bit may not be implied
+-- Static.luarocks.loadModule('luabitop') -- bit may not be implied
 ---@type bit
 local bit = require("bit");
 
