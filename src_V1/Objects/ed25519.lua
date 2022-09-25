@@ -846,7 +846,7 @@ function modL(r, x)
 		x[j] = bit.band(x[j], 0xFF)
 
 		
-		if AAA and (j == 5 or j == 64) then
+		if AAA and (j == 5 or j == 4) then
 			print('aaai', j, x[5])
 		end
 	end
