@@ -836,12 +836,11 @@ function modL(r, x)
 		x[j] = x[j] + carry
 		x[i] = 0
 
-		if AAA and i == 33 then
+		
+	end
+if AAA  then
 			print('aaa', Static.table.toString(x))
 		end
-	end
-
-	-- not ok
 
 	carry = 0;
 
