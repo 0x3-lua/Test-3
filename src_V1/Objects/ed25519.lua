@@ -854,9 +854,9 @@ function modL(r, x)
 
 		
 	if AAA then
-		print('aaa', i, x[i], bit.arshift(x[i], 8))
+		print('aaa', i, x[i], bit.rshift(x[i], 8))
     end
-		x[i + 1] = bit.arshift(x[i], 8)
+		x[i + 1] = x[i + 1] + bit.rshift(x[i], 8)
 		r[i] = bit.band(x[i], 0xFF)
 	end
 
