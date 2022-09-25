@@ -853,7 +853,7 @@ function modL(r, x)
 	
 	for j = 1, 32 do x[j] = x[j] - carry * modL_K[j] end
 	for i = 1, 32 do
-		x[i + 1] = bit.rshift(x[i], 8)
+		x[i + 1] = bit.arshift(x[i], 8)
 		r[i] = bit.band(x[i], 0xFF)
 	end
 end
