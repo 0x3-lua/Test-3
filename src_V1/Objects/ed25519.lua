@@ -844,7 +844,7 @@ function modL(r, x)
 	
 		-- ok
 
-		x[j] = x[j] + carry - bit.rshift(x[32], 4) * modL_K[j]
+		x[j] = x[j] + carry - bit.arshift(x[32], 4) * modL_K[j]
 
 		
 		-- not ok
