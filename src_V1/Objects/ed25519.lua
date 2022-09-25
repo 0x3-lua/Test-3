@@ -841,19 +841,15 @@ function modL(r, x)
 	
 	-- ok
     for j = 1, 32 do
-	
-		-- ok
-
 		x[j] = x[j] + carry - bit.arshift(x[32], 4) * modL_K[j]
-
-		
-		-- not ok
         carry = bit.arshift(x[j], 8)
 		x[j] = bit.band(x[j], 0xFF)
 	end
 	
 	-- not ok
-	
+	if AAA then
+		print('aaa', Static.table.toString(x))
+	end
 	
 	for j = 1, 32 do x[j] = x[j] - carry * modL_K[j] end
 	for i = 1, 32 do
