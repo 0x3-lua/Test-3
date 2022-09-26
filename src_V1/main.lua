@@ -44,7 +44,7 @@ do
 	
 	print('attempting signing')
 
-    local message = "robert" -- someone wanted to name bytecollection this so now its here
+    local message = "CHL WAS HERE" -- someone wanted to name bytecollection this so now its here
 	
     print('got message: ', message)
 
