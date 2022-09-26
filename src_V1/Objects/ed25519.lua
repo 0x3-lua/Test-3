@@ -805,7 +805,6 @@ function crypto_hash(result, m, n, offset)
 	);
 	
     crypto_hashblocks(h, x, n)
-	print('len', #h, #result, #result - (offset or 0))
 	imprint(h, result, nil, offset)
 	-- for i = 1, 64 do result[i] = h[i]; end
 end
@@ -977,7 +976,7 @@ function crypto_sign(result, message, len, secretKey)
 	for i = 1, len do result[64 + i] = message[i]end
 	for i = 1, 32 do result[32 + i] = d[32 + i]end
 	
-    crypto_hash(r, result, len + 32, 33);
+    crypto_hash(r, {unpack(result, 33)}, len + 32);
 	
 	reduce(r)
 	scalarbase(p, r)
@@ -987,7 +986,6 @@ function crypto_sign(result, message, len, secretKey)
 	-- ok
 
 	crypto_hash(h, result, len + 64)
-    print('stat',  Static.table.toString(result))
 	reduce(h)
 	
 	for i = 1, 64 do x[i] = 0 end
@@ -999,6 +997,7 @@ function crypto_sign(result, message, len, secretKey)
 			x[i+j-1] = x[i+j-1] + h[i] * d[j]
 		end
 	end
+    print('stat',  Static.table.toString(result))
 
 	modL(result, x, 32);
 
