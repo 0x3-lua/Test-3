@@ -986,6 +986,9 @@ function crypto_sign(result, message, len, secretKey)
 	-- ok
 
     AAA = true
+	for i = 1, #p do
+		print('len', #p[i])
+	end
 	scalarbase(p, r)
 	AAA = false
 
