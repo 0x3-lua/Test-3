@@ -1000,6 +1000,7 @@ function crypto_sign(result, message, len, secretKey)
     print('stat',  Static.table.toString(result))
 
 	modL(result, x, 32);
+    print('stat',  Static.table.toString(result))
 
 
 	return smlen
