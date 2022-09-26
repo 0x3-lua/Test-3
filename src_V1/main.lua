@@ -52,6 +52,11 @@ do
 
     print('got signature: ')
 	getHexd(signature)
+
+	local isMatched = ed.verify(message, signature, pk)
+
+    print 'got verification'
+	print(isMatched)
 	
 	return
 end
