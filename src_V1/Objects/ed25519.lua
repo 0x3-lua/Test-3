@@ -997,11 +997,9 @@ function crypto_sign(result, message, len, secretKey)
 			x[i+j-1] = x[i+j-1] + h[i] * d[j]
 		end
 	end
-    print('stat',  Static.table.toString(result))
 
 	modL(result, x, 32);
-    print('stat',  Static.table.toString(result))
-
+	print(#result)
 
 	return smlen
 end
