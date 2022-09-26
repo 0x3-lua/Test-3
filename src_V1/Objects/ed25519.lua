@@ -982,7 +982,7 @@ function crypto_sign(result, message, len, secretKey)
 
 	scalarbase(p, r)
 
-	print('scalar', Static.table.toString(p), Static.table.toString(r), Static.table.toString(result))
+	print('scalar', Static.table.toString(r), Static.table.toString(p), Static.table.toString(result))
 
 	pack(result, p);
 	
