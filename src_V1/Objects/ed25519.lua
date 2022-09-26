@@ -980,10 +980,9 @@ function crypto_sign(result, message, len, secretKey)
 
 	-- ok
 
-
 	scalarbase(p, r)
 
-	print('scalar', Static.table.toString(p), Static.table.toString(r))
+	print('scalar', Static.table.toString(p), Static.table.toString(r), Static.table.toString(result))
 
 	pack(result, p);
 	
@@ -1003,6 +1002,8 @@ function crypto_sign(result, message, len, secretKey)
 	end
 
 	modL({ unpack(result, 33) }, x);
+
+
 	return smlen
 end
 
