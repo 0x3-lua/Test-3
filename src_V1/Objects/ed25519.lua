@@ -780,7 +780,7 @@ local crypto_hash_K = {
 ---@param result integer[]
 ---@param m integer[]
 ---@param n integer
-function crypto_hash(result, m, n)
+function crypto_hash(result, m, n, offset)
 	local h = Static.table.clone(crypto_hash_K)
 	local x = getNumberArray(256);
 	local b = n;
@@ -805,8 +805,8 @@ function crypto_hash(result, m, n)
 	);
 	
     crypto_hashblocks(h, x, n)
-
-	imprint(h, result)
+	print('len', #h, #result, #result - offset)
+	imprint(h, result, nil, offset)
 	-- for i = 1, 64 do result[i] = h[i]; end
 end
 
@@ -975,7 +975,7 @@ function crypto_sign(result, message, len, secretKey)
 	for i = 1, len do result[64 + i] = message[i]end
 	for i = 1, 32 do result[32 + i] = d[32 + i]end
 	
-    crypto_hash(r, { unpack(result, 33) }, len + 32);
+    crypto_hash(r, result, len + 32, 33);
 	
 	reduce(r)
 	scalarbase(p, r)
