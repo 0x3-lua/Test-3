@@ -805,7 +805,7 @@ function crypto_hash(result, m, n, offset)
 	);
 	
     crypto_hashblocks(h, x, n)
-	print('len', #h, #result, #result - offset)
+	print('len', #h, #result, #result - (offset or 0))
 	imprint(h, result, nil, offset)
 	-- for i = 1, 64 do result[i] = h[i]; end
 end
