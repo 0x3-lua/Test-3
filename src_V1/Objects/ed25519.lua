@@ -1191,7 +1191,7 @@ ed25519.getSignature = function (message, secretKey)
 		stringToByteArray(secretKey)
 	);
 
-	return byteArrayToStr(signedMessage)
+	return byteArrayToStr({unpack(signedMessage,1,64)})
 end
 
 ---comment
