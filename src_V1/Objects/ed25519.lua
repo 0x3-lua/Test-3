@@ -999,7 +999,6 @@ function crypto_sign(result, message, len, secretKey)
 	end
 
 	modL(result, x, 32);
-	print(#result)
 
 	return smlen
 end
@@ -1174,7 +1173,9 @@ ed25519.getKeyPair = function (secretKey)
 		byteArrayToStr(publicKeyArray)
 end
 
----returns signature
+---returns signature, note, the signature in nacl is represented as
+---an array of length 64 + #msg, in this version, only the signature
+---is returned
 ---@param message string
 ---@param secretKey string
 ---@return string
