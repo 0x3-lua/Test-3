@@ -1122,7 +1122,7 @@ function crypto_sign_open(m, sm, n, pk)
 	crypto_hash(h, m, n);
 	reduce(h);
 	scalarmult_2(p, q, h);
-	scalarbase(q, {unpack(sm, 33)})
+	scalarbase(q, {unpack(sm, 33)});
 	add(p, q)
 	pack(t, p)
 	
