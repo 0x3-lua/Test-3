@@ -979,21 +979,17 @@ function crypto_sign(result, message, len, secretKey)
 	
 	reduce(r)
 
-	-- ok
 
-    AAA = true
 	scalarbase(p, r)
-	AAA = false
 
-
-	-- result ok, r ok, p not ok
 
 	pack(result, p);
 	
     for i = 33, 64 do result[i] = secretKey[i] end
+	-- ok
 
-    print('stat',  Static.table.toString(result))
 	crypto_hash(h, result, len + 64)
+    print('stat',  Static.table.toString(result))
 	reduce(h)
 	
 	for i = 1, 64 do x[i] = 0 end
