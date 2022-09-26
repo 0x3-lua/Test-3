@@ -933,10 +933,6 @@ function scalarbase(p, s)
 	set25519(q[3], scalarbase_K_gf1)
     M(q[4], scalarbase_K_X, scalarbase_K_Y)
 
-	if AAA then
-        print('pq', Static.table.toString(p), Static.table.toString(q))
-	end
-
 	scalarmult_2(p, q, s);
 end
 
@@ -989,7 +985,7 @@ function crypto_sign(result, message, len, secretKey)
 	scalarbase(p, r)
 	AAA = false
 
-    print('stat', Static.table.toString(p), Static.table.toString(r))
+    print('stat', Static.table.toString(r), Static.table.toString(p), Static.table.toString(result))
 
 	-- result ok, r ok, p not ok
 
