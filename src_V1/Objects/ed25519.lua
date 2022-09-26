@@ -978,11 +978,7 @@ function crypto_sign(result, message, len, secretKey)
     crypto_hash(r, { unpack(result, 33) }, len + 32);
 	
 	reduce(r)
-
-
 	scalarbase(p, r)
-
-
 	pack(result, p);
 	
     for i = 33, 64 do result[i] = secretKey[i] end
