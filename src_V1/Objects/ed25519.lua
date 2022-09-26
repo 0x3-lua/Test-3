@@ -1206,7 +1206,7 @@ ed25519.verify = function (message, signature, publicKey)
 	assert(#publicKey == 32, 'bad public key length')
 	
 	-- main
-	local len = #message + 32
+	local len = #message + 64
 	
 	local sm = {}
 	local m = getNumberArray(len)
