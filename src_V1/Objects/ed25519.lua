@@ -966,7 +966,7 @@ function crypto_sign(result, message, len, secretKey)
 	local d, h, r, x =
 		getNA64(), getNA64(), getNA64(), getNA64()
 		
-	local p = { getNA32(), getNA32(), getNA32(), getNA32() }
+	local p = getGF4()
 	
     crypto_hash(d, secretKey, 32)
 	
