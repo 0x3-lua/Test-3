@@ -816,7 +816,10 @@ local modL_K = {0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6,
 
 ---@param r integer[]
 ---@param x integer[]
-function modL(r, x)
+function modL(r, x, offset)
+    -- pre
+	offset = offset or 0
+	-- main
 	local carry
 	
 	for i = 64, 33, -1 do -- analyze
@@ -848,7 +851,7 @@ function modL(r, x)
 	
 	for i = 1, 32 do
 		x[i + 1] = x[i + 1] + bit.rshift(x[i], 8)
-		r[i] = bit.band(x[i], 0xFF)
+		r[i + offset] = bit.band(x[i], 0xFF)
 	end
 end
 
@@ -969,7 +972,6 @@ function crypto_sign(result, message, len, secretKey)
 	d[1] = bit.band(d[1], 248);
 	d[32] = bit.bor(bit.band(d[32], 127), 64)
 
-
 	local smlen = len + 64
 	
 	for i = 1, len do result[64 + i] = message[i]end
@@ -998,7 +1000,7 @@ function crypto_sign(result, message, len, secretKey)
 		end
 	end
 
-	modL({ unpack(result, 33) }, x);
+	modL(result, x, 32);
 
 
 	return smlen
