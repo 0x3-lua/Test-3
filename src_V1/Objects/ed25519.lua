@@ -1215,7 +1215,10 @@ ed25519.verify = function (message, signature, publicKey)
 	for i = 1, #message do sm[i + 64] = message:byte(i,i)end
 
 	-- post
-	assert(len == #sm)
+    assert(
+        len == #sm,
+        ('mismatched len: len=%d, #sm=%d'):format(len, #sm)
+		)
 
 	return crypto_sign_open(m, sm, len, stringToByteArray(publicKey)) >= 0
 end
