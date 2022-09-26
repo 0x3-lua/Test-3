@@ -73,6 +73,9 @@ do
     message = [[Today, we're taking a look at the Sniper. Hailing from the lost country of New Zealand and raised in the unforgiving Australian outback, the Sniper is a tough and ready crack shot. The Sniper's main role on the battlefield is to pick off important enemy targets from afar using his Sniper Rifle and its ability to instantly kill a target with a headshot. He is effective at long range, but weakens with proximity, where he is forced to use his Submachine Gun. As a result, the Sniper tends to perch on high grounds or in hard-to-see places, where he can easily pin down enemies at chokepoints. Although he is typically known for instantaneously killing enemies at a distance, the Sniper can use the Huntsman to get closer to the enemy. Additionally, the Sydney Sleeper and the mysterious contents of Jarate allow him to take on a support role by causing enemies to take mini-crits. Now you want to be the Sniper? That's excellent, but also hard, since Team Fortress 2 needs a lot of skills and practice. It will destroy your soul, dreams and your own family. As a Sniper, it might happen that you fight enemy Snipers. But don't worry, it's mostly easy to fight back if you ambush those Snipers from unexpected places. You are most effective at long range, but don't stay at the same spot all the time, keep changing your shooting spots to destroy the most important targets. While you are sniping around, it might happen that a Spy will try to backstab you. Try to look around next time. Or use the Razorback. If you happen to spot an Engineer nest, but can't see the Engineer, shoot the Sentry or another building first, so the Engineer will show himself to repair it. You can finally call yourself a real Sniper. You can shoot people now. Have fun with your great accomplishment.]]
 	
     print('msg: ' .. message)
+
+    signature = ed.getSignature(message, sk)
+	print('sig:', signature)
 	
 	
     print 'got verification of false sig'
