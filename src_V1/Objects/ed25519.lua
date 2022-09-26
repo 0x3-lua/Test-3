@@ -761,7 +761,6 @@ function crypto_hashblocks(result, array, n)
 		n = n - 128;
     end
 
-
 	for i = 1, 8 do ts64(result, 8*(i - 1), z[i]) end
 
 	return n
@@ -845,22 +844,12 @@ function modL(r, x)
 		x[j] = bit.band(x[j], 0xFF)
 	end
 	
-	-- ok
-	
 	for j = 1, 32 do x[j] = x[j] - carry * modL_K[j] end
 	
-	-- ok 
 	for i = 1, 32 do
-
-		
-	if AAA then
-		print('aaa', i, x[i], bit.rshift(x[i], 8))
-    end
 		x[i + 1] = x[i + 1] + bit.rshift(x[i], 8)
 		r[i] = bit.band(x[i], 0xFF)
 	end
-
-	-- not ok
 end
 
 ---@param r integer[]
@@ -869,8 +858,6 @@ function reduce(r)
 	imprint(r, x)
 	-- for i = 1, 64 do x[i] = r[i]; end
 	for i = 1, 64 do r[i] = 0; end
-
-	-- ok
 
 	modL(r, x);
 end
@@ -989,16 +976,15 @@ function crypto_sign(result, message, len, secretKey)
 	
     crypto_hash(r, { unpack(result, 33) }, len + 32);
 	
-	-- ok
-	AAA = true
 	reduce(r)
-	AAA = false
 
- -- not ok
-	   --  print('post r', Static.table.toString(r))
+	-- ok
 
 
 	scalarbase(p, r)
+
+	print('scalar', Static.table.toString(p), Static.table.toString(r))
+
 	pack(result, p);
 	
     for i = 33, 64 do result[i] = secretKey[i] end
@@ -1029,16 +1015,9 @@ function crypto_sign_keypair(pk, sk)
 	d[1] = bit.band(d[1], 248)
 	d[32] = bit.bor(bit.band(d[32], 127), 64)
 
--- ok
-
     scalarbase(p, d)
-		
-		-- print('p', Static.table.toString(p))
-
 	pack(pk, p)
-	for i = 1, 32 do
-		sk[i + 32] = pk[i]
-	end
+	for i = 1, 32 do sk[i + 32] = pk[i] end
 end
 
 function pow2523(o, i)
