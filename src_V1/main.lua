@@ -24,7 +24,7 @@ do
 	end
 	
     -- used https://ed25519.herokuapp.com/ for testing
-	
+	ed.getRandomString()
     local seed = ed.getRandomString()
 	
 	print('attempting keypair: \nseed')
