@@ -1068,6 +1068,7 @@ local unpackneg_I_K = gf { 0xa0b0, 0x4a0e, 0x1b27, 0xc4ee, 0xe478,
 function unpackneg(r, p)
 	local t, chk, num, den, den2, den4, den6 = gf(), gf(), gf(), gf(), gf(), gf(), gf()
 	
+	StopWatch.start()
 	set25519(r[3], scalarbase_K_gf1)
 	unpack25519(r[2], p)
 	S(num, r[2])
@@ -1075,42 +1076,55 @@ function unpackneg(r, p)
 	Z(num, num, r[3])
 	A(den, r[3], den)
 	
+    print('lap 1', StopWatch.lapRestart())
+	
+
 	S(den2, den)
 	S(den4, den2)
 	M(den6, den4, den2)
 	M(t, den6, num)
 	M(t, t, den)
 	
+	print('lap 2', StopWatch.lapRestart())
+
+
 	pow2523(t, t)
 	M(t, t, num)
 	M(t, t, den)
 	M(t, t, den)
 	M(r[1], t, den)
 	
+		print('lap 3', StopWatch.lapRestart())
+
+
 	S(chk, r[1])
 	M(chk, chk, den)
 	if neq25519(chk, num) then M(r[1], r[1], unpackneg_I_K) end
 	
 	S(chk, r[1])
 	M(chk, chk, den)
-	if neq25519(chk, num) then return true; end
+    if neq25519(chk, num) then return true; end
 	
+    print('lap 4', StopWatch.lapRestart())
+			
+
 	if par25519(r[1]) == bit.rshift(p[32], 7) then Z(r[1], scalarbase_K_gf0, r[1]) end
 
-	M(r[4], r[1], r[2])
-	return false
+    M(r[4], r[1], r[2])
+	    print('lap 5', StopWatch.lapRestart())
+
 end
 
 function crypto_sign_open(m, sm, n, pk)
     -- pre
 	
 	print('crypto_sign_open n pre')
-    if n < 64 then return -1; end
+    if n < 64 then return; end
 	
 	local q = getGF4() -- {gf(), gf(), gf(), gf()}
 
 	print('unpack neg pre')
-	if unpackneg(q, pk) then return -1; end
+	if unpackneg(q, pk) then return end
 
 	local t = getNA32()
 	local h = getNA32()
@@ -1132,13 +1146,13 @@ function crypto_sign_open(m, sm, n, pk)
 	print('crypto 32 pre')
 	if crypto_verify_32(sm, 0, t, 0) then
 		for i = 1, n do m[i] = 0 end
-		return -1
+		return
 	end
 
 	for i = 1, n do m[i] = sm[i + 64] end
 
 	print('reached end')
-	return n
+	return n >= 0
 end
 
 ---returns a string of random characters, with bytes 0 to 255
@@ -1232,7 +1246,7 @@ ed25519.verify = function (message, signature, publicKey)
         ('mismatched len: len=%d, #sm=%d'):format(len, #sm)
 		)
 
-	return crypto_sign_open(m, sm, len, stringToByteArray(publicKey)) >= 0
+	return not not crypto_sign_open(m, sm, len, stringToByteArray(publicKey)) --  >= 0
 end
 
 ---converts hex string to regular string of base 256
@@ -1247,5 +1261,7 @@ ed25519.hexTo256 = function (s)
 
     return result
 end
+
+StopWatch = require('StopWatch').new()
 
 return ed25519
