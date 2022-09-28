@@ -1,7 +1,7 @@
 --run code below
 local Static = require('Static')
 
-if false then
+if true then
     local ed = require('ed25519')
 	
 	local msg = '1664386204{"application_id":"1015102056647893073","id":"1024734743834673194","token":"aW50ZXJhY3Rpb246MTAyNDczNDc0MzgzNDY3MzE5NDp5VEVweEpVTHo4M2tYUTFVdG1waVVqQnhsTXBDQjdiSW81ZDB4ejZqZ2xSVzNqM0pMeUhnVk1jdk5adElFYlJ2a3ZjeDdqM241ZThkSWRuZGdtTHhFc3dnZkVWU3RzakdOdmgxY3o4RDhvMGRheWt5bFpld0JTbzdOYnplbmdacQ","type":1,"user":{"avatar":"c3d4a5d8dc2b00a24c94c6f90fa94bb8","avatar_decoration":null,"discriminator":"1424","id":"505584960997031947","public_flags":0,"username":"CHL"},"version":1}'
@@ -14,6 +14,8 @@ if false then
     print('got sig: ', sig)
     print('got pk:', pk)
 	
+	local last = os.time()
+
     print(
         'verified (should be false)',
         ed.verify(
@@ -21,7 +23,9 @@ if false then
             ed.hexTo256(sig),
 			ed.hexTo256(pk)
 		)
-	)
+    )
+	
+	print(os.time() - last)
 	
 	return 
 end
