@@ -1103,7 +1103,7 @@ end
 
 function crypto_sign_open(m, sm, n, pk)
     -- pre
-	print('n met', 64)
+	print('n met', n)
     if n < 64 then return -1; end
 	print('n')
 	
