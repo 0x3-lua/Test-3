@@ -62,9 +62,12 @@ DiscordBot.new = function(apiKey)
 		local timeStamp = req.headers['X-Signature-Timestamp']
 		local body = req.body
 
-		if ed and timeStamp and body then
-			result = ed25519.verify(timeStamp .. body, ed, apiKey)
-		end
+        result = not not (
+            	ed
+					and timeStamp
+					and body
+					and ed25519.verify(timeStamp .. body, ed, apiKey)
+			)
 
 		return result
 	end
