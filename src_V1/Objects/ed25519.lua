@@ -1102,8 +1102,10 @@ function unpackneg(r, p)
 end
 
 function crypto_sign_open(m, sm, n, pk)
-	-- pre
-	if n < 64 then return -1; end
+    -- pre
+	print('n met', 64)
+    if n < 64 then return -1; end
+	print('n')
 	
 	local q = getGF4() -- {gf(), gf(), gf(), gf()}
 
