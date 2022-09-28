@@ -47,8 +47,16 @@ DiscordBot.new = function(apiKey)
 	object.handlePing = function (req, res)
 		local result = false
 
-		if req.headers['User-Agent'] == interactionUA then
-			print(Static.table.toString(json.decode(req.body)))
+        if req.headers['User-Agent'] == interactionUA then
+            local body = json.decode(req.body)
+			
+			if body.type == 1 then
+           		print(Static.table.toString(json.decode(req.body)))
+				
+			result = true
+
+			end
+			
 		end
 		return result
 	end

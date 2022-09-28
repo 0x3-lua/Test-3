@@ -13,16 +13,22 @@ WebServer.onRequest('/', 'GET', function (_, _, res)
 	res.statusMessage = 'OK'
 	res.headers.connection = 'close'
 	res.body = 'Main page'
+end).onRequest('/interactions', 'POST', function (_, req, res)
+    res.statusCode = 404
+	res.statusMessage = 'found none'
+    res.headers.connection = 'close'
+	res.body = 'found none'
+
+	Bot.handlePing(req, res)
 end).onInvalidRequest(function (_, req, res)
-	res.statusCode = 200
-	res.statusMessage = 'OK'
+	res.statusCode = 404
+	res.statusMessage = 'found none'
 	res.headers.connection = 'close'
-	res.body = 'blank'
+	res.body = 'found none'
 
 	print(
 		Static.table.toString(req)
 	)
 
-	Bot.handlePing(req, res)
 end).launch()
 --]]
