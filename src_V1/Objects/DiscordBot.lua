@@ -54,6 +54,10 @@ DiscordBot.new = function(apiKey)
            		-- print(Static.table.toString(json.decode(req.body)))
                 local edVerified = object.verifyEd25519(req)
 				
+                res.statusCode = edVerified and 200 or 401
+				res.statusMessage = 'msg: ping responded'
+				res.body = '{"type":1}'
+
 				result = true
 			end
 			
