@@ -71,25 +71,27 @@ DiscordBot.new = function(apiKey)
 	---@return boolean
 	object.verifyEd25519 = function (req)
 		local result = false
-		local ed = req.headers['X-Signature-Ed25519']
+		local edSig = req.headers['X-Signature-Ed25519']
+		---@cast edSig string
 		local timeStamp = req.headers['X-Signature-Timestamp']
 		local body = req.body
 
-		if ed and timeStamp and body then
-			local sig = string.char(
-							StringRadix.hexdecimal.getNumericalValue(
-								ed:upper()
-							)
-            )
-			print(StringRadix.hexdecimal.getNumericalValue(
-								ed:upper()
-							))
-
-		result = ed25519.verify(
-						timeStamp .. body,
-						sig,
-						apiKey
+		if edSig and timeStamp and body then
+            local sig = ''
+			
+			for a in edSig:gmatch'%x%x' do
+                sig = sig .. string.char(
+					StringRadix.hexdecimal.getNumericalValue(
+						a:upper()
 					)
+				)
+            end
+
+			result = ed25519.verify(
+					timeStamp .. body,
+					sig,
+					apiKey
+				)
 		end
 
 		return result
