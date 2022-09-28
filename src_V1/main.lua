@@ -39,6 +39,8 @@ local DiscordBot = require('DiscordBot')
 
 local Bot = DiscordBot.new()
 
+local StopWatch = require('StopWatch').new()
+
 
 WebServer.onRequest('/', 'GET', function (_, _, res)
 	res.statusCode = 200
@@ -51,10 +53,15 @@ end).onRequest('/interactions', 'POST', function (_, req, res)
     res.headers.connection = 'close'
 	res.body = 'found none'
 
-	print('met req')
+    print('met req')
+
+	StopWatch.start()
+	
     if Bot.handlePing(req, res) then -- type 1
         print('type 1 met')
-		print(res.toString())
+        print(res.toString())
+		
+		print('got lap', StopWatch.lap())
 		return
     end
 	print('non ping:', Static.table.toString(req))
