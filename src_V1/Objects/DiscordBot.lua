@@ -23,6 +23,7 @@ Static.luarocks.loadModule('lua-cjson')
 ---@type cjson
 local json = require('cjson')
 local ed25519 = require('ed25519')
+local StringRadix = require('StringRadix')
 
 local interactionUA = 'Discord-Interactions/1.0 (+https://discord.com)'
 
@@ -47,14 +48,14 @@ DiscordBot.new = function(apiKey)
 	object.handlePing = function (req, res)
 		local result = false
 
-        if req.headers['User-Agent'] == interactionUA then
-            local body = json.decode(req.body)
+		if req.headers['User-Agent'] == interactionUA then
+			local body = json.decode(req.body)
 			
 			if body.type == 1 then
-           		-- print(Static.table.toString(json.decode(req.body)))
-                local edVerified = object.verifyEd25519(req)
+		   		-- print(Static.table.toString(json.decode(req.body)))
+				local edVerified = object.verifyEd25519(req)
 				
-                res.statusCode = edVerified and 200 or 401
+				res.statusCode = edVerified and 200 or 401
 				res.statusMessage = 'msg: ping responded'
 				res.body = '{"type":1}'
 
@@ -74,11 +75,19 @@ DiscordBot.new = function(apiKey)
 		local timeStamp = req.headers['X-Signature-Timestamp']
 		local body = req.body
 
-        result = not not (
-            	ed
+		result = not not (
+				ed
 					and timeStamp
 					and body
-					and ed25519.verify(timeStamp .. body, ed, apiKey)
+					and ed25519.verify(
+						timeStamp .. body,
+						string.char(
+							StringRadix.hexdecimal.getNumericalValue(
+								ed:upper()
+							)
+						),
+						apiKey
+					)
 			)
 
 		return result
