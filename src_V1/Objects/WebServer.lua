@@ -44,9 +44,12 @@
 ---@type WebServer
 local WebServer = {}
 local Enum = require('Enum')
+local Static = require('Static')
 local isLoaded = false
 
 local cURL = require('cURL')
+
+Static.luarocks.loadModule('socket')
 local socket = require('socket')
 local Static = require('Static')
 local StringParser = require('StringParser')
