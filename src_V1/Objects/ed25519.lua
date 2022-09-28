@@ -33,6 +33,7 @@ and function names have been conserved as much as possible.
 ---@field getKeyPair fun(secret: string?): string, string
 ---@field getSignature fun(message: string, secretKey: string): string
 ---@field verify fun(message: string, signature: string, publicKey: string): boolean
+---@field hexTo256 fun(s: string): string
 
 ---@class ed25519.range
 ---@field hi integer
@@ -1195,7 +1196,7 @@ ed25519.getSignature = function (message, secretKey)
 	return byteArrayToStr({unpack(signedMessage,1,64)})
 end
 
----comment
+---verifies message with signature and public key
 ---@param message string
 ---@param signature string must be exactly 64 bytes
 ---@param publicKey string must be exactly 32 bytes
@@ -1206,7 +1207,10 @@ ed25519.verify = function (message, signature, publicKey)
 		#signature == 64, 
         'bad signature length, got: #sig=' .. #signature
 	)
-	assert(#publicKey == 32, 'bad public key length')
+    assert(
+        #publicKey == 32, 
+		'bad public key length, got: #pk=' .. #publicKey
+	)
 	
 	-- main
 	local len = #message + 64
@@ -1224,6 +1228,19 @@ ed25519.verify = function (message, signature, publicKey)
 		)
 
 	return crypto_sign_open(m, sm, len, stringToByteArray(publicKey)) >= 0
+end
+
+---converts hex string to regular string of base 256
+---@param s string
+---@return string
+ed25519.hexTo256 = function (s)
+	local result = ''
+
+	for a in s:gmatch'%x%x' do
+		result = result .. string.char(assert(tonumber('0x' .. a)))
+	end
+
+    return result
 end
 
 return ed25519

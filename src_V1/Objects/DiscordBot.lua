@@ -77,20 +77,10 @@ DiscordBot.new = function(apiKey)
 		local body = req.body
 
 		if edSig and timeStamp and body then
-            local sig = ''
-			
-			for a in edSig:gmatch'%x%x' do
-                sig = sig .. string.char(
-					StringRadix.hexdecimal.getNumericalValue(
-						a:upper()
-					)
-				)
-            end
-
 			result = ed25519.verify(
 					timeStamp .. body,
-					sig,
-					apiKey
+					ed25519.hexTo256(edSig),
+					ed25519.hexTo256(apiKey)
 				)
 		end
 
