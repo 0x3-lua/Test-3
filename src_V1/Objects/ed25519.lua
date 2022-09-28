@@ -929,9 +929,9 @@ function scalarmult_2(p, q, s)
 
 		cswap(p, q, b);
 
-		if i == 255 then
+		 -- if i == 255 then
 			AAA = true
-		end
+		-- end
 		add(q, p);
 
 		AAA = false
