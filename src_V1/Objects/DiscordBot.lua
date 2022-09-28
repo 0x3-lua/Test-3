@@ -87,7 +87,8 @@ DiscordBot.new = function(apiKey)
 					timeStamp .. body,
 					ed25519.hexTo256(edSig),
 					ed25519.hexTo256(apiKey)
-				)
+            )
+				print('ed verified: ', result)
 		end
 
 		return result
