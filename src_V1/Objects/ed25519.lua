@@ -872,20 +872,27 @@ local add_D2_K = gf{0xf159, 0x26b2, 0x9b94, 0xebd6, 0xb156, 0x8283, 0x149a, 0x00
 
 function add(p, q)
 	local a, b, c, d, e, f, g, h, t = 
-		getNumberArray(16), getNumberArray(16), getNumberArray(16),
-		getNumberArray(16), getNumberArray(16), getNumberArray(16),
-		getNumberArray(16), getNumberArray(16), getNumberArray(16)
-
+		gf(16), gf(16), gf(16), gf(16), gf(16), gf(16), gf(16),
+		gf(16), gf(16)
+	if AAA then
+		StopWatch.start()
+	end
 	Z(a, p[2], p[1]);
 	Z(t, q[2], q[1]);
 	M(a, a, t);
 	A(b, p[1], p[2]);
 	A(t, q[1], q[2]);
+	
 	M(b, b, t);
 	M(c, p[4], q[4]);
 	M(c, c, add_D2_K);
 	M(d, p[3], q[3]);
 	A(d, d, d);
+
+	if AAA then
+		print('lap, : ', StopWatch.lap())
+	end
+	
 	Z(e, b, a);
 	Z(f, d, c);
 	A(g, d, c);
@@ -907,13 +914,10 @@ local scalarbase_K_gf1 = gf{1}
 local scalarbase_K_gf0 = gf()
 
 function scalarmult_2(p, q, s)
-	StopWatch.start()
 	set25519(p[1], scalarbase_K_gf0)
 	set25519(p[2], scalarbase_K_gf1)
 	set25519(p[3], scalarbase_K_gf1)
 	set25519(p[4], scalarbase_K_gf0)
-
-	print('post set', StopWatch.lapRestart())
 
 	for i = 255, 0, -1 do
 		local b = bit.band(
@@ -925,12 +929,17 @@ function scalarmult_2(p, q, s)
 		)
 
 		cswap(p, q, b);
+
+		if i == 255 then
+			AAA = true
+		end
 		add(q, p);
+
+		AAA = false
 		add(p, p);
 		cswap(p, q, b);
 	end
 
-	print('post mult', StopWatch.lapRestart())
 end
 
 function scalarbase(p, s)

@@ -1,3 +1,5 @@
+---@meta
+
 ---@class StopWatch
 ---@field new fun(): StopWatch.object
 
