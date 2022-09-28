@@ -1202,7 +1202,10 @@ end
 ---@return boolean
 ed25519.verify = function (message, signature, publicKey)
 	-- pre
-	assert(#signature == 64, 'bad signature length')
+    assert(
+		#signature == 64, 
+        'bad signature length, got: #sig=' .. #signature
+	)
 	assert(#publicKey == 32, 'bad public key length')
 	
 	-- main
