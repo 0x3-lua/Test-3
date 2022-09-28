@@ -18,6 +18,7 @@ local DiscordBot = {}
 -- deps
 local Static = require('Static')
 local Environment = require('Environment')
+local Enum        = require('Enum')
 
 Static.luarocks.loadModule('lua-cjson')
 ---@type cjson
@@ -57,7 +58,11 @@ DiscordBot.new = function(apiKey)
 				
 				res.statusCode = edVerified and 200 or 401
 				res.statusMessage = edVerified and 'OK' or 'invalid request signature'
-				res.body = edVerified and '{"type":1}' or '{}'
+                res.body = edVerified and '{"type":1}' or 'Bad Signature'
+				
+				if edVerified then
+					res.headers['Content-Type'] = Enum.mimeTypes.json
+				end
 
 				result = true
 			end
