@@ -57,7 +57,7 @@ DiscordBot.new = function(apiKey)
 				
 				res.statusCode = edVerified and 200 or 401
 				res.statusMessage = edVerified and 'OK' or 'invalid request signature'
-				res.body = '{"type":1}'
+				res.body = edVerified and '{"type":1}' or '{}'
 
 				result = true
 			end
