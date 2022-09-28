@@ -907,10 +907,13 @@ local scalarbase_K_gf1 = gf{1}
 local scalarbase_K_gf0 = gf()
 
 function scalarmult_2(p, q, s)
+	StopWatch.start()
 	set25519(p[1], scalarbase_K_gf0)
 	set25519(p[2], scalarbase_K_gf1)
 	set25519(p[3], scalarbase_K_gf1)
 	set25519(p[4], scalarbase_K_gf0)
+
+	print('post set', StopWatch.lapRestart())
 
 	for i = 255, 0, -1 do
 		local b = bit.band(
@@ -926,6 +929,8 @@ function scalarmult_2(p, q, s)
 		add(p, p);
 		cswap(p, q, b);
 	end
+
+	print('post mult', StopWatch.lapRestart())
 end
 
 function scalarbase(p, s)
@@ -1119,15 +1124,10 @@ function crypto_sign_open(m, sm, n, pk)
 	-- for i = 1, n do m[i] = sm[i] end
 	for i = 1, 32 do m[i + 32] = pk[i] end
 
-	StopWatch.start()
 	crypto_hash(h, m, n);
-	print('a', StopWatch.lapRestart())
 	reduce(h);
-	print('b', StopWatch.lapRestart())
-    scalarmult_2(p, q, h);
+    scalarmult_2(p, q, h); -- 9 s
 	
-	print('wut', StopWatch.lapRestart())
-
 	scalarbase(q, {unpack(sm, 33)});
 	add(p, q)
 	pack(t, p)
