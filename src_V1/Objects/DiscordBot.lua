@@ -53,7 +53,7 @@ DiscordBot.new = function(apiKey)
 			if body.type == 1 then
            		print(Static.table.toString(json.decode(req.body)))
 				
-			result = true
+				result = true
 
 			end
 			
