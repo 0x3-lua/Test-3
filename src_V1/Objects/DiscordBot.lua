@@ -51,10 +51,10 @@ DiscordBot.new = function(apiKey)
             local body = json.decode(req.body)
 			
 			if body.type == 1 then
-           		print(Static.table.toString(json.decode(req.body)))
+           		-- print(Static.table.toString(json.decode(req.body)))
+                local edVerified = object.verifyEd25519(req)
 				
 				result = true
-
 			end
 			
 		end
