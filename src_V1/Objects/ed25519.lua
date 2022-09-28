@@ -1119,11 +1119,14 @@ function crypto_sign_open(m, sm, n, pk)
 	-- for i = 1, n do m[i] = sm[i] end
 	for i = 1, 32 do m[i + 32] = pk[i] end
 
+	StopWatch.start()
 	crypto_hash(h, m, n);
+	print('a', StopWatch.lapRestart())
 	reduce(h);
+	print('b', StopWatch.lapRestart())
     scalarmult_2(p, q, h);
 	
-	print('wut')
+	print('wut', StopWatch.lapRestart())
 
 	scalarbase(q, {unpack(sm, 33)});
 	add(p, q)
