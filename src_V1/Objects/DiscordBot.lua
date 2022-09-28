@@ -81,7 +81,9 @@ DiscordBot.new = function(apiKey)
 								ed:upper()
 							)
             )
-			print(#sig)
+			print(StringRadix.hexdecimal.getNumericalValue(
+								ed:upper()
+							))
 
 		result = ed25519.verify(
 						timeStamp .. body,
