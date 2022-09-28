@@ -872,8 +872,7 @@ local add_D2_K = gf{0xf159, 0x26b2, 0x9b94, 0xebd6, 0xb156, 0x8283, 0x149a, 0x00
 
 function add(p, q)
 	local a, b, c, d, e, f, g, h, t = 
-		gf(16), gf(16), gf(16), gf(16), gf(16), gf(16), gf(16),
-		gf(16), gf(16)
+		gf(), gf(), gf(), gf(), gf(), gf(), gf(), gf(), gf()
 	if AAA then
 		StopWatch.start()
 	end
