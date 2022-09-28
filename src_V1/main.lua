@@ -49,7 +49,8 @@ end).onRequest('/interactions', 'POST', function (_, req, res)
 
 	print('met req')
     if Bot.handlePing(req, res) then -- type 1
-	print('type 1 met')
+        print('type 1 met')
+		print(res.toString())
 		return
     end
 	print('non ping:', Static.table.toString(req))
