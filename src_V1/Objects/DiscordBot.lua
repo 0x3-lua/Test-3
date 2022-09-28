@@ -56,7 +56,7 @@ DiscordBot.new = function(apiKey)
 				local edVerified = object.verifyEd25519(req)
 				
 				res.statusCode = edVerified and 200 or 401
-				res.statusMessage = 'msg: ping responded'
+				res.statusMessage = edVerified and 'OK' or 'invalid request signature'
 				res.body = '{"type":1}'
 
 				result = true
