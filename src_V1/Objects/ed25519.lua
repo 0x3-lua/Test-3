@@ -1068,34 +1068,24 @@ local unpackneg_I_K = gf { 0xa0b0, 0x4a0e, 0x1b27, 0xc4ee, 0xe478,
 function unpackneg(r, p)
 	local t, chk, num, den, den2, den4, den6 = gf(), gf(), gf(), gf(), gf(), gf(), gf()
 	
-	StopWatch.start()
 	set25519(r[3], scalarbase_K_gf1)
 	unpack25519(r[2], p)
 	S(num, r[2])
 	M(den, num, unpackneg_D_K)
 	Z(num, num, r[3])
 	A(den, r[3], den)
-	
-    print('lap 1', StopWatch.lapRestart())
-	
 
 	S(den2, den)
 	S(den4, den2)
 	M(den6, den4, den2)
 	M(t, den6, num)
 	M(t, t, den)
-	
-	print('lap 2', StopWatch.lapRestart())
-
 
 	pow2523(t, t)
 	M(t, t, num)
 	M(t, t, den)
 	M(t, t, den)
 	M(r[1], t, den)
-	
-		print('lap 3', StopWatch.lapRestart())
-
 
 	S(chk, r[1])
 	M(chk, chk, den)
@@ -1104,15 +1094,10 @@ function unpackneg(r, p)
 	S(chk, r[1])
 	M(chk, chk, den)
     if neq25519(chk, num) then return true; end
-	
-    print('lap 4', StopWatch.lapRestart())
-			
 
 	if par25519(r[1]) == bit.rshift(p[32], 7) then Z(r[1], scalarbase_K_gf0, r[1]) end
 
     M(r[4], r[1], r[2])
-	    print('lap 5', StopWatch.lapRestart())
-
 end
 
 function crypto_sign_open(m, sm, n, pk)
@@ -1136,7 +1121,10 @@ function crypto_sign_open(m, sm, n, pk)
 
 	crypto_hash(h, m, n);
 	reduce(h);
-	scalarmult_2(p, q, h);
+    scalarmult_2(p, q, h);
+	
+	print('wut')
+
 	scalarbase(q, {unpack(sm, 33)});
 	add(p, q)
 	pack(t, p)
