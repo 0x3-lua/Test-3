@@ -19,7 +19,8 @@ end).onRequest('/interactions', 'POST', function (_, req, res)
     res.headers.connection = 'close'
 	res.body = 'found none'
 
-	if Bot.handlePing(req, res) then -- type 1
+    if Bot.handlePing(req, res) then -- type 1
+	print('type 1 met')
 		return
     end
 	print('non ping:', Static.table.toString(req))
