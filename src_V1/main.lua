@@ -19,6 +19,7 @@ end).onRequest('/interactions', 'POST', function (_, req, res)
     res.headers.connection = 'close'
 	res.body = 'found none'
 
+	print('met req')
     if Bot.handlePing(req, res) then -- type 1
 	print('type 1 met')
 		return
