@@ -1103,9 +1103,9 @@ end
 
 function crypto_sign_open(m, sm, n, pk)
     -- pre
-	print('n met', n)
+	-- print('n met', n)
     if n < 64 then return -1; end
-	print('n')
+	-- print('n')
 	
 	local q = getGF4() -- {gf(), gf(), gf(), gf()}
 
