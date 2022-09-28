@@ -19,7 +19,10 @@ end).onRequest('/interactions', 'POST', function (_, req, res)
     res.headers.connection = 'close'
 	res.body = 'found none'
 
-	Bot.handlePing(req, res)
+	if Bot.handlePing(req, res) then -- type 1
+		return
+    end
+	print('non ping:', Static.table.toString(req))
 end).onInvalidRequest(function (_, req, res)
 	res.statusCode = 404
 	res.statusMessage = 'found none'
