@@ -76,7 +76,13 @@ DiscordBot.new = function(apiKey)
 		local timeStamp = req.headers['X-Signature-Timestamp']
 		local body = req.body
 
-		if edSig and timeStamp and body then
+        if edSig and timeStamp and body then
+            print('|||got body')
+			print(timeStamp .. body)
+			print('||endbody')
+            print('got sig: ', edSig)
+			print('got apikey: ', apiKey)
+
 			result = ed25519.verify(
 					timeStamp .. body,
 					ed25519.hexTo256(edSig),
