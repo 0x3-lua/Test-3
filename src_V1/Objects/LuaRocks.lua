@@ -70,7 +70,7 @@ LuaRocks.getLoaded = function()
 	
     local list = LuaRocks.bashCommand.run('list')
 	
-	print(('%q'):format(list))
+	print('list, ' .. require('StringParser').parseString(list, {delimStart = '"'}))
 	for a in list:gmatch'\n([.]+)\n' do
 		table.insert(result, a)
 	end

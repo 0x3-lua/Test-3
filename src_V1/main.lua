@@ -5,11 +5,13 @@ local StopWatch = require('StopWatch').new()
 if true then
     local LuaRocks = require('LuaRocks').construct()
 	
-	print(LuaRocks.getLoaded())
+    print(
+		Static.table.toString(LuaRocks.getLoaded())
+	)
+	
+	LuaRocks.load('LuaBitOp')
 	return 
 end
-
-
 
 local WebServer = require('WebServer')
 	.new(nil, 3000)
