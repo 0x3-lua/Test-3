@@ -150,11 +150,13 @@ local function unpack25519(o, n)
 end -- unpack25519
 
 local function A(o, a, b) --add
-	for i = 1, 16 do o[i] = a[i] + b[i] end
+    for i = 1, 16 do o[i] = a[i] + b[i] end
+    return A
 end
 
 local function Z(o, a, b) --sub
-	for i = 1, 16 do o[i] = a[i] - b[i] end
+    for i = 1, 16 do o[i] = a[i] - b[i] end
+	return Z
 end
 
 local function M(o, a, b) --mul  gf, gf -> gf
@@ -173,6 +175,7 @@ local function M(o, a, b) --mul  gf, gf -> gf
 
 	car25519(o)
 	car25519(o)
+	return M
 end
 
 local function S(o, a)  --square
@@ -879,28 +882,20 @@ local function add(p, q)
 	local a, b, c, d, e, f, g, h, t = 
 		gf(), gf(), gf(), gf(), gf(), gf(), gf(), gf(), gf()
 
-	Z(a, p[2], p[1]);
-	Z(t, q[2], q[1]);
+	Z(a, p[2], p[1])(t, q[2], q[1]);
 	M(a, a, t);
-	A(b, p[1], p[2]);
-	A(t, q[1], q[2]);
+	A(b, p[1], p[2])(t, q[1], q[2]);
 	
-	M(b, b, t);
-	M(c, p[4], q[4]);
-	M(c, c, add_D2_K);
-	M(d, p[3], q[3]);
+	M(b, b, t)(c, p[4], q[4])(c, c, add_D2_K)(d, p[3], q[3]);
 	A(d, d, d);
 
 	
-	Z(e, b, a);
-	Z(f, d, c);
-	A(g, d, c);
-	A(h, b, a);
+	Z(e, b, a)(f, d, c);
+	A(g, d, c)(h, b, a);
 	  
-	M(p[1], e, f);
-	M(p[2], h, g);
-	M(p[3], g, f);
-	M(p[4], e, h);
+	M(p[1], e, f)(p[2], h, g)(p[3], g, f)(p[4], e, h);
+
+	return add
 end
 
 local scalarbase_K_X = gf{0xd51a, 0x8f25, 0x2d60, 0xc956, 0xa7b2,
