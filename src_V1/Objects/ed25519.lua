@@ -67,8 +67,13 @@ local bitExtra = {
 	end
 }
 
+local band, bor, bxor, rshift, arshift, uleftShift, bnot, lshift =
+	bit.band, bit.bor, bit.bxor, bit.rshift, bit.arshift,
+	bitExtra.uleftShift, bit.bnot, bit.lshift
+
+
 local function rshiftBand(a)
-	return bit.band(bit.rshift(a, 16), 1)
+	return band(rshift(a, 16), 1)
 end
 
 -- set25519() not used
@@ -95,12 +100,12 @@ local function car25519(o)
 end --car25519()
 
 local function sel25519(p, q, b)
-	local c = bit.bnot(b-1)
+	local c = bnot(b-1)
 	local t
 	for i = 1, 16 do
-		t = bit.band(c, bit.bxor(p[i], q[i]))
-		p[i] = bit.bxor(p[i], t)
-		q[i] = bit.bxor(q[i], t)
+		t = band(c, bxor(p[i], q[i]))
+		p[i] = bxor(p[i], t)
+		q[i] = bxor(q[i], t)
 	end
 end --sel25519
 
@@ -118,18 +123,18 @@ local function pack25519(o, n)
 			m[i] = t[i] - 0xffff - 
 				rshiftBand(m[i-1])
 				-- bit.band(bit.rshift(m[i-1], 16), 1)
-			m[i-1] = bit.band(m[i-1], 0xffff)
+			m[i-1] = band(m[i-1], 0xffff)
 		end
 		m[16] = t[16] - 0x7fff -
 			rshiftBand(m[15])
 			-- bit.band(bit.rshift(m[15], 16), 1)
 		b = rshiftBand(m[16]) -- (m[16] >> 16) & 1
-		m[15] = bit.band(m[15], 0xffff)
+		m[15] = band(m[15], 0xffff)
 		sel25519(t, m, 1-b)
 	end
 	for i = 1, 16 do
-		o[2*i-1] = bit.band(t[i], 0xff)
-		o[2*i] = bit.rshift(t[i], 8)
+		o[2*i-1] = band(t[i], 0xff)
+		o[2*i] = rshift(t[i], 8)
 	end
 end -- pack25519
 
@@ -141,7 +146,7 @@ local function unpack25519(o, n)
 	for i = 1, 16 do
 		o[i] = n[2*i-1] + bitExtra.uleftShift(n[2*i], 8)
 	end
-	o[16] = bit.band(o[16], 0x7fff)
+	o[16] = band(o[16], 0x7fff)
 end -- unpack25519
 
 local function A(o, a, b) --add
@@ -202,8 +207,8 @@ local function crypto_scalarmult(q, n, p)
 	local f = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 	for i = 1, 31 do z[i] = n[i] end
 	
-	z[32] = bit.bor(bit.band(n[32], 127), 64)
-	z[1] = bit.band(z[1], 248)
+	z[32] = bor(band(n[32], 127), 64)
+	z[1] = band(z[1], 248)
 --~ 	pt(z)
 	unpack25519(x, p)
 	
@@ -218,10 +223,10 @@ local function crypto_scalarmult(q, n, p)
 	d[1] = 1
 	for i = 254, 0, -1 do
 		local r =
-			bit.band(
-				bit.rshift(
-					z[bit.rshift(i, 3) + 1],
-					bit.band(i, 7)
+			band(
+				rshift(
+					z[rshift(i, 3) + 1],
+					band(i, 7)
 				),
 				1
 		)
@@ -480,8 +485,8 @@ end
 ---@return ed25519.range
 function u64(high, low)
 	return {
-		hi = bit.bor(high, bit.rshift(0, 0)); 
-		lo = bit.bor(low, bit.rshift(0, 0) )
+		hi = bor(high, rshift(0, 0)); 
+		lo = bor(low, rshift(0, 0) )
 	}
 end
 
@@ -494,13 +499,13 @@ function dl64(x, i)
 		print('x', Static.table.toString(x))
 	end
 
-	local h = bit.bor(
+	local h = bor(
 		bitExtra.uleftShift(x[i], 24),
 		bitExtra.uleftShift(x[i + 1], 16),
 		bitExtra.uleftShift(x[i+2], 8),
 		x[i+3]
 	)
-	local l = bit.bor(
+	local l = bor(
 		bitExtra.uleftShift(x[i + 4], 24),
 		bitExtra.uleftShift(x[i + 5], 16),
 		bitExtra.uleftShift(x[i + 6], 8),
@@ -520,23 +525,23 @@ function add64(...)
 	for i = 1, select('#', ...)  do
 		local l = select(i, ...).lo
 		local h = select(i, ...).hi
-		a = a + bit.band(l, m16)
-		b = b + bit.rshift(l, 16)
-		c = c + bit.band(h, m16)
-		d = d + bit.rshift(h, 16)
+		a = a + band(l, m16)
+		b = b + rshift(l, 16)
+		c = c + band(h, m16)
+		d = d + rshift(h, 16)
 	end
 	
-	b = b + bit.rshift(a, 16)
-	c = c + bit.rshift(b, 16)
-	d = d + bit.rshift(c, 16)
+	b = b + rshift(a, 16)
+	c = c + rshift(b, 16)
+	d = d + rshift(c, 16)
 	
 	return u64(
-		bit.bor(
-			bit.band(c, m16),
+		bor(
+			band(c, m16),
 			bitExtra.uleftShift(d, 16)
 		),
-		bit.bor(
-			bit.band(a, m16),
+		bor(
+			band(a, m16),
 			bitExtra.uleftShift(b, 16)
 		)
 	)
@@ -549,8 +554,8 @@ function xor64(...)
 	local h = 0
 
 	for i = 1, select("#", ...)do
-		l = bit.bxor(l, select(i, ...).lo)
-		h = bit.bxor(h, select(i, ...).hi)
+		l = bxor(l, select(i, ...).lo)
+		h = bxor(h, select(i, ...).hi)
 	end
 
 	return u64(h, l)
@@ -569,8 +574,8 @@ function R(x, c)
 	local a = c < 32 and 'hi' or 'lo'
 	local b = c < 32 and 'lo' or 'hi'
 
-	h = bit.bor(bit.rshift(x[a], c), bit.lshift(x[b], c1))
-	l = bit.bor(bit.rshift(x[b], c), bit.lshift(x[a], c1))
+	h = bor(rshift(x[a], c), lshift(x[b], c1))
+	l = bor(rshift(x[b], c), lshift(x[a], c1))
 	
 	return u64(h,l)
 end
@@ -588,10 +593,10 @@ function Sigma1(x)return xor64(R(x,14), R(x,18), R(x,41))end
 ---@return ed25519.range
 function shr64(x, c)
 	return u64(
-		bit.rshift(x.hi, c),
-		bit.bor(
-			bit.rshift(x.lo, c),
-			bit.lshift(x.hi, (32 - c))
+		rshift(x.hi, c),
+		bor(
+			rshift(x.lo, c),
+			lshift(x.hi, (32 - c))
 		)
 	);
 end
@@ -610,17 +615,17 @@ function sigma1(x)return xor64(R(x,19), R(x,61), shr64(x,6))end
 ---@return ed25519.range
 function Ch(x,y,z)
 	return u64(
-		bit.bxor(
-			bit.band(x.hi, y.hi),
-			bit.band(
-				bit.bnot(x.hi),
+		bxor(
+			band(x.hi, y.hi),
+			band(
+				bnot(x.hi),
 				z.hi
 			)
 		),
-		bit.bxor(
-			bit.band(x.lo, y.lo),
-			bit.band(
-				bit.bnot(x.lo),
+		bxor(
+			band(x.lo, y.lo),
+			band(
+				bnot(x.lo),
 				z.lo
 			)
 		)
@@ -633,15 +638,15 @@ end
 ---@return ed25519.range
 function Maj(x,y,z)
 	return u64(
-		bit.bxor(
-			bit.band(x.hi, y.hi),
-			bit.band(x.hi, z.hi),
-			bit.band(y.hi, z.hi)
+		bxor(
+			band(x.hi, y.hi),
+			band(x.hi, z.hi),
+			band(y.hi, z.hi)
 		),
-		bit.bxor(
-			bit.band(x.lo, y.lo), 
-			bit.band(x.lo, z.lo),
-			bit.band(y.lo, z.lo)
+		bxor(
+			band(x.lo, y.lo), 
+			band(x.lo, z.lo),
+			band(y.lo, z.lo)
 		)
 	)
 end
@@ -652,8 +657,8 @@ end
 function ts64(x, i, u)
 	for j = 0, 7 do
 		local a = j < 4 and 'hi' or 'lo'
-		x[i + j + 1] = bit.band(
-			bit.rshift(u[a], 24 - (j % 4) * 8),
+		x[i + j + 1] = band(
+			rshift(u[a], 24 - (j % 4) * 8),
 			0xFF
 		)
 	end
@@ -800,7 +805,7 @@ function crypto_hash(result, m, n, offset)
 		x,
 		n - 8,
 		u64(
-			bit.bor(math.floor(b / 0x20000000), 0),
+			bor(math.floor(b / 0x20000000), 0),
 			bitExtra.uleftShift(b, 3)
 		)
 	);
@@ -842,16 +847,16 @@ function modL(r, x, offset)
     carry = 0
 	
     for j = 1, 32 do
-		x[j] = x[j] + carry - bit.arshift(x[32], 4) * modL_K[j]
-        carry = bit.arshift(x[j], 8)
-		x[j] = bit.band(x[j], 0xFF)
+		x[j] = x[j] + carry - arshift(x[32], 4) * modL_K[j]
+        carry = arshift(x[j], 8)
+		x[j] = band(x[j], 0xFF)
 	end
 	
 	for j = 1, 32 do x[j] = x[j] - carry * modL_K[j] end
 	
 	for i = 1, 32 do
-		x[i + 1] = x[i + 1] + bit.rshift(x[i], 8)
-		r[i + offset] = bit.band(x[i], 0xFF)
+		x[i + 1] = x[i + 1] + rshift(x[i], 8)
+		r[i + offset] = band(x[i], 0xFF)
 	end
 end
 
@@ -865,7 +870,7 @@ function reduce(r)
 	modL(r, x);
 end
 
-function set25519(r, a)for i = 1, 16 do r[i] = bit.bor(a[i], 0)end end
+function set25519(r, a)for i = 1, 16 do r[i] = bor(a[i], 0)end end
 function cswap(p, q, b)for i = 1, 4 do sel25519(p[i], q[i], b)end end
 
 local add_D2_K = gf{0xf159, 0x26b2, 0x9b94, 0xebd6, 0xb156, 0x8283, 0x149a, 0x00e0, 0xd130, 0xeef3, 0x80f2, 0x198e, 0xfce7, 0x56df, 0xd9dc, 0x2406}
@@ -873,9 +878,7 @@ local add_D2_K = gf{0xf159, 0x26b2, 0x9b94, 0xebd6, 0xb156, 0x8283, 0x149a, 0x00
 function add(p, q)
 	local a, b, c, d, e, f, g, h, t = 
 		gf(), gf(), gf(), gf(), gf(), gf(), gf(), gf(), gf()
-	if AAA then
-		StopWatch.start()
-	end
+
 	Z(a, p[2], p[1]);
 	Z(t, q[2], q[1]);
 	M(a, a, t);
@@ -888,9 +891,6 @@ function add(p, q)
 	M(d, p[3], q[3]);
 	A(d, d, d);
 
-	if AAA then
-		print('lap, : ', StopWatch.lap())
-	end
 	
 	Z(e, b, a);
 	Z(f, d, c);
@@ -919,22 +919,16 @@ function scalarmult_2(p, q, s)
 	set25519(p[4], scalarbase_K_gf0)
 
 	for i = 255, 0, -1 do
-		local b = bit.band(
+		local b = band(
 			1,
-			bit.rshift(
-				s[bit.bor(math.floor(i/8), 0) + 1],
-				bit.band(i, 7)
+			rshift(
+				s[bor(math.floor(i/8), 0) + 1],
+				band(i, 7)
 			)
 		)
 
 		cswap(p, q, b);
-
-		 -- if i == 255 then
-			AAA = true
-		-- end
 		add(q, p);
-
-		AAA = false
 		add(p, p);
 		cswap(p, q, b);
 	end
@@ -955,7 +949,7 @@ end
 function par25519(a)
 	local b = getNA32()
 	pack25519(b, a)
-	return bit.band(b[1], 1)
+	return band(b[1], 1)
 end
 
 function pack(r, p)
@@ -964,7 +958,7 @@ function pack(r, p)
 	M(tx, p[1], zi);
 	M(ty, p[2], zi);
 	pack25519(r, ty)
-	r[32] = bit.bxor(
+	r[32] = bxor(
 		r[32],
 		bitExtra.uleftShift(par25519(tx),7)
 	)
@@ -982,8 +976,8 @@ function crypto_sign(result, message, len, secretKey)
 	
     crypto_hash(d, secretKey, 32)
 	
-	d[1] = bit.band(d[1], 248);
-	d[32] = bit.bor(bit.band(d[32], 127), 64)
+	d[1] = band(d[1], 248);
+	d[32] = bor(band(d[32], 127), 64)
 
 	local smlen = len + 64
 	
@@ -1023,8 +1017,8 @@ function crypto_sign_keypair(pk, sk)
 	
 	crypto_hash(d, sk, 32) -- no match
 
-	d[1] = bit.band(d[1], 248)
-	d[32] = bit.bor(bit.band(d[32], 127), 64)
+	d[1] = band(d[1], 248)
+	d[32] = bor(band(d[32], 127), 64)
 
     scalarbase(p, d)
 	pack(pk, p)
@@ -1052,13 +1046,13 @@ end
 function vn(x, xi, y, yi, n)
 	local d = 0
 	for i = 1, n do
-		d = bit.bor(
+		d = bor(
 			d,
-			bit.bxor(x[xi + i], y[yi + i])
+			bxor(x[xi + i], y[yi + i])
 		)
 	end
 
-	return (bit.band(1, bit.rshift(d - 1, 8)) - 1) ~= 0
+	return (band(1, rshift(d - 1, 8)) - 1) ~= 0
 end
 
 function crypto_verify_32(x, xi, y, yi)return vn(x, xi, y, yi, 32)end
@@ -1108,7 +1102,7 @@ function unpackneg(r, p)
 	M(chk, chk, den)
     if neq25519(chk, num) then return true; end
 
-	if par25519(r[1]) == bit.rshift(p[32], 7) then Z(r[1], scalarbase_K_gf0, r[1]) end
+	if par25519(r[1]) == rshift(p[32], 7) then Z(r[1], scalarbase_K_gf0, r[1]) end
 
     M(r[4], r[1], r[2])
 end
