@@ -95,7 +95,7 @@ local function car25519(o)
 			o[1] = o[1] + 38 * (c - 1)
 		end
 		
-		o[i] = o[i] - bitExtra.uleftShift(c, 16)
+		o[i] = o[i] - uleftShift(c, 16)
 	end
 end --car25519()
 
@@ -144,7 +144,7 @@ end -- pack25519
 local function unpack25519(o, n)
 	-- out o[16], in n[32]
 	for i = 1, 16 do
-		o[i] = n[2*i-1] + bitExtra.uleftShift(n[2*i], 8)
+		o[i] = n[2*i-1] + uleftShift(n[2*i], 8)
 	end
 	o[16] = band(o[16], 0x7fff)
 end -- unpack25519
@@ -483,15 +483,10 @@ end
 
 -- sub main
 
-AAA = true
 ---@param high integer
 ---@param low integer
 ---@return ed25519.range
 function u64(high, low)
-	if AAA and high ~= bor(high, rshift(0, 0)) then
-        print('uneq', high, bor(high, rshift(0, 0)))
-	end
-
 	return {
 		hi = bor(high, rshift(0, 0)); 
 		lo = bor(low, rshift(0, 0) )
@@ -503,20 +498,17 @@ end
 ---@return ed25519.range
 function dl64(x, i)
 	i = i + 1
-	if not x[i] then
-		print('x', Static.table.toString(x))
-	end
 
 	local h = bor(
-		bitExtra.uleftShift(x[i], 24),
-		bitExtra.uleftShift(x[i + 1], 16),
-		bitExtra.uleftShift(x[i+2], 8),
+		uleftShift(x[i], 24),
+		uleftShift(x[i + 1], 16),
+		uleftShift(x[i+2], 8),
 		x[i+3]
 	)
 	local l = bor(
-		bitExtra.uleftShift(x[i + 4], 24),
-		bitExtra.uleftShift(x[i + 5], 16),
-		bitExtra.uleftShift(x[i + 6], 8),
+		uleftShift(x[i + 4], 24),
+		uleftShift(x[i + 5], 16),
+		uleftShift(x[i + 6], 8),
 		x[i+7]
 	);
 	
@@ -546,11 +538,11 @@ function add64(...)
 	return u64(
 		bor(
 			band(c, m16),
-			bitExtra.uleftShift(d, 16)
+			uleftShift(d, 16)
 		),
 		bor(
 			band(a, m16),
-			bitExtra.uleftShift(b, 16)
+			uleftShift(b, 16)
 		)
 	)
 end
@@ -814,7 +806,7 @@ function crypto_hash(result, m, n, offset)
 		n - 8,
 		u64(
 			bor(math.floor(b / 0x20000000), 0),
-			bitExtra.uleftShift(b, 3)
+			uleftShift(b, 3)
 		)
 	);
 	
@@ -940,7 +932,6 @@ function scalarmult_2(p, q, s)
 		add(p, p);
 		cswap(p, q, b);
 	end
-
 end
 
 function scalarbase(p, s)
@@ -968,7 +959,7 @@ function pack(r, p)
 	pack25519(r, ty)
 	r[32] = bxor(
 		r[32],
-		bitExtra.uleftShift(par25519(tx),7)
+		uleftShift(par25519(tx),7)
 	)
 end
 
