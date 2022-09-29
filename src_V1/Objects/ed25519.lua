@@ -418,7 +418,7 @@ local ed25519 = {
 
 ---@param s string
 ---@return integer[]
-function stringToByteArray(s)
+local function stringToByteArray(s)
 	local result = {}
 
 	for i = 1, #s do
@@ -430,7 +430,7 @@ end
 
 ---@param a integer[]
 ---@return string
-function byteArrayToStr(a)
+local function byteArrayToStr(a)
 	local result = ''
 	
 	for i = 1, #a do
@@ -442,7 +442,7 @@ end
 
 ---@param len integer
 ---@return number[]
-function getNumberArray(len, init)
+local function getNumberArray(len, init)
 	local result = {}
 	
 	if len then
@@ -460,17 +460,17 @@ function getNumberArray(len, init)
 	return result
 end
 
-function getNA64()return getNumberArray(64)end
-function getNA32()return getNumberArray(32)end
-function gf(init)return getNumberArray(16, init)end
-function getGF4()return {gf(), gf(), gf(), gf()}end
+local function getNA64()return getNumberArray(64)end
+local function getNA32()return getNumberArray(32)end
+local function gf(init)return getNumberArray(16, init)end
+local function getGF4()return {gf(), gf(), gf(), gf()}end
 
 
 ---@param from table
 ---@param to table
 ---@param iterations integer?
 ---@param offset integer?
-function imprint(from, to, iterations, offset)
+local function imprint(from, to, iterations, offset)
 	-- pre
 	iterations = iterations or #from
 	offset = offset or 1
@@ -486,7 +486,7 @@ end
 ---@param high integer
 ---@param low integer
 ---@return ed25519.range
-function u64(high, low)
+local function u64(high, low)
 	return {
 		hi = bor(high, rshift(0, 0)); 
 		lo = bor(low, rshift(0, 0) )
@@ -496,7 +496,7 @@ end
 ---@param x integer[]
 ---@param i integer
 ---@return ed25519.range
-function dl64(x, i)
+local function dl64(x, i)
 	i = i + 1
 
 	local h = bor(
@@ -517,7 +517,7 @@ end
 
 ---@param ... ed25519.range
 ---@return ed25519.range
-function add64(...)
+local function add64(...)
 
 	local a, b, c, d = 0, 0, 0, 0
 	local m16 = 0xFFFF
@@ -549,7 +549,7 @@ end
 
 ---@param ... ed25519.range
 ---@return ed25519.range
-function xor64(...)
+local function xor64(...)
 	local l = 0
 	local h = 0
 
@@ -564,7 +564,7 @@ end
 ---@param x ed25519.range
 ---@param c integer
 ---@return ed25519.range
-function R(x, c)
+local function R(x, c)
 	assert(x)
 	assert(c <= 64, 'invalid c')
 
@@ -582,16 +582,16 @@ end
 
 ---@param x ed25519.range
 ---@return ed25519.range
-function Sigma0(x)return xor64(R(x,28), R(x,34), R(x,39))end
+local function Sigma0(x)return xor64(R(x,28), R(x,34), R(x,39))end
 
 ---@param x ed25519.range
 ---@return ed25519.range
-function Sigma1(x)return xor64(R(x,14), R(x,18), R(x,41))end
+local function Sigma1(x)return xor64(R(x,14), R(x,18), R(x,41))end
 
 ---@param x ed25519.range
 ---@param c integer
 ---@return ed25519.range
-function shr64(x, c)
+local function shr64(x, c)
 	return u64(
 		rshift(x.hi, c),
 		bor(
@@ -603,17 +603,17 @@ end
 
 ---@param x ed25519.range
 ---@return ed25519.range
-function sigma0(x)return xor64(R(x, 1), R(x, 8), shr64(x,7))end
+local function sigma0(x)return xor64(R(x, 1), R(x, 8), shr64(x,7))end
 
 ---@param x ed25519.range
 ---@return ed25519.range
-function sigma1(x)return xor64(R(x,19), R(x,61), shr64(x,6))end
+local function sigma1(x)return xor64(R(x,19), R(x,61), shr64(x,6))end
 
 ---@param x ed25519.range
 ---@param y ed25519.range
 ---@param z ed25519.range
 ---@return ed25519.range
-function Ch(x,y,z)
+local function Ch(x,y,z)
 	return u64(
 		bxor(
 			band(x.hi, y.hi),
@@ -636,7 +636,7 @@ end
 ---@param y ed25519.range
 ---@param z ed25519.range
 ---@return ed25519.range
-function Maj(x,y,z)
+local function Maj(x,y,z)
 	return u64(
 		bxor(
 			band(x.hi, y.hi),
@@ -654,7 +654,7 @@ end
 ---@param x integer[]
 ---@param i integer
 ---@param u ed25519.range
-function ts64(x, i, u)
+local function ts64(x, i, u)
 	for j = 0, 7 do
 		local a = j < 4 and 'hi' or 'lo'
 		x[i + j + 1] = band(
@@ -674,7 +674,7 @@ function ts64(x, i, u)
 	--]]
 end
 
-crypo_hashblocks_K = {
+local crypo_hashblocks_K = {
 	u64(0x428a2f98, 0xd728ae22), u64(0x71374491, 0x23ef65cd),
 	u64(0xb5c0fbcf, 0xec4d3b2f), u64(0xe9b5dba5, 0x8189dbbc),
 	u64(0x3956c25b, 0xf348b538), u64(0x59f111f1, 0xb605d019),
@@ -821,7 +821,7 @@ local modL_K = {0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6,
 
 ---@param r integer[]
 ---@param x integer[]
-function modL(r, x, offset)
+local function modL(r, x, offset)
     -- pre
 	offset = offset or 0
 	-- main
@@ -861,7 +861,7 @@ function modL(r, x, offset)
 end
 
 ---@param r integer[]
-function reduce(r)
+local function reduce(r)
 	local x = getNA64();
 	imprint(r, x)
 	-- for i = 1, 64 do x[i] = r[i]; end
@@ -870,8 +870,8 @@ function reduce(r)
 	modL(r, x);
 end
 
-function set25519(r, a)for i = 1, 16 do r[i] = bor(a[i], 0)end end
-function cswap(p, q, b)for i = 1, 4 do sel25519(p[i], q[i], b)end end
+local function set25519(r, a)for i = 1, 16 do r[i] = bor(a[i], 0)end end
+local function cswap(p, q, b)for i = 1, 4 do sel25519(p[i], q[i], b)end end
 
 local add_D2_K = gf{0xf159, 0x26b2, 0x9b94, 0xebd6, 0xb156, 0x8283, 0x149a, 0x00e0, 0xd130, 0xeef3, 0x80f2, 0x198e, 0xfce7, 0x56df, 0xd9dc, 0x2406}
 
@@ -912,7 +912,7 @@ local scalarbase_K_Y = gf{0x6658, 0x6666, 0x6666, 0x6666, 0x6666,
 local scalarbase_K_gf1 = gf{1}
 local scalarbase_K_gf0 = gf()
 
-function scalarmult_2(p, q, s)
+local function scalarmult_2(p, q, s)
 	set25519(p[1], scalarbase_K_gf0)
 	set25519(p[2], scalarbase_K_gf1)
 	set25519(p[3], scalarbase_K_gf1)
@@ -934,7 +934,7 @@ function scalarmult_2(p, q, s)
 	end
 end
 
-function scalarbase(p, s)
+local function scalarbase(p, s)
 	local q = getGF4()
 	
 	set25519(q[1], scalarbase_K_X)
@@ -945,13 +945,13 @@ function scalarbase(p, s)
 	scalarmult_2(p, q, s);
 end
 
-function par25519(a)
+local function par25519(a)
 	local b = getNA32()
 	pack25519(b, a)
 	return band(b[1], 1)
 end
 
-function pack(r, p)
+local function pack(r, p)
 	local tx, ty, zi = gf(), gf(), gf()
 	inv25519(zi, p[3])
 	M(tx, p[1], zi);
@@ -967,7 +967,7 @@ end
 ---@param message integer[]
 ---@param len integer
 ---@param secretKey integer[]
-function crypto_sign(result, message, len, secretKey)
+local function crypto_sign(result, message, len, secretKey)
 	local d, h, r, x =
 		getNA64(), getNA64(), getNA64(), getNA64()
 		
@@ -1010,7 +1010,7 @@ function crypto_sign(result, message, len, secretKey)
 	return smlen
 end
 
-function crypto_sign_keypair(pk, sk)
+local function crypto_sign_keypair(pk, sk)
 	local d = getNA64()
 	local p = getGF4() -- {gf(),gf(),gf(),gf()}
 	
@@ -1024,7 +1024,7 @@ function crypto_sign_keypair(pk, sk)
 	for i = 1, 32 do sk[i + 32] = pk[i] end
 end
 
-function pow2523(o, i)
+local function pow2523(o, i)
 	local c = gf()
 	imprint(i, c)
 	-- for a = 1, 16 do c[a] = i[a] end
@@ -1042,7 +1042,7 @@ end
 ---@param yi integer
 ---@param n integer
 ---@return boolean
-function vn(x, xi, y, yi, n)
+local function vn(x, xi, y, yi, n)
 	local d = 0
 	for i = 1, n do
 		d = bor(
@@ -1054,9 +1054,9 @@ function vn(x, xi, y, yi, n)
 	return (band(1, rshift(d - 1, 8)) - 1) ~= 0
 end
 
-function crypto_verify_32(x, xi, y, yi)return vn(x, xi, y, yi, 32)end
+local function crypto_verify_32(x, xi, y, yi)return vn(x, xi, y, yi, 32)end
 
-function neq25519(a, b)
+local function neq25519(a, b)
 	local c, d = getNA32(), getNA32()
 	pack25519(c, a)
 	pack25519(d, b)
@@ -1071,7 +1071,7 @@ local unpackneg_I_K = gf { 0xa0b0, 0x4a0e, 0x1b27, 0xc4ee, 0xe478,
 	0xad2f, 0x1806, 0x2f43, 0xd7a7, 0x3dfb, 0x0099, 0x2b4d,0xdf0b,
 	0x4fc1, 0x2480, 0x2b83};
 
-function unpackneg(r, p)
+local function unpackneg(r, p)
 	local t, chk, num, den, den2, den4, den6 = gf(), gf(), gf(), gf(), gf(), gf(), gf()
 	
 	set25519(r[3], scalarbase_K_gf1)
@@ -1106,7 +1106,7 @@ function unpackneg(r, p)
     M(r[4], r[1], r[2])
 end
 
-function crypto_sign_open(m, sm, n, pk)
+local function crypto_sign_open(m, sm, n, pk)
     -- pre
 	
 	print('crypto_sign_open n pre')
