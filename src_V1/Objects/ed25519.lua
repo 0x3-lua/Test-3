@@ -1108,13 +1108,10 @@ end
 
 local function crypto_sign_open(m, sm, n, pk)
     -- pre
-	
-	print('crypto_sign_open n pre')
     if n < 64 then return; end
 	
 	local q = getGF4() -- {gf(), gf(), gf(), gf()}
 
-	print('unpack neg pre')
 	if unpackneg(q, pk) then return end
 
 	local t = getNA32()
@@ -1134,8 +1131,6 @@ local function crypto_sign_open(m, sm, n, pk)
 	pack(t, p)
 	
 	n = n - 64
-
-	print('crypto 32 pre')
 	if crypto_verify_32(sm, 0, t, 0) then
 		for i = 1, n do m[i] = 0 end
 		return
@@ -1143,7 +1138,6 @@ local function crypto_sign_open(m, sm, n, pk)
 
 	for i = 1, n do m[i] = sm[i + 64] end
 
-	print('reached end')
 	return n >= 0
 end
 

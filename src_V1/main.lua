@@ -3,57 +3,9 @@ local Static = require('Static')
 local StopWatch = require('StopWatch').new()
 
 if true then
-    local e = require('ed25519')
-    local rad = require('StringRadix')
-
-	StopWatch.start()
-    local sk, pk = 
-		e.getKeyPair(
-			e.hexTo256
-            'D764C8CCE93255C4478D7AA05D83F3EAA2B7249B043E23CD2866211BFF3783D6'
-        )
-    print('lap,', StopWatch.lapRestart())
+    local LuaRocks = require('LuaRocks').construct()
 	
-	local function hex(s)
-		return table.concat{rad.hexdecimal.getDigitSequence(s:byte(1, 64))}
-	end
-
-    print(hex(sk))
-	print(hex(pk))
-
-	local sig = e.getSignature('foo', sk)
-    print('sig',
-		StopWatch.lapRestart(), hex(sig))
-	
-	local ver = e.verify('foo', sig, pk)
-	print('ver', StopWatch.lap(), ver)
-	return
-elseif true then
-    local ed = require('ed25519')
-	
-	local msg = '1664386204{"application_id":"1015102056647893073","id":"1024734743834673194","token":"aW50ZXJhY3Rpb246MTAyNDczNDc0MzgzNDY3MzE5NDp5VEVweEpVTHo4M2tYUTFVdG1waVVqQnhsTXBDQjdiSW81ZDB4ejZqZ2xSVzNqM0pMeUhnVk1jdk5adElFYlJ2a3ZjeDdqM241ZThkSWRuZGdtTHhFc3dnZkVWU3RzakdOdmgxY3o4RDhvMGRheWt5bFpld0JTbzdOYnplbmdacQ","type":1,"user":{"avatar":"c3d4a5d8dc2b00a24c94c6f90fa94bb8","avatar_decoration":null,"discriminator":"1424","id":"505584960997031947","public_flags":0,"username":"CHL"},"version":1}'
-
-	local sig = 'DA512238E134B8ABE10444BCC7D722936949F6D1868D38106A7BC5C50276B6929BD3A6C28E88E35E0100A50AACF004411C9C3CAC26DFC37B809872DC5D54730C'
-
-    local pk = '883CC7E299900430883B9F3CDF322BB8A500420B410C52AB253C1AD6F1BC6671'
-	
-    print('got msg: ', msg)
-    print('got sig: ', sig)
-    print('got pk:', pk)
-	
-	local last = os.time()
-
-    print(
-        'verified (should be true)',
-        ed.verify(
-            msg,
-            ed.hexTo256(sig),
-			ed.hexTo256(pk)
-		)
-    )
-	
-	print(os.time() - last)
-	
+	print(LuaRocks.getLoaded())
 	return 
 end
 
