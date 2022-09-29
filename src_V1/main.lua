@@ -9,7 +9,7 @@ if true then
 		Static.table.toString(LuaRocks.getLoaded())
 	)
 	
-	LuaRocks.load('luatweetnacl')
+	LuaRocks.load('luatweetnacl 0.5-1')
     print(
 		Static.table.toString(LuaRocks.getLoaded())
 	)
