@@ -483,10 +483,15 @@ end
 
 -- sub main
 
+AAA = true
 ---@param high integer
 ---@param low integer
 ---@return ed25519.range
 function u64(high, low)
+	if AAA then
+		print(high, bor(high, rshift(0, 0)))
+	end
+
 	return {
 		hi = bor(high, rshift(0, 0)); 
 		lo = bor(low, rshift(0, 0) )
