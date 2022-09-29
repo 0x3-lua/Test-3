@@ -488,8 +488,8 @@ AAA = true
 ---@param low integer
 ---@return ed25519.range
 function u64(high, low)
-	if AAA then
-		print(high, bor(high, rshift(0, 0)))
+	if AAA and high ~= bor(high, rshift(0, 0)) then
+        print('uneq', high, bor(high, rshift(0, 0)))
 	end
 
 	return {
