@@ -17,7 +17,7 @@ if true then
 	local last = os.time()
 
     print(
-        'verified (should be false)',
+        'verified (should be true)',
         ed.verify(
             msg,
             ed.hexTo256(sig),
