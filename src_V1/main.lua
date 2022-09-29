@@ -11,10 +11,21 @@ if true then
 			e.hexTo256
             'D764C8CCE93255C4478D7AA05D83F3EAA2B7249B043E23CD2866211BFF3783D6'
         )
-	print('lap,',StopWatch.lap())
-    print(rad.hexdecimal.getDigitSequence(sk:byte(1, 64)))
-	print(rad.hexdecimal.getDigitSequence(pk:byte(1,64)))
+    print('lap,', StopWatch.lapRestart())
+	
+	local function hex(s)
+		return table.concat{rad.hexdecimal.getDigitSequence(s:byte(1, 64))}
+	end
 
+    print(hex(sk))
+	print(hex(pk))
+
+	local sig = e.getSignature('foo', sk)
+    print('sig',
+		StopWatch.lapRestart(), hex(sig))
+	
+	local ver = e.verify('foo', sig, pk)
+	print('ver', StopWatch.lap(), ver)
 	return
 elseif true then
     local ed = require('ed25519')
