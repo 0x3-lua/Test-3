@@ -5,6 +5,10 @@ local StopWatch = require('StopWatch').new()
 if true then
     local e = require('ed25519')
     local rad = require('StringRadix')
+
+    local gSig = assert(loadstring(string.dump(e.getSignature)))
+	local gVer = assert(loadstring(string.dump(e.verify)))
+
 	StopWatch.start()
     local sk, pk = 
 		e.getKeyPair(
@@ -20,11 +24,11 @@ if true then
     print(hex(sk))
 	print(hex(pk))
 
-	local sig = e.getSignature('foo', sk)
+	local sig = gSig('foo', sk)
     print('sig',
 		StopWatch.lapRestart(), hex(sig))
 	
-	local ver = e.verify('foo', sig, pk)
+	local ver = gVer('foo', sig, pk)
 	print('ver', StopWatch.lap(), ver)
 	return
 elseif true then

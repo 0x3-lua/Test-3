@@ -72,8 +72,15 @@ local band, bor, bxor, rshift, arshift, uleftShift, bnot, lshift =
 	bitExtra.uleftShift, bit.bnot, bit.lshift
 
 
-local function rshiftBand(a)
-	return band(rshift(a, 16), 1)
+local function rshiftBand(a)return band(rshift(a, 16), 1)end
+local function tCreate(len, v)
+    local result = {}
+	
+	for i = 1, len do
+		result[i] = v
+	end
+
+	return result
 end
 
 -- set25519() not used
@@ -151,12 +158,10 @@ end -- unpack25519
 
 local function A(o, a, b) --add
     for i = 1, 16 do o[i] = a[i] + b[i] end
-    return A
 end
 
 local function Z(o, a, b) --sub
     for i = 1, 16 do o[i] = a[i] - b[i] end
-	return Z
 end
 
 local function M(o, a, b) --mul  gf, gf -> gf
@@ -175,7 +180,6 @@ local function M(o, a, b) --mul  gf, gf -> gf
 
 	car25519(o)
 	car25519(o)
-	return M
 end
 
 local function S(o, a)  --square
@@ -200,17 +204,17 @@ local t_121665 = {0xDB41,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 ---@param q integer[] output of function
 ---@param n integer[]
 ---@param p integer[]
----@return integer
+-- -@return integer
 local function crypto_scalarmult(q, n, p)
 	-- out q[], in n[], in p[]
 	local z = {}
 	local x = {}
-	local a = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-	local b = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-	local c = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-	local d = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-	local e = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-	local f = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+	local a = tCreate(16, 0)
+	local b = tCreate(16, 0)
+	local c = tCreate(16, 0)
+	local d = tCreate(16, 0)
+	local e = tCreate(16, 0)
+	local f = tCreate(16, 0)
 	for i = 1, 31 do z[i] = n[i] end
 	
 	z[32] = bor(band(n[32], 127), 64)
@@ -238,8 +242,6 @@ local function crypto_scalarmult(q, n, p)
 		)
 		
 		sel25519(a, b, r)
-		-- a corrupted at i==252
-		
 		sel25519(c,d,r)
 		A(e,a,c)
 		Z(a,a,c)
@@ -278,7 +280,7 @@ local function crypto_scalarmult(q, n, p)
 	inv25519(x32,x32)
 	M(x16,x16,x32)
 	pack25519(q,x16)
-	return 0
+	-- return 0
 end -- crypto_scalarmult
 
 local t_9 = { -- u8 * 32
@@ -288,10 +290,11 @@ local t_9 = { -- u8 * 32
 
 ---@param q integer[] output
 ---@param n integer[]
----@return integer
+-- -@return integer
 local function crypto_scalarmult_base(q, n)
 	-- out q[], in n[]
-	return crypto_scalarmult(q, n, t_9)
+    -- return
+	crypto_scalarmult(q, n, t_9)
 end
 
 ------------------------------------------------------------------------
@@ -318,8 +321,7 @@ local function scalarmult(n, p)
 	end
 	crypto_scalarmult(qt, nt, pt)
 	
-	local q = string.char(unpack(qt))
-	return q
+	return string.char(unpack(qt))
 end
 
 -- base: the curve point generator = 9
@@ -446,13 +448,7 @@ end
 ---@param len integer
 ---@return number[]
 local function getNumberArray(len, init)
-	local result = {}
-	
-	if len then
-		for i = 1, len do
-			result[i] = 0 
-		end
-	end
+	local result = tCreate(len or 0, 0)
 
 	if init then
 		for i = 1, #init do
@@ -492,7 +488,7 @@ end
 local function u64(high, low)
 	return {
 		hi = bor(high, rshift(0, 0)); 
-		lo = bor(low, rshift(0, 0) )
+		lo = bor(low, rshift(0, 0))
 	}
 end
 
@@ -505,7 +501,7 @@ local function dl64(x, i)
 	local h = bor(
 		uleftShift(x[i], 24),
 		uleftShift(x[i + 1], 16),
-		uleftShift(x[i+2], 8),
+		uleftShift(x[i + 2], 8),
 		x[i+3]
 	)
 	local l = bor(
@@ -882,18 +878,27 @@ local function add(p, q)
 	local a, b, c, d, e, f, g, h, t = 
 		gf(), gf(), gf(), gf(), gf(), gf(), gf(), gf(), gf()
 
-	Z(a, p[2], p[1])(t, q[2], q[1]);
+    Z(a, p[2], p[1]);
+	Z(t, q[2], q[1]);
 	M(a, a, t);
-	A(b, p[1], p[2])(t, q[1], q[2]);
+    A(b, p[1], p[2])
+	A(t, q[1], q[2]);
 	
-	M(b, b, t)(c, p[4], q[4])(c, c, add_D2_K)(d, p[3], q[3]);
+    M(b, b, t)
+    M(c, p[4], q[4])
+    M(c, c, add_D2_K)
+	M(d, p[3], q[3]);
 	A(d, d, d);
 
-	
-	Z(e, b, a)(f, d, c);
-	A(g, d, c)(h, b, a);
+    Z(e, b, a);
+	Z(f, d, c);
+    A(g, d, c);
+	A(h, b, a);
 	  
-	M(p[1], e, f)(p[2], h, g)(p[3], g, f)(p[4], e, h);
+	M(p[1], e, f);
+	M(p[2], h, g);
+	M(p[3], g, f);
+	M(p[4], e, h);
 
 	return add
 end
