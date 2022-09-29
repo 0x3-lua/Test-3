@@ -1,15 +1,17 @@
 --run code below
 local Static = require('Static')
+local StopWatch = require('StopWatch').new()
 
 if true then
     local e = require('ed25519')
-	local rad = require('StringRadix')
+    local rad = require('StringRadix')
+	StopWatch.start()
     local sk, pk = 
 		e.getKeyPair(
 			e.hexTo256
             'D764C8CCE93255C4478D7AA05D83F3EAA2B7249B043E23CD2866211BFF3783D6'
         )
-	
+	print('lap,',StopWatch.lap)
     print(rad.hexdecimal.getDigitSequence(sk:byte(1, 64)))
 	print(rad.hexdecimal.getDigitSequence(pk:byte(1,64)))
 
@@ -52,7 +54,6 @@ local DiscordBot = require('DiscordBot')
 
 local Bot = DiscordBot.new()
 
-local StopWatch = require('StopWatch').new()
 
 
 WebServer.onRequest('/', 'GET', function (_, _, res)
