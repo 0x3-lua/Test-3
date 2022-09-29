@@ -9,7 +9,7 @@ if true then
 		Static.table.toString(LuaRocks.getLoaded())
 	)
 	
-	LuaRocks.load('slncrypto')
+	LuaRocks.load('luazen')
 	return 
 end
 
