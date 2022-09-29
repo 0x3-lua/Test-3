@@ -64,12 +64,12 @@ LuaRocks.load = function(rockName)
 end
 
 ---returns loaded rocks
----@return string[]
+---@return {[string]: boolean?}
 LuaRocks.getLoaded = function()
     local result = {}
     local list = LuaRocks.bashCommand.run('list')
 	
-    for a in list:gmatch '\10\10(.-)\10' do table.insert(result, a) end
+    for a in list:gmatch '\10\10(.-)\10' do result[a] = true end
 
 	return result
 end
