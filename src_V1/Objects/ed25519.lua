@@ -166,9 +166,9 @@ local function M(o, a, b) --mul  gf, gf -> gf
 			t[i+j-1] = t[i+j-1] + (a[i] * b[j])
 		end
 	end
-	for i = 1, 16 --[[15]] do t[i] = t[i] + 38 * t[i+16] end
+	--for i = 1, 16 --[[15]] do t[i] = t[i] + 38 * t[i+16] end
     for i = 1, 16 do -- why
-        o[i] = t[i]
+        o[i] = t[i] + 38 * t[i+16]
 	end
 
 	car25519(o)
