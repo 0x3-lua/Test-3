@@ -875,7 +875,7 @@ function cswap(p, q, b)for i = 1, 4 do sel25519(p[i], q[i], b)end end
 
 local add_D2_K = gf{0xf159, 0x26b2, 0x9b94, 0xebd6, 0xb156, 0x8283, 0x149a, 0x00e0, 0xd130, 0xeef3, 0x80f2, 0x198e, 0xfce7, 0x56df, 0xd9dc, 0x2406}
 
-function add(p, q)
+local function add(p, q)
 	local a, b, c, d, e, f, g, h, t = 
 		gf(), gf(), gf(), gf(), gf(), gf(), gf(), gf(), gf()
 
