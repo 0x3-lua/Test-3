@@ -13,7 +13,7 @@
 --[[code]]
 
 local Static = require('Static')
--- local StringParser = require('StringParser')
+local StringParser = require('StringParser')
 
 ---@type LuaRocks
 local LuaRocks = {}
@@ -69,6 +69,8 @@ LuaRocks.getLoaded = function()
     local result = {}
     local list = LuaRocks.bashCommand.run('list')
 	
+	print(StringParser.parseString(list, {delimStart = '"'}))
+
     for a in list:gmatch '\10\10(.-)\10' do result[a] = true end
 
 	return result
