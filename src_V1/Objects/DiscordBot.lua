@@ -20,12 +20,14 @@ local Static = require('Static')
 local Environment = require('Environment')
 local Enum        = require('Enum')
 
+--[[
 require('LuaRocks').construct()
     .load('lua-cjson')
 
----@type cjson
+-- -@type cjson
 local json = require('cjson')
 local ed25519 = require('ed25519')
+--]]
 local StringRadix = require('StringRadix')
 
 local interactionUA = 'Discord-Interactions/1.0 (+https://discord.com)'
@@ -44,6 +46,7 @@ DiscordBot.new = function(apiKey)
 	---@type DiscordBot.bot
 	local object = {}
 
+	--[[
     ---handles discord interaction "ping"
 	---@deprecated
 	---@param req cURL.ClientRequest
@@ -103,7 +106,7 @@ DiscordBot.new = function(apiKey)
 		return result
 	end
 
-
+	--]]
 	return object
 end
 

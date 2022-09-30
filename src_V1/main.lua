@@ -36,3 +36,5 @@ end).launch()
 	.keepAlive('https://Test-3.0x2.repl.co/keepalive',function ()
 	return not cURL.get('https://paste.ee/p/7TDya').body:find('404')
 end)
+
+print(Static.coroutine.iterationsPerSecond)
