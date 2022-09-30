@@ -18,7 +18,7 @@
 ---@field onInvalidRequest fun(response: fun(client: TcpServer.client, request: cURL.ClientRequest, response: cURL.ServerResponse)): WebServer.object
 ---@field StringParser StringParser.object
 ---@field launch fun(): WebServer.object
----@field keepAlive fun(contactUrl: string, preconditionalUrl: string, checkString: string): WebServer.object
+---@field keepAlive fun(contactUrl: string, precondition: fun(): boolean): WebServer.object
 
 ---@class socket
 ---@field bind fun(host: string, port: number): TcpServer.server
@@ -166,23 +166,21 @@ function WebServer.new(host, port)
     --- to. This is a precaution that's necessary because I don't know what
 	--- happens to the webserver after it shuts down
     ---@param checkUrl string
-	---@param preconditionalUrl string
-	---@param checkString string
+	---@param preconditional fun(): boolean
 	---@return WebServer.object
-    function object.keepAlive(checkUrl, preconditionalUrl, checkString)
+    function object.keepAlive(checkUrl, preconditional)
 		-- pre
         assert(not object.isAlive, 'attempting to revive an alive web server')
         assert(launched, 'attempting to revive an unlaunched server')
         assert(checkUrl, 'missing check url')
-        assert(preconditionalUrl, 'missing preconditionalUrl')
-        assert(checkString, 'missing checkString')
+        assert(preconditional, 'missing precondition')
 		
         -- main
         object.isAlive = true
 		
 		coroutine.wrap(function()
             while object.isAlive
-				and cURL.get(preconditionalUrl).body == checkString do
+				and preconditional() do
 				cURL.get(checkUrl)
                 Static.coroutine.wait(20)
 			end

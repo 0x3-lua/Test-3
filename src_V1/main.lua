@@ -3,8 +3,8 @@ local Static = require('Static')
 
 
 local WebServer = require('WebServer')
-	.new(nil, 3000)
--- local cURL = require('cURL')
+    .new(nil, 3000)
+local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
 
 local Bot = DiscordBot.new()
@@ -16,6 +16,12 @@ WebServer.onRequest('/', 'GET', function (_, _, res)
 	res.statusMessage = 'OK'
 	res.headers.connection = 'close'
 	res.body = 'Main page'
+end).onRequest('/keepalive', 'GET', function (_,_,res)
+    res.statusCode = 200;
+	res.statusMessage = 'OK'
+    res.headers.connection = 'close'
+    res.body = 'got ping'
+	print('pong')
 end).onInvalidRequest(function (_, req, res)
 	res.statusCode = 404
 	res.statusMessage = 'found none'
@@ -27,4 +33,6 @@ end).onInvalidRequest(function (_, req, res)
 	)
 
 end).launch()
-	-- .keepAlive('https://test-3',"https://paste.ee/r/UjfWy/0", 'foo')
+	.keepAlive('https://Test-3.0x2.repl.co/keepalive',function ()
+	return not cURL.get('https://paste.ee/p/7TDya').body:find('404')
+end)

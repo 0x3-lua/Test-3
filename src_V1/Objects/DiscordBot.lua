@@ -44,7 +44,8 @@ DiscordBot.new = function(apiKey)
 	---@type DiscordBot.bot
 	local object = {}
 
-	---handles discord interaction "ping"
+    ---handles discord interaction "ping"
+	---@deprecated
 	---@param req cURL.ClientRequest
 	---@param res cURL.ServerResponse
 	---@return boolean
@@ -56,7 +57,7 @@ DiscordBot.new = function(apiKey)
 			
 			if body.type == 1 then
 		   		-- print(Static.table.toString(json.decode(req.body)))
-				local edVerified = object.verifyEd25519(req)
+				local edVerified ;-- = object.verifyEd25519(req)
 				
 				res.statusCode = edVerified and 200 or 401
 				res.statusMessage = edVerified and 'OK' or 'invalid request signature'
@@ -73,7 +74,8 @@ DiscordBot.new = function(apiKey)
 		return result
 	end
 
-	---verifies interaction
+    ---verifies interaction, deprecated for being too slow
+	---@deprecated
 	---@param req cURL.ClientRequest
 	---@return boolean
 	object.verifyEd25519 = function (req)
