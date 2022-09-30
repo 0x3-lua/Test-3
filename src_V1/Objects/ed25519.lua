@@ -1,5 +1,7 @@
 ---@meta
 
+---@deprecated
+
 -- see https://github.com/philanc/plc and tweetnacl
 -- Class specs after licence
 

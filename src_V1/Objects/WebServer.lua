@@ -1,5 +1,7 @@
 ---@meta
 
+--[[spec]]
+
 -- nixOS: pkgs.lua51Packages.luasocket
 -- socket
 -- refer to https://w3.impa.br/~diego/software/luasocket/reference.html
@@ -10,11 +12,13 @@
 ---@field server TcpServer.server
 ---@field ipAddress string
 ---@field serverPort number
+---@field isAlive boolean
+---@field replitDataBase ReplitDataBase May need to modify this later, dont bother using this extensively
 ---@field onRequest fun(webPage: string, requestType: string, response: fun(client: TcpServer.client, request: cURL.ClientRequest, response: cURL.ServerResponse)): WebServer.object
 ---@field onInvalidRequest fun(response: fun(client: TcpServer.client, request: cURL.ClientRequest, response: cURL.ServerResponse)): WebServer.object
----@field replitDataBase ReplitDataBase
 ---@field StringParser StringParser.object
 ---@field launch fun(): WebServer.object
+---@field keepAlive fun(): WebServer.object
 
 ---@class socket
 ---@field bind fun(host: string, port: number): TcpServer.server
@@ -73,6 +77,7 @@ function WebServer.new(host, port)
 	---@type WebServer.object
 	local object = {}
 	
+	object.isAlive = false
 	object.server = socket.bind(host, port)
 	object.ipAddress, object.serverPort = 
 		object.server:getsockname()
@@ -119,7 +124,7 @@ function WebServer.new(host, port)
 		assert(invalidFunc, 'needs invalid func')
 
 		launched = true
-		coroutine.wrap(function ()
+		coroutine.wrap(function()
 			while true do
 				local client = object.server:accept()
 
@@ -152,6 +157,22 @@ function WebServer.new(host, port)
 				client:close()
 			end
 		end)()
+    end
+	
+    function object.keepAlive()
+		-- pre
+        assert(not object.isAlive, 'attempting to revive an alive web server')
+		
+        -- main
+        object.isAlive = true
+		
+		coroutine.wrap(function()
+			while object.isAlive do
+				
+			end
+		end)()
+
+		return object
 	end
 
 	return object

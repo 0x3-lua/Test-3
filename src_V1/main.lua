@@ -1,24 +1,22 @@
 --run code below
 local Static = require('Static')
-local StopWatch = require('StopWatch').new()
 
-if true then
-    local LuaRocks = require('LuaRocks').construct()
+do
+    local test = os.time()
+    print(test)
 	
-    print(
-		Static.table.toString(LuaRocks.getLoaded())
-	)
+    Static.coroutine.wait(10)
 	
-	--LuaRocks.load('libsodium')
-    print(
-		Static.table.toString(LuaRocks.getLoaded())
-	)
+	print(os.time(), os.time() - test)
+
+
 	return 
 end
 
+
 local WebServer = require('WebServer')
 	.new(nil, 3000)
-local cURL = require('cURL')
+-- local cURL = require('cURL')
 local DiscordBot = require('DiscordBot')
 
 local Bot = DiscordBot.new()

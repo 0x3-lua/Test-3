@@ -1,16 +1,21 @@
 ---@meta
 
 ---@class Static
----@field luarocks Static.luarocks
+---@field coroutine Static.coroutine
+-- -@field luarocks Static.luarocks
 ---@field math Static.math
 ---@field os Static.os
 ---@field package Static.package
 ---@field string Static.string
 ---@field table Static.table
 
----@class Static.luarocks
----@field loadModule fun(mod: string): {[number]: string}
----@field loaded {[string]: {[number]: string}}
+---@class Static.coroutine
+---@field wait fun(len)
+---@field iterationsPerSecond integer
+
+-- -@class Static.luarocks
+-- -@field loadModule fun(mod: string): {[number]: string}
+-- -@field loaded {[string]: {[number]: string}}
 
 ---@class Static.math
 ---@field getDigit fun(n: number, base:number, i:number): number
@@ -41,36 +46,34 @@
 
 ---@type Static
 local Static = {}
-Static.luarocks = {loaded = {}}
+Static.coroutine = {}
 Static.math = {}
 Static.os = {}
 Static.package = {}
 Static.string = {}
 Static.table = {}
 
----loads a module, must preload luarocks
----@param mod string module name
----@return {[number]: string} success
-function Static.luarocks.loadModule(mod)
-	local result = Static.luarocks.loaded[mod]
+local last = os.time()
+local iteration = 0
+while os.time() - last < 1 do iteration = iteration + 1 end
 
-	if not result then
-		result = {}
-		local diffA = Static.table.clone(package.loaded)
-		-- local str = may need later
-		Static.os.runBash(
-			"luarocks install --local " .. mod
-		)
+Static.coroutine.iterationsPerSecond = iteration
 
-		for i in next, package.loaded do
-			if not diffA[i] then
-				table.insert(result, i)
-			end
-		end
-
-		Static.luarocks.loaded[mod] = result
+---waits, this function is theoretical and there's no actual way to test it
+---@param waitTime number
+function Static.coroutine.wait(waitTime)
+    local its = math.ceil(
+        Static.coroutine.iterationsPerSecond * (waitTime % 1)
+    )
+	
+    local wholeSeconds = math.floor(waitTime)
+	
+	local last = os.time()
+	while os.time() - last < wholeSeconds do
+		Static.coroutine.wait(.5)
 	end
-	return result
+	
+	for i = 1, its do end
 end
 
 --[[
