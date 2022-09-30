@@ -18,7 +18,7 @@
 ---@field onInvalidRequest fun(response: fun(client: TcpServer.client, request: cURL.ClientRequest, response: cURL.ServerResponse)): WebServer.object
 ---@field StringParser StringParser.object
 ---@field launch fun(): WebServer.object
----@field keepAlive fun(): WebServer.object
+---@field keepAlive fun(contactUrl: string, preconditionalUrl: string, checkString: string): WebServer.object
 
 ---@class socket
 ---@field bind fun(host: string, port: number): TcpServer.server
@@ -48,7 +48,6 @@
 ---@type WebServer
 local WebServer = {}
 local Enum = require('Enum')
-local Static = require('Static')
 local isLoaded = false
 
 local cURL = require('cURL')
@@ -57,8 +56,8 @@ local cURL = require('cURL')
 local socket = require('socket')
 local Static = require('Static')
 local StringParser = require('StringParser')
-local ReplitDataBase = 
-	require('ReplitDatabase')
+local cURL = require('cURL')
+local ReplitDataBase = require('ReplitDatabase')
 
 ---returns webserver object
 ---@param host string?
@@ -119,6 +118,8 @@ function WebServer.new(host, port)
 
 	local launched = false
 
+    ---launches web server, at that point it is able to recieve messages
+	--- and respond to them
 	function object.launch()
 		assert(not launched, 'can only launch once')
 		assert(invalidFunc, 'needs invalid func')
@@ -159,16 +160,31 @@ function WebServer.new(host, port)
 		end)()
     end
 	
-    function object.keepAlive()
+    ---keeps server alive to avoid shutting down, requires a check url to 
+	--- send an http request to itself, a preconditional Url, which returns 
+    --- `checkString` upon an http request and a check string to match it
+    --- to. This is a precaution that's necessary because I don't know what
+	--- happens to the webserver after it shuts down
+    ---@param checkUrl string
+	---@param preconditionalUrl string
+	---@param checkString string
+	---@return WebServer.object
+    function object.keepAlive(checkUrl, preconditionalUrl, checkString)
 		-- pre
         assert(not object.isAlive, 'attempting to revive an alive web server')
+        assert(launched, 'attempting to revive an unlaunched server')
+        assert(checkUrl, 'missing check url')
+        assert(preconditionalUrl, 'missing preconditionalUrl')
+        assert(checkString, 'missing checkString')
 		
         -- main
         object.isAlive = true
 		
 		coroutine.wrap(function()
-			while object.isAlive do
-				
+            while object.isAlive
+				and cURL.get(preconditionalUrl).body == checkString do
+				cURL.get(checkUrl)
+                Static.coroutine.wait(20)
 			end
 		end)()
 

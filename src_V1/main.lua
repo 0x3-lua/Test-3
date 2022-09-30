@@ -1,18 +1,6 @@
 --run code below
 local Static = require('Static')
 
-do
-    local test = os.time()
-    print(test)
-	
-    Static.coroutine.wait(10)
-	
-	print(os.time(), os.time() - test)
-
-
-	return 
-end
-
 
 local WebServer = require('WebServer')
 	.new(nil, 3000)
@@ -57,4 +45,4 @@ end).onInvalidRequest(function (_, req, res)
 	)
 
 end).launch()
---]]
+	-- .keepAlive('https://test-3',"https://paste.ee/r/UjfWy/0", 'foo')
