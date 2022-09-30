@@ -20,7 +20,9 @@ local Static = require('Static')
 local Environment = require('Environment')
 local Enum        = require('Enum')
 
-Static.luarocks.loadModule('lua-cjson')
+require('LuaRocks').construct()
+    .load('lua-cjson')
+
 ---@type cjson
 local json = require('cjson')
 local ed25519 = require('ed25519')

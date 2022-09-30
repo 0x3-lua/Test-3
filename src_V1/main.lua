@@ -16,24 +16,6 @@ WebServer.onRequest('/', 'GET', function (_, _, res)
 	res.statusMessage = 'OK'
 	res.headers.connection = 'close'
 	res.body = 'Main page'
-end).onRequest('/interactions', 'POST', function (_, req, res)
-    res.statusCode = 404
-	res.statusMessage = 'found none'
-    res.headers.connection = 'close'
-	res.body = 'found none'
-
-    print('met req')
-
-	StopWatch.start()
-	
-    if Bot.handlePing(req, res) then -- type 1
-        print('type 1 met')
-        print(res.toString())
-		
-		print('got lap', StopWatch.lap())
-		return
-    end
-	print('non ping:', Static.table.toString(req))
 end).onInvalidRequest(function (_, req, res)
 	res.statusCode = 404
 	res.statusMessage = 'found none'
