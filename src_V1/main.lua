@@ -9,7 +9,7 @@ if true then
 		Static.table.toString(LuaRocks.getLoaded())
 	)
 	
-	LuaRocks.load('libsodium')
+	--LuaRocks.load('libsodium')
     print(
 		Static.table.toString(LuaRocks.getLoaded())
 	)

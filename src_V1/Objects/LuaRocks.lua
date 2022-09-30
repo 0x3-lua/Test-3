@@ -6,7 +6,7 @@
 ---@field bashCommand BashCommand.object
 ---@field isConstructed boolean
 ---@field parser StringParser.object
----@field load fun(rockName: string): LuaRocks
+---@field load fun(rockName: string): boolean
 ---@field getLoaded fun(): string[]
 ---@field integrityCheck fun(): LuaRocks
 ---@field construct fun(path: string?, cpath: string?): LuaRocks
@@ -59,14 +59,18 @@ end
 
 ---loads a rock
 ---@param rockName string
----@return LuaRocks
+---@return boolean
 LuaRocks.load = function(rockName)
 	-- pre
-    LuaRocks.checkIntegrity()
+    local loaded = LuaRocks.checkIntegrity()
+		.getLoaded()[rockName]
 	
-	-- main
-		.bashCommand.run('install --local ' .. rockName)
-	return LuaRocks
+	if loaded then return true end
+
+    -- main
+    LuaRocks.bashCommand.run('install --local ' .. rockName)
+	
+	return not not LuaRocks.getLoaded()[rockName]
 end
 
 ---returns loaded rocks
