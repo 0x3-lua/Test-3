@@ -33,8 +33,12 @@ end).onInvalidRequest(function (_, req, res)
 	)
 
 end).launch()
-	.keepAlive('https://Test-3.0x2.repl.co/keepalive',function ()
-	return not cURL.get('https://paste.ee/p/7TDya').body:find('404')
+    .keepAlive('https://Test-3.0x2.repl.co/keepalive', function()
+	print('met pre')
+        local result = not cURL.get('https://paste.ee/p/7TDya').body:find('404')
+	
+	print(result)
+	return result
 end)
 
 print(Static.coroutine.iterationsPerSecond)
