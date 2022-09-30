@@ -4,11 +4,16 @@
 
 ---@class LuaRocks
 ---@field bashCommand BashCommand.object
+---@field isConstructed boolean
+---@field parser StringParser.object
 ---@field load fun(rockName: string): LuaRocks
 ---@field getLoaded fun(): string[]
----@field isConstructed boolean
 ---@field integrityCheck fun(): LuaRocks
 ---@field construct fun(path: string?, cpath: string?): LuaRocks
+
+---@class LuaRocks.rockspec
+---@field package string
+---@field version string
 
 --[[code]]
 
@@ -19,6 +24,7 @@ local StringParser = require('StringParser')
 local LuaRocks = {}
 LuaRocks.bashCommand = require('BashCommand').new { command = 'luarocks' }
 LuaRocks.isConstructed = false
+LuaRocks.parser = StringParser.new('')
 
 ---@param path string?
 ---@param cpath string?
@@ -64,14 +70,34 @@ LuaRocks.load = function(rockName)
 end
 
 ---returns loaded rocks
----@return {[string]: boolean?}
+---@return {[string]: LuaRocks.rockspec}
 LuaRocks.getLoaded = function()
     local result = {}
-    local list = LuaRocks.bashCommand.run('list')
+	local parser = LuaRocks.parser.reset(LuaRocks.bashCommand.run('list'))
 	
-	print(StringParser.parseString(list, {delimStart = '"'}))
+	parser.pop(36)
 
-    for a in list:gmatch '\10\10(.-)\10' do result[a] = true end
+	while not parser.atEnd() do
+        local rockName = parser.popUntil('\10   ', true)
+        assert(rockName)
+        local version = parser.popUntil(' ')
+		assert(version)
+		---@type LuaRocks.rockspec
+        local struct = {
+            package = rockName;
+			version = version;
+        }
+		
+		-- idk what to use this for, its gonna stay here
+		if parser.cPop('(installed) ', true) then
+			local _;
+        end
+
+		parser.popUntil('\10\10', true)
+		
+		result[rockName] = struct
+	end
+
 
 	return result
 end
