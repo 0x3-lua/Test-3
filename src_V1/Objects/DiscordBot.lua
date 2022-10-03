@@ -55,7 +55,7 @@ DiscordBot.new = function(apiKey, version)
 
     local basicHeaders = {
         Authorization = 'Bot ' .. apiKey;
-        ['User-Agent'] = 'DiscordBot (https://github.com/CHL-a/Test-3, 5.79)';
+        ['User-Agent'] = 'DiscordBot (bot testo)';
 		['X-RateLimit-Precision'] = 'millisecond'
 	}
 	
