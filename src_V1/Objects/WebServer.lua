@@ -18,7 +18,7 @@
 ---@field onInvalidRequest fun(response: fun(client: TcpServer.client, request: cURL.ClientRequest, response: cURL.ServerResponse)): WebServer.object
 ---@field StringParser StringParser.object
 ---@field launch fun(): WebServer.object
----@field keepAlive fun(contactUrl: string, precondition: fun(): boolean): WebServer.object
+---@field keepAlive fun(): WebServer.object
 
 ---@class socket
 ---@field bind fun(host: string, port: number): TcpServer.server
@@ -33,6 +33,7 @@
 ---@class TcpServer.server: TcpServer.super
 ---@field getsockname fun(): string, number
 ---@field accept fun(): TcpServer.client
+---@field setoption fun(option: string, value: string?)
 
 ---@class TcpServer.client: TcpServer.super
 ---@field receive fun(self: TcpServer.client, s: (string | integer)?): string, string?
@@ -160,32 +161,13 @@ function WebServer.new(host, port)
 		end)()
     end
 	
-    ---keeps server alive to avoid shutting down, requires a check url to 
-	--- send an http request to itself, a preconditional Url, which returns 
-    --- `checkString` upon an http request and a check string to match it
-    --- to. This is a precaution that's necessary because I don't know what
-	--- happens to the webserver after it shuts down
-    ---@param checkUrl string
-	---@param preconditional fun(): boolean
+    ---keeps server alive to avoid shutting down (indevelopment)
+	---@deprecated
 	---@return WebServer.object
-    function object.keepAlive(checkUrl, preconditional)
-		-- pre
-        assert(not object.isAlive, 'attempting to revive an alive web server')
-        assert(launched, 'attempting to revive an unlaunched server')
-        assert(checkUrl, 'missing check url')
-        assert(preconditional, 'missing precondition')
-		
+    function object.keepAlive()
         -- main
         object.isAlive = true
-		
-		coroutine.wrap(function()
-            while object.isAlive
-				and preconditional() do
-				cURL.get(checkUrl)
-                Static.coroutine.wait(20)
-			end
-		end)()
-
+		object.server:setoption('keepalive')
 		return object
 	end
 

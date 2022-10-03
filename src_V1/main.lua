@@ -32,13 +32,5 @@ end).onInvalidRequest(function (_, req, res)
 		Static.table.toString(req)
 	)
 
-end).launch()
-    .keepAlive('https://Test-3.0x2.repl.co/keepalive', function()
-	print('met pre')
-        local result = not cURL.get('https://paste.ee/p/7TDya').body:find('404')
-	
-	print(result)
-	return result
-end)
-
-print(Static.coroutine.iterationsPerSecond)
+end).keepAlive()
+	.launch()
