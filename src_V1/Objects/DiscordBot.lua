@@ -55,11 +55,11 @@ DiscordBot.new = function(apiKey, version)
 
     local basicHeaders = {
         Authorization = apiKey;
-        ['User-Agent'] = 'DiscordBot (Custom Bot Test)';
+        ['User-Agent'] = 'DiscordBot (Custom Bot Test, 5.76)';
 		['X-RateLimit-Precision'] = 'millisecond'
 	}
 	
-	object.endPoint = cURL.bind(('https://discord.com/api/v%d'):format(version))
+	object.endPoint = cURL.bind(('https://discord.com/api/v%d/'):format(version))
 
     --[[
 
@@ -98,7 +98,7 @@ end).keepAlive()
 		print('met')
 
         print('result',
-			object.endPoint.get('/users/@me', nil, basicHeaders).toString()
+			object.endPoint.get('users/@me', nil, basicHeaders).toString()
 		)
 	end
 

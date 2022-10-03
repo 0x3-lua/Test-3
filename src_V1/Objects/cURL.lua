@@ -1,5 +1,7 @@
 ---@meta
 
+--[[spec]]
+
 ---@class cURL @runs bash command cURL
 ---@field bashCommand BashCommand.object
 ---@field request fun(url: string, httpRequestType: string, data: string?, headers: {[string]: any}): cURL.ServerResponse
@@ -43,6 +45,8 @@
 ---@class cURL.ServerResponse.Headers possibly more headers
 ---@field Content-Length number
 ---@field Content-Type string
+
+--[[code]]
 
 ---@type cURL
 local cURL = {}
