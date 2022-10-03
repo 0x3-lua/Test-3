@@ -98,7 +98,7 @@ end).keepAlive()
 		print('met')
 
         print('result',
-			object.endPoint.get('users/@me', nil, basicHeaders).toString()
+			object.endPoint.get('users/@me', '{}', basicHeaders).toString()
 		)
 	end
 
