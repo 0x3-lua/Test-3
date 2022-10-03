@@ -1,9 +1,16 @@
+---@meta
+
+--[[spec]]
+
 ---@class DiscordBot
 ---@field new fun(apiKey: string?): DiscordBot.bot
 
 ---@class DiscordBot.bot
----@field handlePing fun(req: cURL.ClientRequest, res: cURL.ServerResponse): boolean
----@field verifyEd25519 fun(req: cURL.ClientRequest): boolean
+---@field endPoint cURL.object
+---@field webServer WebServer.object
+-- -@field handlePing fun(req: cURL.ClientRequest, res: cURL.ServerResponse): boolean
+-- -@field verifyEd25519 fun(req: cURL.ClientRequest): boolean
+---@field run fun()
 
 ---@class cjson
 ---@field decode fun(s: string): table
@@ -12,13 +19,16 @@
 -- -@class utf8
 -- -@field d fun(s: string) :string
 
+--[[code]]
+
 ---@type DiscordBot
 local DiscordBot = {}
 
 -- deps
 local Static = require('Static')
 local Environment = require('Environment')
-local Enum        = require('Enum')
+local Enum = require('Enum')
+local cURL = require('cURL')
 
 --[[
 require('LuaRocks').construct()
@@ -28,23 +38,73 @@ require('LuaRocks').construct()
 local json = require('cjson')
 local ed25519 = require('ed25519')
 --]]
-local StringRadix = require('StringRadix')
-
-local interactionUA = 'Discord-Interactions/1.0 (+https://discord.com)'
 
 ---returns bot
 ---@param apiKey string? default is an Environment variable named "DiscordBotAPIKey"
+---@param version integer? versioning of the api end point
 ---@return DiscordBot.bot
-DiscordBot.new = function(apiKey)
+DiscordBot.new = function(apiKey, version)
 	-- pre
-	apiKey = assert(
-		apiKey or Environment.get('DiscordBotAPIKey'),
-		'No api key'
-	)
+    apiKey = assert(apiKey or Environment.get('DiscordBotToken'),
+        'No api key, give argument or provide environment of index `DiscordBotToken` a valid token')
+	version = version or 8
 
 	-- main
 	---@type DiscordBot.bot
-	local object = {}
+    local object = {}
+
+    local basicHeaders = {
+        Authorization = apiKey;
+        ['User-Agent'] = 'DiscordBot (Custom Bot Test)';
+		['X-RateLimit-Precision'] = 'millisecond'
+	}
+	
+	object.endPoint = cURL.bind(('https://discord.com/api/v%d'):format(version))
+
+    --[[
+
+		 require('WebServer')
+    .new(nil, 3000)
+WebServer.onRequest('/', 'GET', function (_, _, res)
+	res.statusCode = 200
+	res.statusMessage = 'OK'
+	res.headers.connection = 'close'
+	res.body = 'Main page'
+end).onRequest('/keepalive', 'GET', function (_,_,res)
+    res.statusCode = 200;
+	res.statusMessage = 'OK'
+    res.headers.connection = 'close'
+    res.body = 'got ping'
+	print('pong')
+end).onInvalidRequest(function (_, req, res)
+	res.statusCode = 404
+	res.statusMessage = 'found none'
+	res.headers.connection = 'close'
+	res.body = 'found none'
+
+	print(
+		Static.table.toString(req)
+	)
+
+end).keepAlive()
+	.launch()
+	
+	]]
+
+--
+	
+	---Runs the discord bot, this function should be called as the last step
+    object.run = function()
+        print(
+			object.endPoint.get('/users/@me', nil, basicHeaders)
+		)
+	end
+
+
+	return object
+end
+
+-- dead stuff that someone might use, idk 
 
 	--[[
     ---handles discord interaction "ping"
@@ -107,10 +167,6 @@ DiscordBot.new = function(apiKey)
 	end
 
 	--]]
-	return object
-end
-
-
 
 
 return DiscordBot
