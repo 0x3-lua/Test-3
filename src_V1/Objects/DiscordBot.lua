@@ -55,7 +55,7 @@ DiscordBot.new = function(apiKey, version)
 
     local basicHeaders = {
         Authorization = apiKey;
-        ['User-Agent'] = 'DiscordBot (Custom Bot Test, 5.76)';
+        ['User-Agent'] = 'DiscordBot (https://github.com/CHL-a/Test-3, 5.77)';
 		['X-RateLimit-Precision'] = 'millisecond'
 	}
 	
@@ -95,10 +95,11 @@ end).keepAlive()
 	
 	---Runs the discord bot, this function should be called as the last step
     object.run = function()
-		print('met')
+        print('met')
+		-- basicHeaders['Content-Type'] = Enum.mimeTypes.json
 
         print('result',
-			object.endPoint.get('users/@me', '{}', basicHeaders).toString()
+			object.endPoint.get('users/@me', nil, basicHeaders).toString()
 		)
 	end
 
