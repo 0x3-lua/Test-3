@@ -33,7 +33,7 @@
 ---@class TcpServer.server: TcpServer.super
 ---@field getsockname fun(): string, number
 ---@field accept fun(): TcpServer.client
----@field setoption fun(option: string, value: string?)
+---@field setoption fun(self: TcpServer.server, option: string, value: boolean?)
 
 ---@class TcpServer.client: TcpServer.super
 ---@field receive fun(self: TcpServer.client, s: (string | integer)?): string, string?
@@ -45,6 +45,8 @@
 
 ---@class Headers
 ---@field X-Forwarded-For string? ip address from address
+
+--[[code]]
 
 ---@type WebServer
 local WebServer = {}
@@ -167,7 +169,7 @@ function WebServer.new(host, port)
     function object.keepAlive()
         -- main
         object.isAlive = true
-		object.server:setoption('keepalive')
+		object.server:setoption('keepalive', true)
 		return object
 	end
 
