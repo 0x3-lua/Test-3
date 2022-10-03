@@ -95,8 +95,10 @@ end).keepAlive()
 	
 	---Runs the discord bot, this function should be called as the last step
     object.run = function()
-        print(
-			object.endPoint.get('/users/@me', nil, basicHeaders)
+		print('met')
+
+        print('result',
+			object.endPoint.get('/users/@me', nil, basicHeaders).toString()
 		)
 	end
 
