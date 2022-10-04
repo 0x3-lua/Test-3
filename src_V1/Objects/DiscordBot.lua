@@ -4,20 +4,44 @@
 
 ---@class DiscordBot
 ---@field new fun(apiKey: string?): DiscordBot.bot
+---@field toStruct fun(json: string): table
+---@field user fun(s: string): DiscordBot.user
 
 ---@class DiscordBot.bot
 ---@field endPoint cURL.object
 ---@field webServer WebServer.object
--- -@field handlePing fun(req: cURL.ClientRequest, res: cURL.ServerResponse): boolean
--- -@field verifyEd25519 fun(req: cURL.ClientRequest): boolean
+---@field user DiscordBot.user
+---@field request fun(a: DiscordBot.request.argument): cURL.ServerResponse
 ---@field run fun()
+
+---@class DiscordBot.request.argument
+---@field suffix string
+---@field type requestType
+---@field data string?
+---@field headers {[string]: string}?
 
 ---@class cjson
 ---@field decode fun(s: string): table
 ---@field encode fun(t: table): string
 
--- -@class utf8
--- -@field d fun(s: string) :string
+---@alias snowflake string
+
+---@class DiscordBot.user
+---@field id snowflake specific id
+---@field username string the user's username, not unique across the platform
+---@field discriminator string the user's 4-digit discord-tag
+---@field avatar string? the user's avatar hash
+---@field bot boolean? whether the user belongs to an OAuth2 application
+---@field system boolean? whether the user is an Official Discord System user (part of the urgent message system)
+---@field mfa_enabled boolean whether the user has two factor enabled on their account
+---@field banner string? the user's banner hash
+---@field accent_color integer?	the user's banner color encoded as an integer representation of hexadecimal color code
+---@field locale string? the user's chosen language option
+---@field verified boolean? whether the email on this account has been verified
+---@field email string? the user's email
+---@field flags integer? the flags on a user's account
+---@field premium_type integer? the type of Nitro subscription on a user's account
+---@field public_flags integer? the public flags on a user's account
 
 --[[code]]
 
@@ -29,15 +53,11 @@ local Static = require('Static')
 local Environment = require('Environment')
 local Enum = require('Enum')
 local cURL = require('cURL')
+local LuaRocks = require('LuaRocks').construct()
+	.load('lua-cjson')
 
---[[
-require('LuaRocks').construct()
-    .load('lua-cjson')
-
--- -@type cjson
+---@type cjson
 local json = require('cjson')
-local ed25519 = require('ed25519')
---]]
 
 ---returns bot
 ---@param apiKey string? default is an Environment variable named "DiscordBotAPIKey"
@@ -45,36 +65,36 @@ local ed25519 = require('ed25519')
 ---@return DiscordBot.bot
 DiscordBot.new = function(apiKey, version)
 	-- pre
-    apiKey = assert(apiKey or Environment.get('DiscordBotToken'),
-        'No api key, give argument or provide environment of index `DiscordBotToken` a valid token')
+	apiKey = assert(apiKey or Environment.get('DiscordBotToken'),
+		'No api key, give argument or provide environment of index `DiscordBotToken` a valid token')
 	version = version or 8
 
 	-- main
 	---@type DiscordBot.bot
-    local object = {}
+	local object = {}
 
-    local basicHeaders = {
-        Authorization = 'Bot ' .. apiKey;
-        ['User-Agent'] = 'DiscordBot ';
+	local basicHeaders = {
+		Authorization = 'Bot ' .. apiKey;
+		['User-Agent'] = 'DiscordBot (TEST)';
 		['X-RateLimit-Precision'] = 'millisecond'
 	}
 	
 	object.endPoint = cURL.bind(('https://discord.com/api/v%d/'):format(version))
 
-    --[[
+	--[[
 
 		 require('WebServer')
-    .new(nil, 3000)
+	.new(nil, 3000)
 WebServer.onRequest('/', 'GET', function (_, _, res)
 	res.statusCode = 200
 	res.statusMessage = 'OK'
 	res.headers.connection = 'close'
 	res.body = 'Main page'
 end).onRequest('/keepalive', 'GET', function (_,_,res)
-    res.statusCode = 200;
+	res.statusCode = 200;
 	res.statusMessage = 'OK'
-    res.headers.connection = 'close'
-    res.body = 'got ping'
+	res.headers.connection = 'close'
+	res.body = 'got ping'
 	print('pong')
 end).onInvalidRequest(function (_, req, res)
 	res.statusCode = 404
@@ -91,26 +111,66 @@ end).keepAlive()
 	
 	]]
 
---
-	
+	---@param arg DiscordBot.request.argument
+	---@return cURL.ServerResponse
+	object.request = function(arg)return object.endPoint[tostring(arg.type):lower()](arg.suffix, arg.data, arg.headers)end
+
 	---Runs the discord bot, this function should be called as the last step
-    object.run = function()
-        print('met')
-		-- basicHeaders['Content-Type'] = Enum.mimeTypes.json
-
-        print('result',
-			object.endPoint.get('users/@me', nil, basicHeaders).toString()
-		)
+	object.run = function()
+		-- pre
+		local response = object.request{
+			suffix = 'users/@me';
+			headers = basicHeaders;
+		}
+		
+		assert(response.statusCode == 200, 'bad response: ' .. response.toString())
+		
+		-- main
+		object.user = DiscordBot.user(response.body)
 	end
-
 
 	return object
 end
 
+---transforms a json object to a lua dictionary
+---@param s string
+---@return table
+DiscordBot.toStruct = function(s) return json.decode(s);end
+
+local snowflakeHashmap = {}
+
+---@generic A
+---@param func fun(t: A): A
+function getObjectConstructor(func)
+	return function(s)
+		local result = DiscordBot.toStruct(s)
+
+		if result.id and snowflakeHashmap[result.id] then
+			result = snowflakeHashmap[result.id]
+		else
+			result = func(DiscordBot.toStruct(s))
+
+			if result.id then
+				snowflakeHashmap[result.id] = result
+			end
+		end
+		
+		return result
+	end
+end
+
+DiscordBot.user = getObjectConstructor(function (t) return t end)
+
 -- dead stuff that someone might use, idk 
 
 	--[[
-    ---handles discord interaction "ping"
+-- -@field handlePing fun(req: cURL.ClientRequest, res: cURL.ServerResponse): boolean
+-- -@field verifyEd25519 fun(req: cURL.ClientRequest): boolean
+
+local ed25519 = require('ed25519')
+
+
+	---handles discord interaction "ping"
 	---@deprecated
 	---@param req cURL.ClientRequest
 	---@param res cURL.ServerResponse
@@ -127,7 +187,7 @@ end
 				
 				res.statusCode = edVerified and 200 or 401
 				res.statusMessage = edVerified and 'OK' or 'invalid request signature'
-                res.body = edVerified and '{"type":1}' or 'Bad Signature'
+				res.body = edVerified and '{"type":1}' or 'Bad Signature'
 				
 				if edVerified then
 					res.headers['Content-Type'] = Enum.mimeTypes.json
@@ -140,7 +200,7 @@ end
 		return result
 	end
 
-    ---verifies interaction, deprecated for being too slow
+	---verifies interaction, deprecated for being too slow
 	---@deprecated
 	---@param req cURL.ClientRequest
 	---@return boolean
@@ -151,18 +211,18 @@ end
 		local timeStamp = req.headers['X-Signature-Timestamp']
 		local body = req.body
 
-        if edSig and timeStamp and body then
-            print('|||got body')
+		if edSig and timeStamp and body then
+			print('|||got body')
 			print(timeStamp .. body)
 			print('||endbody')
-            print('got sig: ', edSig)
+			print('got sig: ', edSig)
 			print('got apikey: ', apiKey)
 
 			result = ed25519.verify(
 					timeStamp .. body,
 					ed25519.hexTo256(edSig),
 					ed25519.hexTo256(apiKey)
-            )
+			)
 				print('ed verified: ', result)
 		end
 
