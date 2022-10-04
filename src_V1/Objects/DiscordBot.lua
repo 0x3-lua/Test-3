@@ -120,7 +120,8 @@ end).keepAlive()
 		
 		assert(response.statusCode == 200, 'bad response: ' .. response.toString())
 		
-		-- main
+        -- main
+		print('body')
 		object.user = DiscordBot.user(response.body)
 	end
 
