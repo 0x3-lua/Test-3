@@ -1,2 +1,2 @@
-# WebService-Observation-Quest
-This project is mainly an implementation and observation quest of how webservices work. This is not meant to be a full-on web framework, but feel free to use project.
+# TEST 3
+Discord bot, provided with the bare essentials, dont use as your bot

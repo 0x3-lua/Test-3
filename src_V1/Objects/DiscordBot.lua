@@ -11,6 +11,8 @@
 ---@field endPoint cURL.object
 ---@field webServer WebServer.object
 ---@field user DiscordBot.user
+---@field onRequestCallback fun(c:TcpServer.client, req: cURL.ClientRequest, res: cURL.ServerResponse)
+---@field setRequestCallback fun(f: fun(c:TcpServer.client, req: cURL.ClientRequest, res:cURL.ServerResponse)): DiscordBot.bot
 ---@field request fun(a: DiscordBot.request.argument): cURL.ServerResponse
 ---@field run fun()
 
@@ -50,6 +52,7 @@ local Environment = require('Environment')
 local Enum = require('Enum')
 local cURL = require('cURL')
 local json = require('json')
+local WebServer = require('WebServer')
 
 ---returns bot
 ---@param apiKey string? default is an Environment variable named "DiscordBotAPIKey"
@@ -73,56 +76,39 @@ DiscordBot.new = function(apiKey, version)
 	
 	object.endPoint = cURL.bind(('https://discord.com/api/v%d/'):format(version))
 
-	--[[
-
-		 require('WebServer')
-	.new(nil, 3000)
-WebServer.onRequest('/', 'GET', function (_, _, res)
-	res.statusCode = 200
-	res.statusMessage = 'OK'
-	res.headers.connection = 'close'
-	res.body = 'Main page'
-end).onRequest('/keepalive', 'GET', function (_,_,res)
-	res.statusCode = 200;
-	res.statusMessage = 'OK'
-	res.headers.connection = 'close'
-	res.body = 'got ping'
-	print('pong')
-end).onInvalidRequest(function (_, req, res)
-	res.statusCode = 404
-	res.statusMessage = 'found none'
-	res.headers.connection = 'close'
-	res.body = 'found none'
-
-	print(
-		Static.table.toString(req)
-	)
-
-end).keepAlive()
-	.launch()
-	
-	]]
-
 	---@param arg DiscordBot.request.argument
 	---@return cURL.ServerResponse
-    object.request = function(arg)
+	object.request = function(arg)
 		return object.endPoint[tostring(arg.type):lower()](arg.suffix, arg.data, arg.headers)
 	end
 
 	---Runs the discord bot, this function should be called as the last step
 	object.run = function()
-		-- pre
+        -- pre
+		assert(object.onRequestCallback, 'missing default callback')
+
 		local response = object.request{
 			suffix = 'users/@me';
-            headers = basicHeaders;
+			headers = basicHeaders;
 			type = Enum.requestTypes.GET
 		}
 		
 		assert(response.statusCode == 200, 'bad response: ' .. response.toString())
 		
-        -- main
-		print('body', response.body)
-		object.user = DiscordBot.user(response.body)
+		-- main
+        object.user = DiscordBot.user(response.body)
+        object.webServer = WebServer.new()
+			.onInvalidRequest(object.onRequestCallback)
+			.launch()
+	end
+
+	---sets callback
+	---@param f fun(c: TcpServer.client, req: cURL.ClientRequest, res: cURL.ServerResponse)
+	---@return DiscordBot.bot
+    object.setRequestCallback = function(f)
+		object.onRequestCallback = f
+
+		return object
 	end
 
 	return object
@@ -155,7 +141,11 @@ function getObjectConstructor(func)
 	end
 end
 
-DiscordBot.user = getObjectConstructor(function (t) return t end)
+DiscordBot.user = getObjectConstructor(function(t)
+	---@cast t DiscordBot.user
+	
+	return t
+end)
 
 -- dead stuff that someone might use, idk 
 

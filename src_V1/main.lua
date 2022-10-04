@@ -3,6 +3,9 @@ local Static = require('Static')
 local DiscordBot = require('DiscordBot')
 local Bot = DiscordBot.new() -- argument optional if environment variable `DiscordBotToken` is correctly set
 
-Bot.run()
+.setRequestCallback(function (c, req, res)
+	print('met', Static.table.toString(req))
+end)
 
-print(Static.table.toString(Bot.user))
+
+.run() -- last step
