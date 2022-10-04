@@ -124,7 +124,7 @@ DiscordBot.new = function(apiKey, version)
 		
 		assert(gatewayBotResponse.success, 'see response: ' .. gatewayBotResponse.toString())
 
-		print(gatewayBotResponse.body)
+		print(Static.table.toString( gatewayBotResponse))
 
 		-- last step: set up webserver, set up discord to bot "connection", and launch server
         object.webServer = WebServer.new()
