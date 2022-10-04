@@ -135,7 +135,7 @@ DiscordBot.new = function(apiKey, version)
         assert(applicationInfoResponse.success,
             'bad application info response, see response: ' .. applicationInfoResponse.toString())
 		
-		
+		print('bod', applicationInfoResponse.body)
 
         local gatewayBotBody = json:decode(gatewayBotResponse.body)
 		gateway.
