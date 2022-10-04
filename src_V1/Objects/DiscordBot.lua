@@ -97,6 +97,14 @@ DiscordBot.new = function(apiKey, version)
 		
 		-- main
         object.user = DiscordBot.user(response.body)
+        print(Static.table.toString(object.request {
+            type = Enum.requestTypes.GET;
+            headers = basicHeaders;
+			suffix = '/gateway/bot'
+		}))
+
+
+
         object.webServer = WebServer.new()
 			.onInvalidRequest(object.onRequestCallback)
 			.launch()
