@@ -105,14 +105,17 @@ end).keepAlive()
 
 	---@param arg DiscordBot.request.argument
 	---@return cURL.ServerResponse
-	object.request = function(arg)return object.endPoint[tostring(arg.type):lower()](arg.suffix, arg.data, arg.headers)end
+    object.request = function(arg)
+		return object.endPoint[tostring(arg.type):lower()](arg.suffix, arg.data, arg.headers)
+	end
 
 	---Runs the discord bot, this function should be called as the last step
 	object.run = function()
 		-- pre
 		local response = object.request{
 			suffix = 'users/@me';
-			headers = basicHeaders;
+            headers = basicHeaders;
+			type = Enum.requestTypes.GET
 		}
 		
 		assert(response.statusCode == 200, 'bad response: ' .. response.toString())
