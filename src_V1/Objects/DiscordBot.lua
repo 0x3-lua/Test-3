@@ -20,10 +20,6 @@
 ---@field data string?
 ---@field headers {[string]: string}?
 
----@class rapidjson
----@field decode fun(s: string): table
----@field encode fun(t: table): string
-
 ---@alias snowflake string
 
 ---@class DiscordBot.user
@@ -53,10 +49,6 @@ local Static = require('Static')
 local Environment = require('Environment')
 local Enum = require('Enum')
 local cURL = require('cURL')
-require('LuaRocks').construct()
-	.load('rapidjson')
-
----@type rapidjson
 local json = require('json')
 
 ---returns bot
@@ -135,7 +127,7 @@ end
 ---transforms a json object to a lua dictionary
 ---@param s string
 ---@return table
-DiscordBot.toStruct = function(s) return json.decode(s);end
+DiscordBot.toStruct = function(s)local result = json:decode(s)return result end
 
 local snowflakeHashmap = {}
 
