@@ -57,7 +57,7 @@ require('LuaRocks').construct()
 	.load('rapidjson')
 
 ---@type rapidjson
-local json = require('rapidjson')
+local json = require('json')
 
 ---returns bot
 ---@param apiKey string? default is an Environment variable named "DiscordBotAPIKey"
