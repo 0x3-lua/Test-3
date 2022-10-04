@@ -76,11 +76,26 @@ DiscordBot.new = function(apiKey, version)
 	
 	object.endPoint = cURL.bind(('https://discord.com/api/v%d/'):format(version))
 
+	--[[func]]
+
 	---@param arg DiscordBot.request.argument
 	---@return cURL.ServerResponse
 	object.request = function(arg)
 		return object.endPoint[tostring(arg.type):lower()](arg.suffix, arg.data, arg.headers)
 	end
+
+	--[[
+	---@param arg DiscordBot.request.argument
+	---@return fun(): cURL.ServerResponse
+	local function request(arg)
+        arg.type = arg.type or Enum.requestTypes.GET
+		arg.headers = arg.headers or basicHeaders
+		
+        return function()
+			return object.request(arg)
+		end
+    end
+	--]]
 
 	---Runs the discord bot, this function should be called as the last step
 	object.run = function()
@@ -95,16 +110,23 @@ DiscordBot.new = function(apiKey, version)
 		
 		assert(response.statusCode == 200, 'bad response: ' .. response.toString())
 		
-		-- main
+        -- main
+
+		-- get user
         object.user = DiscordBot.user(response.body)
-        print(Static.table.toString(object.request {
+
+        -- set up gateway
+		local gatewayBotResponse = object.request {
             type = Enum.requestTypes.GET;
             headers = basicHeaders;
 			suffix = '/gateway/bot'
-		}))
+        }
+		
+		assert(gatewayBotResponse.success, 'see response: ' .. gatewayBotResponse.toString())
 
+		print(gatewayBotResponse.body)
 
-
+		-- last step: set up webserver, set up discord to bot "connection", and launch server
         object.webServer = WebServer.new()
 			.onInvalidRequest(object.onRequestCallback)
 			.launch()
