@@ -117,7 +117,9 @@ DiscordBot.new = function(apiKey, version)
 		assert(object.user.bot, 'user object for discord bot is not a bot')
 
         -- set up gateway,
-		local gateway = {}
+        local cache = {}
+		
+		-- assume cache does not exist, must implement 
 		local gatewayBotResponse = object.request {
             type = Enum.requestTypes.GET;
             headers = basicHeaders;
@@ -135,10 +137,23 @@ DiscordBot.new = function(apiKey, version)
         assert(applicationInfoResponse.success,
             'bad application info response, see response: ' .. applicationInfoResponse.toString())
 		
-		print('bod', applicationInfoResponse.body)
-
         local gatewayBotBody = json:decode(gatewayBotResponse.body)
-		gateway.
+        local applicationInfo = json:decode(applicationInfoResponse.body)
+		
+		cache[object.user.id] = {owner = applicationInfo.owner; shards = gatewayBotBody.shards}
+        cache.url = gatewayBotBody.url
+
+		-- end cache
+		
+		local currentPick = cache[object.user.id]
+
+		print(Static.table.toString(currentPick))
+
+
+
+
+
+
 
 		-- last step: set up webserver, set up discord to bot "connection", and launch server
         object.webServer = WebServer.new()
