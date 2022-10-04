@@ -20,7 +20,7 @@
 ---@field data string?
 ---@field headers {[string]: string}?
 
----@class cjson
+---@class rapidjson
 ---@field decode fun(s: string): table
 ---@field encode fun(t: table): string
 
@@ -53,11 +53,11 @@ local Static = require('Static')
 local Environment = require('Environment')
 local Enum = require('Enum')
 local cURL = require('cURL')
-local LuaRocks = require('LuaRocks').construct()
-	.load('lua-cjson')
+require('LuaRocks').construct()
+	.load('rapidjson')
 
----@type cjson
-local json = require('cjson')
+---@type rapidjson
+local json = require('rapidjson')
 
 ---returns bot
 ---@param apiKey string? default is an Environment variable named "DiscordBotAPIKey"
