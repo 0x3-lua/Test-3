@@ -3,7 +3,7 @@ local Static = require('Static')
 local DiscordBot = require('DiscordBot')
 local Bot = DiscordBot.new() -- argument optional if environment variable `DiscordBotToken` is correctly set
 
-	.setRequestCallback(function(c, req, res)
+	.setRequestCallback(function(_, req, res)
 	res.headers.connection = 'close'
 	if req.webPage == '/' then
 		res.body = 'home'

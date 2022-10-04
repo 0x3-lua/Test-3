@@ -114,17 +114,31 @@ DiscordBot.new = function(apiKey, version)
 
 		-- get user
         object.user = DiscordBot.user(response.body)
+		assert(object.user.bot, 'user object for discord bot is not a bot')
 
-        -- set up gateway
+        -- set up gateway,
+		local gateway = {}
 		local gatewayBotResponse = object.request {
             type = Enum.requestTypes.GET;
             headers = basicHeaders;
 			suffix = '/gateway/bot'
         }
 		
-		assert(gatewayBotResponse.success, 'see response: ' .. gatewayBotResponse.toString())
+		assert(gatewayBotResponse.success, 'bad gateway bot response, see response: ' .. gatewayBotResponse.toString())
 
-		print(Static.table.toString( gatewayBotResponse))
+        local applicationInfoResponse = object.request {
+            type = Enum.requestTypes.GET;
+            headers = basicHeaders;
+			suffix = '/oauth2/applications/@me'
+		}
+
+        assert(applicationInfoResponse.success,
+            'bad application info response, see response: ' .. applicationInfoResponse.toString())
+		
+		
+
+        local gatewayBotBody = json:decode(gatewayBotResponse.body)
+		gateway.
 
 		-- last step: set up webserver, set up discord to bot "connection", and launch server
         object.webServer = WebServer.new()
