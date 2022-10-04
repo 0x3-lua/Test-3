@@ -235,10 +235,10 @@ function cURL.serverResponse.fromString(s)
 	-- and the body in that order, separated by line breaks
 	-- headers
 	while not tempStringParser.cPop('\r\n', true) do
-		local index = tempStringParser.popUntil(':', true)
+		local index = tempStringParser.popUntil(': ', true)
 		assert(index)
 
-		local value = tempStringParser.popUntil('\n')
+		local value = tempStringParser.popUntil('\r\n')
 		assert(value)
 
 		object.headers[index] = value
