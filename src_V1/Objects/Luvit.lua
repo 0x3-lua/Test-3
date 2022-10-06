@@ -13,7 +13,7 @@ local Static = require'Static'
 Static.os.runBash('cd ~/')
 
 local folderExists = Static.os.runBash('echo a\necho b')
-
+print(folderExists)
 --- print(folderExists, Static.os.runBash("dir"))
 
 if not folderExists and false then
