@@ -32,20 +32,15 @@ LuaRocks.parser = StringParser.new('')
 LuaRocks.construct = function(path, cpath)
 	-- pre
 	assert(not LuaRocks.isConstructed, 'already constructed')
-	path = path or '../.luarocks/share/lua/5.1/?.lua;/home/runner/.luarocks/share/lua/5.1/?/init.lua;/usr/local/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?/init.lua;./?.lua;/usr/local/lib/lua/5.1/?.lua;/usr/local/lib/lua/5.1/?/init.lua;/usr/share/lua/5.1/?.lua;/usr/share/lua/5.1/?/init.lua'
-
-    cpath = cpath or
-        '../.luarocks/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/?.so;./?.so;/usr/lib/x86_64-linux-gnu/lua/5.1/?.so;/usr/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/loadall.so'
+	path = path or Static.os.runBash'luarocks path --lr-path'
+    cpath = cpath or Static.os.runBash'luarocks path --lr-cpath'
 	
     -- main
 	LuaRocks.isConstructed = true
 
-	Static.os.runBash('eval "$(luarocks path --bin)"')
-
-	--[[
-    package.path = path;
-	package.cpath = cpath;
-	--]]
+    package.path = package.path .. ';' .. path;
+	package.cpath = package.path .. ';' .. cpath
+	
 	return LuaRocks
 end
 
