@@ -30,8 +30,9 @@ LuaRocks.parser = StringParser.new('')
 ---@param cpath string?
 ---@return LuaRocks
 LuaRocks.construct = function(path, cpath)
-	-- pre
-	assert(not LuaRocks.isConstructed, 'already constructed')
+    -- pre
+	if LuaRocks.isConstructed then return LuaRocks;end
+    -- assert(not LuaRocks.isConstructed, 'already constructed')
 	path = path or Static.os.runBash'luarocks path --lr-path'
     cpath = cpath or Static.os.runBash'luarocks path --lr-cpath'
 	

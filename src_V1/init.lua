@@ -1,5 +1,8 @@
 ---@version 5.1
 
+package.path = package.path .. ';./src_V1/?.lua;./src_V1/Objects/?.lua;./src_V1/Objects/?/init.lua'
+
+--[[
 -- modified require
 local overridenRequire = require
 
@@ -27,6 +30,7 @@ require = function(mod)
 
 	return result
 end
+--]]
 
 require('main')
 
