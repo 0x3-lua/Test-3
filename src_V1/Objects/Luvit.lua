@@ -1,23 +1,30 @@
 --[[spec]]
 ---@class Luvit
----@field isConstructed boolean
----@field construct fun(targetDirectory): Luvit
+---@field path string
+---@field install fun(name: string): Luvit
 
 --[[code]]
 
 -- pre
+---@type Luvit
+local Luvit = {}
 local Static = require'Static'
 
-local path = Static.os.runBash('cd ~/;test -d "luvit"||'
+Luvit.path = Static.os.runBash('cd ~/;test -d "luvit"||'
     .. ' mkdir luvit;cd luvit;test -e "lit"||curl -L ht'
     .. 'tps://github.com/luvit/lit/raw/master/get-lit.s'
 	.. 'h | sh;pwd')
 
-print(path)
+Luvit.install = function (s)
+    Static.os.runBash(
+        ('cd %s;./lit install %s')
+        :format(
+            Luvit.path,
+			s
+		)
+	)
 
-
-local Luvit = {}
-
-
+	return Luvit
+end
 
 return Luvit

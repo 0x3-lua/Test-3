@@ -2,4 +2,4 @@
 local Static = require('Static')
 local LuaRocks = require('LuaRocks').construct()
 
-require('Luvit')
+require('Luvit').install('SinisterRectus/discordia')
