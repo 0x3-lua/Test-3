@@ -14,7 +14,7 @@ Static.os.runBash('cd ~/')
 
 local folderExists = Static.os.runBash('test -d Test-3 && echo 1 || echo 0') == '1'
 
-print(folderExists)
+print(folderExists, Static.os.runBash("dir"))
 
 if not folderExists and false then
 	Static.os.runBash('mkdir luvit')
