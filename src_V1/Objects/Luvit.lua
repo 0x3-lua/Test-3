@@ -12,7 +12,7 @@ local Static = require'Static'
 local current = Static.os.runBash('pwd')
 Static.os.runBash('cd ~/')
 
-local folderExists = Static.os.runBash('if [test -e "luvit"];then\n\techo 1;\nelif true; then\n\techo 0;') == '1'
+local folderExists = Static.os.runBash('if [test -e "luvit"];then\n\techo 1;\nelse\n\techo 0;fi') == '1'
 
 print(folderExists)
 
