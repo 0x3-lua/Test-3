@@ -8,9 +8,9 @@
 -- pre
 local Static = require'Static'
 
-local path = Static.os.runBash('cd ~/\nif !test -d "luvit";then'
-    .. ' mkdir luvit;fi;\ncd luvit;curl -L https://github.com/l'
-	..'uvit/lit/raw/master/get-lit.sh | sh;pwd')
+local path = Static.os.runBash('cd ~/;test -d "luvit"||'
+    .. ' mkdir luvit;cd luvit;curl -L https://github.com/l'
+	.. 'uvit/lit/raw/master/get-lit.sh | sh;pwd')
 
 print(path)
 
