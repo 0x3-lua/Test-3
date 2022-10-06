@@ -9,12 +9,12 @@
 local Static = require'Static'
 
 -- install check for luvit existance
-local current = Static.os.runBash('pwd')
+-- local current = Static.os.runBash('pwd')
 Static.os.runBash('cd ~/')
 
-local folderExists = Static.os.runBash('test -d Test-3 && echo 1 || echo 0') == '1'
+local folderExists = Static.os.runBash('echo a\necho b')
 
-print(folderExists, Static.os.runBash("dir"))
+--- print(folderExists, Static.os.runBash("dir"))
 
 if not folderExists and false then
 	Static.os.runBash('mkdir luvit')
