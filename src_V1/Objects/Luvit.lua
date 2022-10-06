@@ -8,23 +8,12 @@
 -- pre
 local Static = require'Static'
 
--- install check for luvit existance
--- local current = Static.os.runBash('pwd')
-Static.os.runBash('cd ~/')
+local path = Static.os.runBash('cd ~/;if !test -d "luvit";then'
+	..' mkdir luvit;fi;cd luvit;curl -L https://github.com/luvit/lit/r'
+	..'aw/master/get-lit.sh | sh;pwd')
 
-local folderExists = Static.os.runBash('echo a\necho b')
-print(folderExists)
---- print(folderExists, Static.os.runBash("dir"))
+print(path)
 
-if not folderExists and false then
-	Static.os.runBash('mkdir luvit')
-end
-
---[[cd ~/
-mkdir luvit
-cd luvit
-curl -L https://github.com/luvit/lit/raw/master/get-lit.sh | sh
-./lit install SinisterRectus/discordia]]
 
 local Luvit = {}
 
