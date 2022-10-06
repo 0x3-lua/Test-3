@@ -2,4 +2,4 @@
 local Static = require('Static')
 local LuaRocks = require('LuaRocks').construct()
 
-print(LuaRocks.load'lua-cjson')
+print(LuaRocks.load'luazen')
