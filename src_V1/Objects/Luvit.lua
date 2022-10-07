@@ -17,7 +17,7 @@ Luvit.path = Static.os.runBash('cd ~/;test -d "luvit"||'
 
 Luvit.install = function(s)
 	Static.os.runBash(
-		('cd %stest -e "deps"&&rmdir deps;./lit install %s;')
+		('cd %stest -e "deps"&&rm -R deps;./lit install %s;')
 		:format(
 			Luvit.path,
 			s
