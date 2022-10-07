@@ -13,7 +13,11 @@ local Static = require'Static'
 Luvit.path = Static.os.runBash('cd ~/;test -d "luvit"&&'
     .. 'rm -R luvit;mkdir luvit;cd luvit;test -e "lit"|'
     .. '|curl -L https://github.com/luvit/lit/raw/maste'
-	.. 'r/get-lit.sh | sh;clear;pwd')
+	.. 'r/get-lit.sh | sh;pwd')
+
+
+print(Static.table.toString(Static.string.split(Luvit.path, '\n')
+))
 
 print('lpath', Luvit.path)
 
