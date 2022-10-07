@@ -7,14 +7,15 @@ local Static = require('Static')
 
 local path = Static.os.runBash('pwd')
 
-local cmd = ('cd %s./luvit %s/src_V1/main.lua'):format(
+local out = 
+
+Static.os.runBash(
+	('cd %s./luvit %s/src_V1/main.lua'):format(
         Luvit.path,
 		path:sub(1, -2)
 	)
-
-Static.os.runBash(
-	cmd
 )
-print('met', cmd)
+
+print(out)
 
 return true;
