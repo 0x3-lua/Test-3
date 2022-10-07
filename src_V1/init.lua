@@ -2,36 +2,16 @@
 
 package.path = package.path .. ';./src_V1/?.lua;./src_V1/Objects/?.lua;./src_V1/Objects/?/init.lua'
 
---[[
--- modified require
-local overridenRequire = require
+local Luvit = require('Luvit').install('SinisterRectus/discordia')
+local Static = require('Static')
 
----overriden Require, can be better
----@param mod string
-require = function(mod)
-	local result
+local path = Static.os.runBash('pwd')
 
-	local fullName = io.popen(
-			('find -name \'%s.lua\''):format(mod)
-		):read '*a'
-		
-	if not fullName or #fullName == 0 then
-		result = overridenRequire(mod)
-	else
-		local subName = fullName:sub(1, -2)
-		local func = loadfile(subName)
-
-		if not func then
-			error('possible parsing error, please check: ' .. subName)
-		else
-			result = func()
-		end
-	end
-
-	return result
-end
---]]
-
-require('main')
+Static.os.runBash(
+	('cd %s;./luvit %s/src_V1/main.lua'):format(
+        Luvit.path,
+		path:sub(1, -2)
+	)
+)
 
 return true;
