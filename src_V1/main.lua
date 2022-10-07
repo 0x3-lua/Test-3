@@ -1,5 +1,8 @@
 --[[run code below]]
 print('met', _VERSION)
 -- local Static = require('Static')
-io.write('yo')
+require('Discordia')
+
+
+
 print('package', package.path)
