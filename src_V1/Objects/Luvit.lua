@@ -10,19 +10,17 @@
 local Luvit = {}
 local Static = require'Static'
 
-Luvit.path = Static.os.runBash('cd ~/;test -d "luvit"&&'
+local output = Static.os.runBash('cd ~/;test -d "luvit"&&'
     .. 'rm -R luvit;mkdir luvit;cd luvit;test -e "lit"|'
     .. '|curl -L https://github.com/luvit/lit/raw/maste'
 	.. 'r/get-lit.sh | sh;pwd')
-
-
-print(Static.table.toString(Static.string.split(Luvit.path, '\n')
-))
+local lineSplit = Static.string.split(output, '\n')
+Luvit.path = lineSplit[#lineSplit - 2]
 
 print('lpath', Luvit.path)
 
 Luvit.install = function(s)
-	local command = ('cd %stest -e "deps"&&rm -R deps;./lit install %s;')
+	local command = ('cd %s;test -e "deps"&&rm -R deps;./lit install %s;')
 		:format(
 			Luvit.path,
 			s
