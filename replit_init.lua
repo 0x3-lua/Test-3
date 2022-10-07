@@ -7,8 +7,8 @@ local Static = require('Static')
 
 local path = Static.os.runBash('pwd')
 
-local command = ('RelativePath="%s"cd %s./luvit %s/init.lua'):format(
-	path,
+local command = ('RelativePath="%s";cd %s./luvit %s/init.lua'):format(
+	path:sub(1,-2),
 	Luvit.path,
 	path:sub(1, -2)
 )

@@ -15,6 +15,8 @@ Luvit.path = Static.os.runBash('cd ~/;test -d "luvit"&&'
     .. '|curl -L https://github.com/luvit/lit/raw/maste'
 	.. 'r/get-lit.sh | sh;pwd')
 
+print('lpath', Luvit.path)
+
 Luvit.install = function(s)
 	local command = ('cd %stest -e "deps"&&rm -R deps;./lit install %s;')
 		:format(
