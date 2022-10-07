@@ -1,4 +1,5 @@
 --[[run code below]]
--- local Static = require('Static')
 print('met', _VERSION)
+local Static = require('Static')
+
 print('package', package.path)
