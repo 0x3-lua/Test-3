@@ -8,5 +8,7 @@ package.path = ('%s;%s/?.lua;%s/src_V1/?.lua;%s/src_V1/Objects/?.lua'):format(
 	path
 )
 
+print(package.path)
+
 -- do return end
 require('main')
