@@ -7,12 +7,10 @@ local Static = require('Static')
 
 local path = Static.os.runBash('pwd'):sub(1, -2)
 
-local command = ('RelativePath="%s";cd %s;./luvit %s/init.lua'):format(
+local command = ('RelativePath="%s";cd %s;./luvit %s/init.lua;set'):format(
 	path,
 	Luvit.path,
 	path
 )
 
-print('pre replit init', command)
-out = Static.os.runBash(command)
-print('post replit init', out)
+io.write(Static.os.runBash(command)) -- possible debugging
