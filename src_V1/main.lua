@@ -1,7 +1,7 @@
 --[[run code below]]
 print('met', _VERSION)
 -- local Static = require('Static')
-require('Discordia')
+require('discordia')
 
 
 
