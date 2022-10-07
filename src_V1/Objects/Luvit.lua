@@ -17,14 +17,14 @@ local output = Static.os.runBash('cd ~/;test -d "luvit"&&'
 local lineSplit = Static.string.split(output, '\n')
 Luvit.path = lineSplit[#lineSplit - 1]
 
-print('lpath', Luvit.path)
-
 Luvit.install = function(s)
+	print('met')
 	local command = ('cd %s;test -e "deps"&&rm -R deps;./lit install %s;')
 		:format(
 			Luvit.path,
 			s
-		)
+        )
+		print('met2')
 	Static.os.runBash(command)
 
 	return Luvit
