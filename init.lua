@@ -1,5 +1,6 @@
+
 print'met init'
-local initParent = io.popen('echo $RelativePath'):read('*a')
+local initParent = io.popen('pwd'):read('*a')
 print'finished'
 print('met', initParent)
 do return end
