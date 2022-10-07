@@ -1,4 +1,4 @@
-entrypoint = "src_V1/init.lua"
+entrypoint = "replit_init.lua"
 
 [interpreter]
 command = [
