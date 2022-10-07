@@ -13,4 +13,4 @@ local command = ('RelativePath="%s";cd %s;./luvit %s/init.lua'):format(
 	path
 )
 
-print(Static.os.runBash(command))
+Static.os.runBash(command)
