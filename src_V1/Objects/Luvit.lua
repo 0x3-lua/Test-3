@@ -13,7 +13,7 @@ local Static = require'Static'
 Luvit.path = Static.os.runBash('cd ~/;test -d "luvit"&&'
     .. 'rm -R luvit;mkdir luvit;cd luvit;test -e "lit"|'
     .. '|curl -L https://github.com/luvit/lit/raw/maste'
-	.. 'r/get-lit.sh | sh;pwd')
+	.. 'r/get-lit.sh | sh;clear;pwd')
 
 print('lpath', Luvit.path)
 
