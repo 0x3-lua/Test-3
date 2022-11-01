@@ -22,6 +22,4 @@ client:on('messageCreate', function (m)
 end)
 print'ran'
 
-error'wow'
-
 client:run('Bot ' .. Environment.get('DiscordBotToken'))
