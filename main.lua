@@ -12,7 +12,11 @@ local client = discordia.Client()
 client:on('messageCreate', function (m)
 	if m.content == 'yo' then
 		m:reply('yo')
+		print('met')
+	else
+		print('not met', m.content)
 	end
+	print'met mc'
 end)
 
 client:run('Bot ' .. Environment.get('DiscordBotToken'))
