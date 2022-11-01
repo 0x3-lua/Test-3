@@ -10,8 +10,7 @@
 local Luvit = {}
 local Static = require'Static'
 
-local output = Static.os.runBash('test -d "luvit"&&'
-    .. 'rm -R luvit;mkdir luvit;cd luvit;test -e "lit"|'
+local output = Static.os.runBash('test -e "lit"|'
     .. '|curl -L https://github.com/luvit/lit/raw/maste'
 	.. 'r/get-lit.sh | sh;pwd')
 local lineSplit = Static.string.split(output, '\n')
