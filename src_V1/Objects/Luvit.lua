@@ -10,9 +10,9 @@
 local Luvit = {}
 local Static = require'Static'
 
-local output = Static.os.runBash('test -e "lit"|'
-    .. '|curl -L https://github.com/luvit/lit/raw/maste'
-	.. 'r/get-lit.sh | sh;pwd')
+local output = Static.os.runBash('test -e "lit"||curl -L https://github.com/luvit/lit/'
+	..'raw/master/get-lit.sh | sh;pwd')
+	
 local lineSplit = Static.string.split(output, '\n')
 Luvit.path = lineSplit[#lineSplit - 1]
 

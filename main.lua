@@ -2,7 +2,6 @@
 assert(require('init'), 'loading initial failed, check ')
 
 -- [main]
-
 local Static = require('Static')
 local discordia = require('discordia')
 
