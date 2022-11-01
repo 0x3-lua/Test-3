@@ -9,6 +9,8 @@ local discordia = require('discordia')
 
 local client = discordia.Client()
 
+print'ran2'
+
 client:on('messageCreate', function (m)
 	if m.content == 'yo' then
 		m:reply('yo')
