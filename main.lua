@@ -9,5 +9,10 @@ local discordia = require('discordia')
 
 local client = discordia.Client()
 
+client:on('messageCreate', function (m)
+	if m.content == 'yo' then
+		m:reply('yo')
+	end
+end)
 
 client:run('Bot ' .. Environment.get('DiscordBotToken'))
