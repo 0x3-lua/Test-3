@@ -18,5 +18,6 @@ client:on('messageCreate', function (m)
 	end
 	print'met mc'
 end)
+print'ran'
 
 client:run('Bot ' .. Environment.get('DiscordBotToken'))
