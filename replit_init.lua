@@ -4,5 +4,5 @@ require('Luvit').install('SinisterRectus/discordia')
 local Static = require('Static')
 
 
-io.write(Static.os.runBash('./luvit ./main.lua')) -- possible debugging
+io.write(Static.os.runBash('./luvit ./main.lua;pause')) -- possible debugging
 
